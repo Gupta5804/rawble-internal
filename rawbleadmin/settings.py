@@ -150,14 +150,13 @@ WSGI_APPLICATION = 'rawbleadmin.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd9dks2oppapac6',
-        'USER': 'faetrgiofumyqw',
-        'PASSWORD':'9a33e89e18b06af9ab9f8fd420280b2b37e5aed5612a9dd162aca34fe1bbd696',
-        'HOST':'ec2-23-23-92-204.compute-1.amazonaws.com',
-        'PORT':'5432',
+        'NAME': 'rawbleadmin',
+        'USER': 'rawbleadmin',
+        'PASSWORD': 'Gupta_5804',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
