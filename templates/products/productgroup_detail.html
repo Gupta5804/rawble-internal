@@ -1,0 +1,35 @@
+{% extends 'home.html' %}
+{% block page-title-var %} Group Detail {% endblock page-title-var %}
+{% block application-active %}
+
+<p style="text-align: center;">&nbsp;</p>
+<p style="text-align: center;color: black;
+    font-weight: 500;"><strong>Group Name</strong> : {{ productgroup.name }}</p>
+<p style="text-align: center;">&nbsp;</p>
+<p style="text-align: center;">&nbsp;</p>
+
+<table class="table table-hover" style="margin-bottom:5%">
+  <thead>
+    <tr>
+      <th scope="col" style="text-decoration:underline">Product Name</th>
+      <th scope="col">---</th>
+      <th scope="col">Stock On Hand</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  {% for product  in productgroup.product_set.all %}
+  <tbody>
+    <tr>
+      <th scope="row">{{ product.name }} </th>
+      <td>---</td>
+      <td>{{ product.stock_on_hand }}</td>
+      <td><a class="btn btn-outline-primary btn-sm" href="{% url 'product_group_product_remove' pk1=productgroup.id pk2=product.pk %}">REMOVE</a></td>
+    </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
+
+<a class="btn btn-outline-primary btn-lg" href="{% url 'product_group_add_product' pk1=productgroup.id %}" style="display:block;text-align:center;font-weight:900;margin-bottom:5%;"> Add More Products </a>
+
+{% endblock application-active %}

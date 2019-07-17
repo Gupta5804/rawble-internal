@@ -1,0 +1,47 @@
+<p>Dear Team,</p>
+<p>These Item(s) Are Dispatched</p>
+<table style="height: 38px;" border="2" width="597">
+<tbody>
+<tr>
+<td style="width: 60px;">SO #</td>
+<td style="width: 60px;">Buyer</td>
+<td style="width: 60px;">Product</td>
+
+<td style="width: 60px;">Selling Price</td>
+<td style="width: 60px;">Total Quantity</td>
+<td style="width: 60px;">Quantity Dispatched Till Now</td>
+<td style="width: 60px;">Quantity Dispatched Today</td>
+<td style="width: 60px;">Transporter Detail</td>
+<td style="width: 60px;">Freight</td>
+<td style="width: 60px;">COA File</td>
+
+</tr>
+{% for sopp in sopp_email %}
+<tr>
+<td style="width: 60px;">
+    <a href="{{ sopp.salesorderproduct.salesorder.salesorder_url }}">{{ sopp.salesorderproduct.salesorder.salesorder_number }}</a>
+</td>
+<td style="width: 60px;">
+    <a href="http://rawble-admin.herokuapp.com{% url 'buyer_profile' contact_id=sopp.salesorderproduct.salesorder.buyer.contact_id %}">
+        {{ sopp.salesorderproduct.salesorder.buyer.contact_name }}
+    </a>
+</td>
+<td style="width: 60px;"><a href="http://rawble-admin.herokuapp.com{% url 'products_listing' %}?name__icontains={{ sopp.salesorderproduct.product.name }}"> {{ sopp.salesorderproduct.product.name }} </a></td>
+
+<td style="width: 60px;">{{ sopp.salesorderproduct.so_selling_price }}</td>
+<td style="width: 60px;">{{ sopp.salesorderproduct.quantity }}</td>
+<td style="width: 60px;">{{ sopp.salesorderproduct.quantity_dispatched }}</td>
+<td style="width: 60px;">{{ sopp.planned_quantity }}</td>
+<td style="width: 60px;">{{ sopp.transporter.name }} <br> {{ sopp.transporter.address }} <br> @{{ sopp.transporter.contact_name }} <br> {{ sopp.transporter.phone_number }}</td>
+<td style="width: 60px;">{{ sopp.freight }}</td>
+<td style="width: 60px;"><a href="{{ sopp.coafile.file.url}}" >Click Here</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<a href="http://rawble-admin.herokuapp.com{% url 'report_servicedelivery' %}" >Click Here</a> To See Today's Inward And Outward Report
+<p style="text-align:center;">Please Find the COA's in the attachment</p>
+<hr>
+<p style="text-align: center;">Total Quantity: {{ total_quantity }}</p>
+<p style="text-align: center;">Total Amount: {{ total_amount }}</p>

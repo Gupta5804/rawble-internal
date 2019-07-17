@@ -1,0 +1,42 @@
+<form method="post" action="" id="salesorder-updatevendorvariation-form" onsubmit="return salesorderUpdateVendorVariation(this);">
+    {% csrf_token %}
+    <select name="vendorproductvariation" id="vendorproductvariation" class="form-control form-control-lg">
+        <option value="">Select Variation</option>
+        {% for vendorproduct in product.vendorproduct_set.all %}
+            <optgroup style="font-size:109%;color:black;" label="Vendor: {{ vendorproduct.vendor.contact_name }} || Payment Terms: {{ vendorproduct.vendor.payment_terms }} || Location: {{ vendorproduct.vendor.place_of_contact }}">
+            {% for vendorproductvariation in vendorproduct.vendorproductvariation_set.all %}
+                              
+                <option style="color:black;" class="{% if vendorproductvariation.dealvendorproduct.expiry_status > 0 %} bg-success {% elif vendorproductvariation.dealvendorproduct.expiry_status == 0 %} bg-warning {% else %} bg-danger{% endif %}" value="{{ vendorproductvariation.id }}" data-vendor="{{ vendorproduct.vendor.contact_name }}" data-contact_id="{{ vendorproduct.vendor.contact_id }}" data-unit="{{ vendorproduct.product.unit }}" data-product_id="{{ vendorproduct.product.pk }}" data-payment_terms="{{ vendorproduct.vendor.payment_terms }}" data-dealproduct_id = "{{ vendorproductvariation.dealvendorproduct.id }}" data-place_of_contact="{{ vendorproduct.vendor.place_of_contact }} " data-label_name="{{ vendorproductvariation.dealvendorproduct.label_name }}" data-delivery_terms="{{ vendorproductvariation.dealvendorproduct.deal.delivery_terms }}" data-pack_size="{{ vendorproductvariation.dealvendorproduct.quantity }}" data-specs="{{ vendorproductvariation.dealvendorproduct.specs }}" data-vendor_price="{{ vendorproductvariation.dealvendorproduct.vendor_price }}" data-expiry_status="{% if vendorproductvariation.dealvendorproduct.expiry_status > 0 %} Will expire in {{ vendorproductvariation.dealvendorproduct.expiry_status }} day(s). {% elif vendorproductvariation.dealvendorproduct.expiry_status == 0 %} Expires Today {% else %} Expired {% widthratio vendorproductvariation.dealvendorproduct.expiry_status 1 -1 %} day(s) ago.{% endif %}"> >> Variation - {{ forloop.counter }} || Specs:{{ vendorproductvariation.dealvendorproduct.specs }} | Pack-size:{{ vendorproductvariation.dealvendorproduct.quantity }} || Price:{{ vendorproductvariation.dealvendorproduct.vendor_price }} || ({% if vendorproductvariation.dealvendorproduct.expiry_status > 0 %} Will expire in {{ vendorproductvariation.dealvendorproduct.expiry_status }} day(s). {% elif vendorproductvariation.dealvendorproduct.expiry_status == 0 %} Expires Today {% else %} Expired {% widthratio vendorproductvariation.dealvendorproduct.expiry_status 1 -1 %} day(s) ago.{% endif %}) </option>
+            {% endfor %}
+                                  
+        {% endfor %}
+                            
+    </select>
+    <table class="table table-bordered mt-3" id="updatevendorvariation-{{ product.pk }}">
+    </table>
+    <input type="submit" name="update_vendorvariation" value="Update Price of this Variation" title="Update Price of this Variation" class="btn btn-outline-success btn-lg btn-block">
+</form>
+
+
+<script>
+$('select#vendorproductvariation').on('change',function(){
+  vendor = $(this).find(':selected').data('vendor');
+  contact_id = $(this).find(':selected').data('contact_id');
+  dealproduct_id = $(this).find(':selected').data('dealproduct_id');
+  
+  label_name = $(this).find(':selected').data('label_name');
+  place_of_contact = $(this).find(':selected').data('place_of_contact');
+  payment_terms = $(this).find(':selected').data('payment_terms');
+  product_id = $(this).find(':selected').data('product_id');
+  unit = $(this).find(':selected').data('unit');
+  delivery_terms = $(this).find(':selected').data('delivery_terms');
+  pack_size = $(this).find(':selected').data('pack_size');
+  specs = $(this).find(':selected').data('specs');
+  vendor_price = $(this).find(':selected').data('vendor_price');
+  expiry_status = $(this).find(':selected').data('expiry_status');
+  
+
+  
+$('table#updatevendorvariation-'+product_id).html('<tr><td class="table-secondary">Vendor:</td><td>'+vendor+'</td></tr><tr><td class="table-secondary">Location:</td><td>'+place_of_contact+'</td></tr><tr><td class="table-secondary">Payment Terms:</td><td>'+payment_terms+'</td></tr><tr><td class="table-secondary">Label Name:</td><td>'+label_name+'</td></tr><tr><td class="table-secondary">Old Delivery Terms:</td><td>'+delivery_terms+'</td></tr><tr><td class="table-secondary">Delivery Terms:</td><td class="form-group"><select class="form-control" id="delivery_terms" name="delivery_terms"><option value="Door Deliver">Door Deliver</option><option value="Ex-Godown">Ex-Godown</option><option value="FOR">FOR</option><option value="Local Transport">Local Transport</option></select></td></tr><tr><td class="table-secondary">Pack Size:</td><td>'+pack_size+'( '+unit+' )</td></tr><tr><td class="table-secondary">Specifications:</td><td>'+specs+'</td></tr><tr><td class="table-secondary">Last Price (INR):</td><td>'+vendor_price+'</td></tr><tr><td class="table-secondary">New Price (INR):</td><td><input type="number" name="price" id="price" step="0.01" class="form-control" required></td></tr><tr><td class="table-secondary">Expiry Status:</td><td>'+expiry_status+'</td></tr><tr><td class="table-secondary">Expiry Date:</td><td class="form-group"><input type="date" id="expiry" name="expiry" class="form-control" required></td></tr><input type="hidden" value="'+product_id+'" id="product_id"><input type="hidden" value="'+contact_id+'" id="contact_id"><input type="hidden" value="'+dealproduct_id+'" id="dealproduct_id">');
+});
+</script>

@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<!-- =====================================newnav============================== -->
+<div id="mySidenav" class="sidenav">
+    <span onclick="closeNav()" style="position: absolute; right: 0; padding-right:10% ;display: none;" id="casp"></span>
+    <div class="sidebar-header">
+        <h3 style=" margin-left:12%;font-family: 'Josefin Sans', sans-serif;">
+            {{ user.first_name}} {{user.last_name}}  ({{ user.username}})
+        </h3>
+        <br>
+        <br>
+    </div>
+
+    <hr>
+    <ul class="list-unstyled components">
+        <li  class='{% if request.resolver_match.url_name == "home" %}active{% endif %}'>
+            <a href="{% url 'home' %}">
+                <i class="fas fa-th"></i>
+                Dashboard
+            </a>
+        </li>
+        <hr>
+        <br>
+        <br>
+        <li>
+            <a href="#buyer" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-users"></i>
+                Buyers
+            </a>
+            <hr>
+            <ul class='collapse list-unstyled {% if request.resolver_match.url_name == "buyers_listing"  or request.resolver_match.url_name == "zoho_estimates" or request.resolver_match.url_name == "zoho_salesorders" or request.resolver_match.url_name == "sales_report" %}collapse show {% endif %}' id="buyer" style="padding-left:12%">
+                <li style="size: 4px" class='{% if request.resolver_match.url_name == "buyers_listing"  %}sub-menu active{% endif %}'>
+                    <a href="{% url 'buyers_listing' %}" ><i class="fas fa-list-ul"></i> Buyer's List</a>
+                </li>
+                <hr>
+                
+                
+            
+                <li class='{% if request.resolver_match.url_name == "zoho_salesorders"  %}sub-menu active{% endif %}'>
+                    <a href="{% url 'zoho_salesorders' %}"><i class="fas fa-dollar-sign"></i> Zoho Sales-Orders</a>
+                </li>
+                <hr>
+                <li class='{% if request.resolver_match.url_name == "zoho_estimates"  %}sub-menu active{% endif %}'>
+                    <a href="{% url 'zoho_estimates' %}"><i class="fas fa-euro-sign"></i> Zoho Estimates</a>
+                </li>
+                <hr>
+                
+                <li class='{% if request.resolver_match.url_name == "sales_report"  %}sub-menu active{% endif %}'>
+                    <a href="{% url 'sales_report' %}"><i class="fas fa-clipboard"></i> Sales Report</a>
+                </li>
+                <hr>
+            </ul>
+            <br>
+            <br>
+
+            <a href="#vendor" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-users"></i>
+                Vendors
+            </a>
+            <hr>
+            <ul style="padding-left:12%" class="collapse list-unstyled {% if request.resolver_match.url_name == 'vendors_listing'  or request.resolver_match.url_name == 'deal_vendor_list'  %} collapse show{% endif %}" id="vendor">
+                <li class='{% if request.resolver_match.url_name == "vendors_listing" %}sub-menu active{% endif %}'>
+                    <a href="{% url 'vendors_listing' %}"><i class="fas fa-list-ul"></i> Vendor's List</a>
+                </li>
+                <hr>
+                
+                <li class='{% if request.resolver_match.url_name == "deal_vendor_list" %}sub-menu active{% endif %}'>
+                    <a href="{% url 'deal_vendor_list' %}">Vendor Deals</a>
+                </li>
+                <hr>
+            </ul>
+            <br>
+            <br>
+            <li>
+            <a href="#servicedelivery" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-truck-loading"></i>
+                Service <br>    Delivery
+            </a>
+            
+            <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "inward_servicedelivery"  or request.resolver_match.url_name == "outward_servicedelivery" %}collapse show {% endif %}' id="servicedelivery">
+                
+                <hr>
+                <li class='{% if request.resolver_match.url_name == "inward_servicedelivery"  %}sub-menu active{% endif %}'> 
+                    <a href="{% url 'inward_servicedelivery' %}" ><i class="fas fa-sign-in-alt"></i> Inward</a>
+                </li>
+                <hr>
+            
+                <li class='{% if request.resolver_match.url_name == "outward_servicedelivery"  %}sub-menu active{% endif %}'>
+                    
+                    <a href="#servicedelivery-outward" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-sign-out-alt"></i>
+                            Outward
+                    </a>
+                    <hr>
+                    <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "outward_servicedelivery"  or request.resolver_match.url_name == "outward_servicedelivery_shipping" or request.resolver_match.url_name == "outward_servicedelivery_intransit"  or request.resolver_match.url_name == "outward_servicedelivery_report" %}collapse show {% endif %}' id="servicedelivery-outward">
+                
+                        
+                        <li class='{% if request.resolver_match.url_name == "outward_servicedelivery"  %}sub-menu active{% endif %}'> 
+                            <a href="{% url 'outward_servicedelivery' %}" >
+                                <i class="fas fa-calendar-alt"></i> 
+                                Plan Outward
+                            </a>
+                        </li>
+                        <hr>
+            
+                        <li class='{% if request.resolver_match.url_name == "outward_servicedelivery_shipping" %}sub-menu active{% endif %}'>
+                            <a href="{% url 'outward_servicedelivery_shipping' %}">
+                                <i class="fas fa-truck"></i> 
+                                Shipping
+                            </a>
+                        </li>
+                        <hr>
+                        <li class='{% if request.resolver_match.url_name == "outward_servicedelivery_intransit"  %}sub-menu active{% endif %}'>
+                            <a href="{% url 'outward_servicedelivery_intransit' %}">
+                                <i class="fas fa-shipping-fast"></i> 
+                                In Transit
+                            </a>
+                        </li>
+                        <hr>
+                        <li class='{% if request.resolver_match.url_name == "outward_servicedelivery_report"  %}sub-menu active{% endif %}'>
+                            <a href="{% url 'outward_servicedelivery_report' %}?salesorderproduct__salesorder__buyer=&date_range=month">
+                                <i class="fas fa-clipboard"></i> 
+                                Outward Report
+                            </a>
+                        </li>
+                        
+                
+                    </ul>
+                </li>
+                <hr>
+                <li class='{% if request.resolver_match.url_name == "servicedelivery_outward"  %}sub-menu active{% endif %}'>
+                    <a href="#">
+                        <i class="fas fa-clipboard"></i> 
+                        Service Delivery Report
+                    </a>
+                </li>
+                <hr>
+                
+            </ul>
+            <hr>
+            <br>
+            <br>
+            <a href="#product" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-flask"></i>
+                Products
+            </a>
+            <hr>
+            <ul class='collapse list-unstyled {% if request.resolver_match.url_name == "products_listing" or request.resolver_match.url_name == "product_group_list"  %}collapse show{% endif %}' id="product">
+                
+                <li class = '{% if request.resolver_match.url_name == "products_listing" %}sub-menu active{% endif %}'>
+                    <a href="{% url 'products_listing' %}?per_page=5">Product's List</a>
+                </li>
+                <hr>
+                <li class = '{% if request.resolver_match.url_name == "product_group_list" %}sub-menu active{% endif %}'>
+                    <a href="{% url 'product_group_list' %}">Product Group</a>
+                </li>
+                <hr>
+
+            </ul>
+            <br>
+            <br>
+            <a href="#make" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-copy"></i>
+                Make
+            </a>
+            <hr>
+            <ul class='collapse list-unstyled {% if request.resolver_match.url_name == "make_list" %}collapse show{% endif %}' id="make">
+                <li class = '{% if request.resolver_match.url_name == "make_list" %}sub-menu active{% endif %}'>
+                    <a href="{% url 'make_list'%}">Make's List</a>
+                </li>
+                <hr>
+            </ul>
+        </li>
+        <br>
+        <br>
+        <li>
+            <a href="#payment" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-dollar-sign"></i>
+                Payments
+            </a>
+            <hr>
+            <ul class='collapse list-unstyled {% if request.resolver_match.url_name == "payment" %}collapse show {% endif %}' id="payment">
+                <li class='{% if request.resolver_match.url_name == "payment"  %}sub-menu active{% endif %}'>
+                    <a href="{% url 'payment' %}" >All Payments</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+        
+    <ul class="list-unstyled CTAs" >
+      <li> 
+        <a href="{% url 'password_change' %}" >Change Password</a>
+      </li>
+        <li>
+            <a href="{% url 'logout' %}">Log-Out</a>
+        </li>
+    </ul>
+  </div>
+  
+  <!-- Use any element to open the sidenav -->
+  
+<div id="main" class="container-fluid">  
+<!-- ========================================newnav_ends============================== -->
+
+        <!-- Page Content  -->
+        <div id="content ">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: rgb(37, 78, 88);">
+                <div class="container-fluid">
+
+                    <button onclick="Nav()" type="button" id="sidebarCollapse" class="btn btn-info" style="background-color: rgb(136, 189, 188)" >
+                       <span > <i class="fas fa-align-left" style=""></i></span>
+
+
+
+                    </button>
+                    <h2 style="padding-left: 23px;padding-top:9px; font-family: 'Raleway', sans-serif; margin-bottom: 2% ">{% block page-title-var %} DASHBOARD  {% endblock page-title-var %} </h2>
+                                 
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <button id="colla1" class="btn btn-info" style="background-color:rgb(136, 189, 188); border-radius: 25px ;  position: absolute; right: 0; margin-right: 8%" data-toggle="tooltip" data-placement="bottom" title="Timeline" >
+                                    <i class="fas fa-code-branch"></i>
+                                </button>
+                            
+
+                                    <div class="dropdown" style="position: absolute;right: 0; margin-right: 5%">
+
+                                    <button id="colla2" class="btn btn-info" data-toggle="dropdown" style="background-color: rgb(136, 189, 188); border-radius: 25px; margin-right: 5% " data-toggle="tooltip" data-placement="bottom" title="Expired Product" >
+                                        <i class="fas fa-trash"></i>
+                                   </button>
+                                      <div class="dropdown-menu dropdown-menu-right">
+                                          <a href="#"><strong style="margin-left: 40%;font-size: larger;">Expiring Products</strong></a>
+                                            <div class="dropdown-divider"></div>
+                                          {% for vpv in vendorproductvariation  %}
+                                          {% if vpv.dealvendorproduct.expiry_status < 0 and forloop.counter < 7 %}
+                                              <a onmouseover="this.bgColor='rgb(136, 189, 188)'" class="dropdown-item sup" href="{% url 'products_listing' %}?name=&name__icontains={{ vpv.vendorproduct.product.name }}&make=&make__icontains=&status=&group=">{{ vpv.vendorproduct.vendor }}-<strong>{{ vpv.vendorproduct.product }}</strong>-Expired </a>
+                                               <div class="dropdown-divider"></div>
+                                          {% endif %}
+                                          {% endfor %}
+                                      <div class="dropdown-divider"></div>
+                                          <a class="dropdown-item" href="{% url 'seeall' %}"><strong style="margin-left: 45%;font-size: larger;">See All</strong></a>
+                                      </div>
+                                    </div>
+
+                                    <button id="colla3" class="btn btn-info" style="background-color: rgb(136, 189, 188); border-radius: 25px ; position: absolute; right: 0;margin-right: 2%"data-toggle="tooltip" data-placement="bottom" title="Notification" >
+                                        <i class="fas fa-bell"></i>
+                                   </button>
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item active">
+
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="card" id="card-block" style="margin-top:5%;border-radius:3px;background-color:white;">
+                <br> <br>
+            {% block application-active %}
+            
+            <!-- ================================tab============================= -->
+            <nav class="nav nav-tabs nav-justified">
+                    <a class="nav-item nav-link" id="hag" data-toggle="tab" href="#home">General</a>
+                    <a class="nav-item nav-link" data-toggle="tab" href="#menu1">Sales</a>
+                    <a class="nav-item nav-link" data-toggle="tab" href="#menu2">Purchase</a>
+            </nav>
+                    
+                    <div class="tab-content">
+                    <div id="home" class="tab-pane fade in">
+                            <table class="table active table-hover" >
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col">Count</th>
+                                        <th scope="col">Refresh</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <th scope="row">Users</th>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{ total_users }}</td>
+                                        <td><a class="btn btn-outline-primary btn-sm" href="#">Refresh Users From Zoho</a> </td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Products</th>
+                                        <td></td>
+                                        <td></td>
+                                        <td><a href="{% url 'products_listing' %}">{{ total_products }}</a></td>
+                                        <td><a class="btn btn-outline-primary btn-sm" href="{% url 'refresh_products' %}">Refresh Products From Zoho</a> </td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Purchase</th>
+                                        <td colspan="2"></td>
+                                        <td>0</td>
+                                        <td></td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Sales</th>
+                                        <td colspan="2"></td>
+                                        <td>0</td>
+                                        <td></td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Estimates</th>
+                                        <td colspan="2"></td>
+                                        <td><a href="{% url 'zoho_estimates' %}">{{ total_estimates }}</a></td>
+                                        <td></td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Vendors</th>
+                                        <td colspan="2"></td>
+                                        <td><a href="{% url 'vendors_listing' %}">{{ total_vendors }}</a></td>
+                                        <td><a class="btn btn-outline-primary btn-sm" href="{% url 'refresh_contacts' %}" rowspan="2">Refresh Contacts From Zoho</a> </td>
+                                      </tr>
+                                      <tr>
+                                        <th scope="row">Buyers</th>
+                                        <td colspan="2"></td>
+                                        <td><a href="{% url 'buyers_listing' %}">{{ total_buyers }}</a></td>
+                                        <td><a class="btn btn-outline-primary btn-sm" href="{% url 'refresh_contacts' %}">Refresh Contacts From Zoho</a> </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                    </div>
+                    <div id="menu1" class="tab-pane active fade in">
+                    <h2 style="text-align: center;margin-top: 1%;"> Target For {{ month_string }}</h2>
+                    <select class="form-control w-75" style="margin-top:1%;margin-left:auto;margin-right:auto;" onchange="return buyers(this);">
+                        {% for relationship_manager in relationship_managers %}
+                            <option value="{{ relationship_manager }}">{{ relationship_manager }}</option>
+                        {% endfor %}
+                    </select>
+                    <div id="buyers" class="mt-4">
+                    </div>
+                    </div>
+                    <div id="menu2" class="tab-pane fade in">
+                    <h3>Purchase</h3>
+                    <p>Some content in Purchase</p>
+                    </div>
+                    </div>
+                    <script>
+                            document.getElementById('hag').click(); 
+                    </script>
+            <!-- ================================tab_ends============================== -->
+     
+
+
+      {% endblock application-active %}
+    <br>
+    <br>
+    </div>  
+    </div>
+
+
+
+
+
+ <!--===================
+        Header
+        =======================-->
+
+
+{% else %}
+<div class="container" style="text-align:center;margin-top:25%;">
+  <h1>You are not logged in</h1>
+  <h2><a type="button" class="btn btn-info btn-lg" href="{% url 'login' %}">LOGIN</a> <h2>
+</div>
+{% endif %}
+{% endblock content %}
+

@@ -1,0 +1,149 @@
+
+{% extends 'home.html' %}
+{% load deals_extras %}
+{% load widget_tweaks %}
+{% block page-title-var %}<i class="fas fa-clipboard"></i> Sales Report {% endblock page-title-var %}
+{% block application-active %}
+<div class="container bg-light" style="max-width:none">
+  <div class="alert alert-dark" role="alert">
+    <a class="btn btn-outline-danger" href="{% url 'salesreport_mail_admin' %}"><i class="fas fa-envelope"></i> Send Admin Mail</a>
+  </div>
+  <div class="alert alert-dark mt-3" role="alert">
+    <form method="get" style="display:grid;text-align:center">
+      <div class="input-group input-daterange">
+        {% for field in filter.form %}
+          {% render_field field class="form-control" %}
+        {% endfor %} 
+      </div>
+      <button type="submit" class="btn btn-primary"> FILTER</button>
+    </form>
+  </div>
+  <hr>
+  <div class="alert alert-primary" id="overall-stats" role="alert">
+
+    <a class="btn btn-outline-warning btn-block w-50 m-auto" onclick="get_overall_stats(this);"><i class="fas fa-sync-alt"></i> Get Overall Stats</a>
+  </div>
+  {% for sp,sp_values in salesperson_buyer.items %}
+  <div class="card border border-dark mt-5 shadow">
+    <div class="card-header bg-white">
+      <a class="btn btn-primary btn-block" data-toggle="collapse" href="#sp-{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="collapseExample">
+        {% if sp == "" %}
+        No SalesPerson
+        {% else %}
+        {{ sp }}
+        {% endif %}
+      </a>
+      <div class="alert alert-warning border border-dark" role="alert" id="sp-stats-{{ forloop.counter }}"> 
+        <a class="btn btn-outline-warning btn-block w-50 m-auto" data-id="{{ forloop.counter }}" data-salesperson="{{ sp }}" onclick="get_sp_stats(this);"><i class="fas fa-sync-alt"></i> Get Stats</a>
+      </div>
+    </div>
+    <div class="collapse" id="sp-{{ forloop.counter }}">
+      {% for b,b_values in sp_values.items %}
+      <div class="card-body">
+        <h5 class="card-title">{{ b }}</h5>
+        <table class="table table-hoverable table-bordered card-text">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">SO#</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Zoho Location</th>
+              <th scope="col">Product</th>
+              <th scope="col">Make</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Quoted Purchase Price</th>
+              <th scope="col">Vendor</th>
+              <th scope="col">Payment Cycle[BPT -VPT]</th>
+              <th scope="col">Base Selling Price</th>
+              <th scope="col">Selling Price</th>
+              <th scope="col">Margin Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sop in b_values %}
+              {% if sop.hiya == False %}
+              <tr>
+                <th scope="row">{{ sop.salesorder.salesorder_number }}</th>
+                <td scope="row">
+                  {{ sop.salesorder.buyer.contact_name }}
+                  <br>
+                  <div class="alert alert-info">
+                    <p style="font-weight:bold;font-size:smaller;">Freight(per Unit): {{ sop.salesorder.buyer.freight_per_kg }}</p>
+                    <p style="font-weight:bold;font-size:smaller;">Payment Terms: {{ sop.salesorder.buyer.payment_terms_no }}</p>
+                  </div>
+                  
+                </td>
+                <td style="{% if sop.salesorder.zoho_location == 'okhla' %} color:red{% elif sop.salesorder.zoho_location == 'baddi' %}color:blue{% endif %};font-weight:bold;text-transform: uppercase;">
+                  {{ sop.salesorder.zoho_location }}
+                </td>
+                <td>{{ sop.product.name }}</td>
+                <td>{{ sop.product.make }}</td>
+                <td>{{ sop.quantity }}</td>
+                <td>{{ sop.vpv.dealvendorproduct.vendor_price }}</td>
+                <td>
+                {{ sop.vpv.dealvendorproduct.deal.vendor.contact_name }}
+                <br>
+                  <div class="alert alert-info">
+                    <p style="font-weight:bold;font-size:smaller;">Freight(per Unit): {{ sop.vpv.dealvendorproduct.deal.vendor.freight_per_kg }}</p>
+                    <p style="font-weight:bold;font-size:smaller;">Payment Terms: {{ sop.vpv.dealvendorproduct.deal.vendor.payment_terms_no }}</p>
+                  
+                  </div>
+                </td>
+                <td>{{ sop.payment_cycle }}</td>
+                <td> {{ sop.selling_price }}</td>
+                <td style="{% if sop.above_base_price %}color:green{% else %}color:red{% endif %};font-weight:bold;">{{ sop.so_selling_price }}</td>
+                <td>
+                {{ sop.margin }}
+                <div class="alert alert-warning">
+                    <p style="font-weight:bold;font-size:smaller;">Margin %: {{ sop.margin_percentage }} %</p>
+                    
+                  
+                </div>
+                </td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<script>
+function get_overall_stats(sp){
+  
+  
+  var sp_id = sp.getAttribute("data-id");
+  $('div#overall-stats').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/bars/index.progress-bar-facebook-loader.gif' />");
+    $.ajax({
+            url: '../../../../../ajax/overall_stats',
+            type: "get",
+            data: {},
+            success: function(data){$('div#overall-stats').html(data.overall_stats_snippet);},
+            error: function(err) {console.log('error', err);}
+            })
+}
+function get_sp_stats(sp){
+  
+  var salesperson = sp.getAttribute("data-salesperson");
+  var sp_id = sp.getAttribute("data-id");
+  $('div#sp-stats-'+sp_id).html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/bars/index.progress-bar-facebook-loader.gif' />");
+    $.ajax({
+            url: '../../../../../ajax/salesperson_stats',
+            type: "get",
+            data: {'salesperson':salesperson},
+            success: function(data){$('div#sp-stats-'+sp_id).html(data.salesperson_stats_snippet);},
+            error: function(err) {console.log('error', err);}
+            })
+}
+$("#id_month").datepicker( {
+    format: "mm-yyyy",
+    viewMode: "months", 
+    minViewMode: "months"
+});
+$('.input-daterange input').each(function() {
+    $(this).datepicker('clearDates');
+});
+</script>
+{% endblock %}

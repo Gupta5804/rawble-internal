@@ -1,0 +1,222 @@
+{% extends 'home.html' %}
+{% block page-title-var %}Inward Service Delivery{% endblock page-title-var %}
+
+{% block application-active %}
+    <div class="btn-toolbar" style="align-self: center" >
+
+        <a href="{% url 'refresh_purchase_orders' %}" class="btn btn-outline-info form-group">Update Purchase orders from Zoho</a>
+        <a href="{% url 'send_mail_pickup' %}" class="btn btn-outline-info form-group" style="position: absolute;left: 0;margin-left: 2%;">Send mail for Today's pickup</a>
+        <a href="#" id="todayspickup" style="position: absolute; right: 0; margin-right: 2%" data-toggle="modal" data-target="#todayspickupmodal" class="btn btn-outline-info form-group">Todays Pickup</a>
+        <!-- Modal -->
+                <div class="modal fade" id="todayspickupmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Todays Pickup</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <form method="post" action="">
+                      <div class="modal-body">
+
+                      </div>
+                      <input type="submit" value="Received" class="btn btn-outline-success btn-block" name="received-pickup">
+                      </form>
+                    </div>
+                  </div>
+                </div>
+    </div>
+            <nav class="nav nav-tabs nav-justified">
+                    <a class="nav-item nav-link" id="hag" data-toggle="tab" href="#home">Others</a>
+                    <a class="nav-item nav-link" data-toggle="tab" href="#menu1">HIYA INDIA BIOTECH PVT LTD</a>
+            </nav>
+      <div class="tab-content">
+      <div id="home" class="tab-pane fade in">
+<table  class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Purchase Order Number</th>
+                <th>Sales Order</th>
+                <th>Vendor</th>
+                
+                <th>Status</th>
+                
+                
+                <th>Total</th>
+
+                <th>Select PickUp Dates</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+        {% for purchaseorder in purchaseorders %}
+        {% if purchaseorder.status != 'billed' and purchaseorder.status != 'cancelled' and purchaseorder.vendor.contact_name != 'HIYA INDIA BIOTECH PVT LTD' and purchaseorder.received_status == False %}
+            <tr>
+                <td>{{ purchaseorder.date }}</td>
+                <td><a href="{{ purchaseorder.purchaseorder_url }}" class="btn btn-outline-info btn-block">{{ purchaseorder.purchaseorder_number }}</a></td>
+                <td>
+                {% if purchaseorder.salesorder %}
+                    <a href="{{ purchaseorder.salesorder.salesorder_url }}" class="btn btn-outline-primary btn-sm btn-block">
+                        {{ purchaseorder.salesorder.salesorder_number }} 
+                    </a>
+                {% else %}
+                    No Sales Order
+                {% endif %}
+                </td>
+                
+                <td><a href="{% url 'vendor_profile' contact_id=purchaseorder.vendor.contact_id %}" class="btn btn-outline-primary btn-sm btn-block">{{ purchaseorder.vendor }}</a></td>
+                
+                <td>{{ purchaseorder.status }}</td>
+                
+                
+                <td>{{ purchaseorder.total }}</td>
+                <td>
+                    <a class="btn btn-outline-warning select-pickup btn-block" data-id="{{ purchaseorder.purchaseorder_id }}" data-toggle="modal" data-target="#po-pickup-{{ purchaseorder.purchaseorder_id }}">
+                        <i class="fas fa-hand-pointer"></i>  Select PickUp Date 
+                    </a>
+                    <div class="modal fade" id="po-pickup-{{ purchaseorder.purchaseorder_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content" style="width:118%">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Select PickUp Dates of PO# - <span style="color:red;">{{ purchaseorder.purchaseorder_number }}</span> of {{ purchaseorder.vendor.contact_name }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="" method="post">
+                                
+                                <div class="modal-body">
+                                    ...
+                                </div>
+                                <input type="submit" value="Save Dates" class="btn btn-outline-success btn-block" name="po-pickup" >
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                   
+                </td>
+
+            </tr>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+</table>
+      </div>
+      <div id="menu1" class="tab-pane fade in">
+          <table  class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Purchase Order Number</th>
+                <th>Sales Order</th>
+                <th>Vendor</th>
+
+                <th>Status</th>
+
+
+                <th>Total</th>
+
+                <th>Select PickUp Dates</th>
+
+            </tr>
+        </thead>
+        <tbody>
+        {% for purchaseorder in purchaseorders %}
+        {% if purchaseorder.status != 'billed' and purchaseorder.status != 'cancelled' and purchaseorder.vendor.contact_name == 'HIYA INDIA BIOTECH PVT LTD' and purchaseorder.received_status == False %}
+            <tr>
+                <td>{{ purchaseorder.date }}</td>
+                <td><a href="{{ purchaseorder.purchaseorder_url }}" class="btn btn-outline-info btn-block">{{ purchaseorder.purchaseorder_number }}</a></td>
+                <td>
+                {% if purchaseorder.salesorder %}
+                    <a href="{{ purchaseorder.salesorder.salesorder_url }}" class="btn btn-outline-primary btn-sm btn-block">
+                        {{ purchaseorder.salesorder.salesorder_number }}
+                    </a>
+                {% else %}
+                    No Sales Order
+                {% endif %}
+                </td>
+
+                <td><a href="{% url 'vendor_profile' contact_id=purchaseorder.vendor.contact_id %}" class="btn btn-outline-primary btn-sm btn-block">{{ purchaseorder.vendor }}</a></td>
+
+                <td>{{ purchaseorder.status }}</td>
+
+
+                <td>{{ purchaseorder.total }}</td>
+                <td>
+                    <a class="btn btn-outline-warning select-pickup btn-block" data-id="{{ purchaseorder.purchaseorder_id }}" data-toggle="modal" data-target="#po-pickup-{{ purchaseorder.purchaseorder_id }}">
+                        <i class="fas fa-hand-pointer"></i>  Select PickUp Date
+                    </a>
+                    <div class="modal fade" id="po-pickup-{{ purchaseorder.purchaseorder_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Select PickUp Dates of PO# - <span style="color:red;">{{ purchaseorder.purchaseorder_number }}</span> of {{ purchaseorder.vendor.contact_name }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="" method="post">
+
+                                <div class="modal-body">
+                                    ...
+                                </div>
+                                <input type="submit" value="Save Dates" class="btn btn-outline-success btn-block" name="po-pickup" >
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                </td>
+
+            </tr>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+</table>
+      </div>
+      </div>
+    <script>
+    $('#hag').click();
+    </script>
+    <script>
+    $(document).on("click",".select-pickup",function(){
+        var purchaseorder_id = $(this).data('id');
+        
+        $('#po-pickup-'+purchaseorder_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
+        $.ajax({
+            url: '../../../../../ajax/purchaseorder_pickup',
+            type: "get",
+            data: {'slug': purchaseorder_id},
+            success: function(data) {
+              $('#po-pickup-'+purchaseorder_id).modal('show');
+              $('#po-pickup-'+purchaseorder_id).find('.modal-body').html(data.po_snippet);
+            },
+            error: function(err) {
+              console.log('error', err);
+            }
+          })
+    });
+    </script>
+
+    <script>
+    $('#todayspickup').on("click",function () {
+
+        $('#todayspickupmodal').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
+         $.ajax({
+            url: '../../../../../ajax/todays_pickup',
+            type: "get",
+            success: function(data) {
+              $('#todayspickupmodal').find('.modal-body').html(data.po_snippet);
+            },
+            error: function(err) {
+              console.log('error', err);
+            }
+          })
+
+    })
+    </script>
+{% endblock application-active %}

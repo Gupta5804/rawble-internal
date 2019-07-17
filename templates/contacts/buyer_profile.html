@@ -1,0 +1,317 @@
+{% extends 'home.html' %}
+ 
+{% block page-title-var %} <span>Buyer Profile of {{ buyer.contact_name }}</span>{% endblock page-title-var %}
+{% block application-active %}
+
+<div class="container">
+    <table class="table table-bordered shadow p-3 mb-5 bg-white rounded-lg">
+    <tbody>
+        <tr>
+          <td class="bg-info table-dark" colspan="4" style="text-align:center;font-weight:800;">
+          {{ buyer.contact_name }}
+          </td>
+        </tr>
+        <tr>
+            <td class="table-secondary">Location:</td>
+            <td>{{ buyer.place_of_contact}}</td>
+            <form method="post" action="">
+            {% csrf_token %}
+              <td class="table-secondary">Freight (per kg):</td>
+              <td>
+                
+                <div class="input-group mb-3">
+                  <input type="number" step="0.01" name="freight" id="freight" class="form-control" value="{{ buyer.freight_per_kg }}" aria-label="Freight Per Kg" aria-describedby="button-addon2" >
+                  <div class="input-group-append" id="side-button-group" style="display:none;">
+                    <button class="btn btn-outline-warning" name="update_freight" type="submit" id="button-addon2" title="Update Freight">
+                      <i class="fas fa-exchange-alt" ></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </form>
+          </tr>
+        <tr>
+            <td class="table-secondary">Payment Terms:</td>
+            <td>{{ buyer.payment_terms }}</td>
+            <td class="table-secondary">Outstanding-Receivable:</td>
+            <td>{{ buyer.outstanding_receivable }}</td>
+            
+        </tr>
+        <tr>
+            <td class="table-secondary">Contact Person:</td>
+            <td>{{ buyer.first_name }} {{ buyer.last_name }} </td>
+            <td class="table-secondary">Email-id:</td>
+            <td>[ {{ buyer.email }} ]</td>
+            
+        </tr>
+        <tr>
+            <td class="table-secondary">Relationship Manager:</td>
+            <td>{{ buyer.relationship_manager }}</td>
+            <td class="table-secondary">Gst No.: </td>
+            <td>{{ buyer.gst_no }}</td>
+        </tr>
+    </tbody>
+    </table>
+    
+    
+    
+    
+    
+</div>
+<hr>
+<!-- ================================new scrollspy================================= -->
+<nav class="navigation fixed" id="nav">
+<div class="container">
+  <h2 style="color: black ; text-align: center;">Products of <span style="color:red; text-decoration: underline; "> {{ buyer.contact_name }}</span> </h2>
+</div>
+  <div class="container">
+    <div class="row">
+      {% for buyerproduct in buyerproducts %}
+      <div class="col-4">
+        <a href="#head-{{ buyerproduct.id }}"><button type="button" onclick="document.getElementById('but-{{ buyerproduct.id }}').click()" class="btn btn-outline-dark btn-block" style="margin: 3%;" >{{ buyerproduct.product.name }} </button></a>
+      </div>
+      {% endfor %}
+    </div>
+    </div>    
+  </nav>
+  <br>
+  <hr>
+<!-- ===========================================end:-new scrollspy========================= -->
+
+
+<div id="accordion" role="tablist" aria-multiselectable="true" style="height: 400px; overflow: auto; margin-top:1%; ">
+{% for buyerproduct in buyerproducts %}
+  <div class="card m-1 p-3" id="head-{{ buyerproduct.id }}">
+    <div class="card-header" role="tab" id="heading-{{ buyerproduct.id }}">
+      <h5 class="mb-0" style="">
+        <a data-toggle="collapse" id="but-{{ buyerproduct.id }}" class="btn btn-outline-dark btn-block" data-parent="#accordion" href="#collapse-{{ buyerproduct.id }}" aria-expanded="true" aria-controls="collapse-{{ buyerproduct.id }}" title="Click To View Variations">
+          {{ buyerproduct.product.name }}  
+        </a>
+      </h5>
+      <table class="table table-bordered">
+    <tbody>
+        <tr>
+            <td class="table-secondary">Make:</td>
+            <td>{{ buyerproduct.product.make }}</td>
+            <td class="table-secondary">Group:</td>
+            <td>{{ buyerproduct.product.group }}</td>
+        </tr>
+        <tr>
+            <td class="table-secondary">Informations:</td>
+            <td>
+              <a href="#" class="btn btn-outline-success btn-sm sales_history m-1" data-toggle="modal" data-target=".sales-{{ buyerproduct.product.item_id }}" data-id="{{ buyerproduct.product.item_id }}" title="Sales History(Zoho Books Invoice)">
+                <i class="fas fa-dollar-sign"></i> Sales
+              </a>
+
+              <a href="#" class="btn btn-outline-danger btn-sm m-1 purchase_history" data-toggle="modal" data-target=".purchase-{{ buyerproduct.product.item_id }}" data-id="{{ buyerproduct.product.item_id }}" title="Purchase History(Zoho Books Bills)">
+                <i class="fas fa-dollar-sign"></i> Purchase
+              </a>
+              
+              <a href="#" class="btn btn-outline-info btn-sm m-1 graph" data-toggle="modal" data-target=".graph-{{ buyerproduct.product.item_id }}" title="Detailed Summary buyer Wise" data-id="{{ buyerproduct.product.item_id }}">
+                <i class="fas fa-chart-area"></i> Summary
+              </a>
+
+              <a href="#" class="btn btn-outline-info btn-sm m-1 googlechartsapp" data-toggle="modal" data-target=".googlechartsapp-{{ buyerproduct.product.item_id }}" title="Google Charts To Filter Data" data-id="{{ buyerproduct.product.item_id }}">
+                <i class="fas fa-chart-area"></i> Google Charts App
+              </a>
+              
+              <div class="modal fade sales-{{ buyerproduct.product.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">Sales of :</h5>
+                      <h4 style="text-align:center;">
+                        <span style="text-decoration: underline;"> {{ buyerproduct.product.name }} </span>
+                      </h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- PURCHASES MODAL -->
+              <div class="modal fade purchase-{{ buyerproduct.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">Purchases of:</h5>
+                      <h4 style="text-align:center;">
+                        <span style="text-decoration: underline;"> {{ buyerproduct.product.name }} </span>
+                      </h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Graphical Summary MODAL -->
+              <div class="modal fade graph-{{ buyerproduct.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content" style="left:-19%;width:141%">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">Summary</h5>
+                        <h4 style="text-align:center;">
+                          <span style="text-decoration: underline;">{{ buyerproduct.product.name }} </span> 
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Google Charts App MODAL -->
+              <div class="modal fade googlechartsapp-{{ buyerproduct.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content" style="left:-32%;width:165%">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle" style="">
+                        <img src="https://cdn.iconscout.com/icon/free/png-256/graph-286-84772.png" class="mr-1" style="height:53px">
+                      </h5>
+                      <h4>
+                        <span style="text-decoration: underline;"> Product</span>: {{ buyerproduct.product.name }} 
+                      </h4>
+                      <h4> ( Make :<span style="text-decoration: underline;"> {{ buyerproduct.product.make }} )
+                      </h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            
+            
+            <td class="table-secondary">COA Files:</td>
+            <td>
+              <a class="btn btn-outline-success m-1" href="{% url "coa_upload" pk=buyerproduct.product.item_id %}">
+                <i class="fas fa-cloud-upload-alt"></i> Upload
+              </a>
+              <a  href="#" class="btn {% if buyerproduct.product.coafile_set.count > 0 %} btn-outline-info {% else %} btn-outline-dark disabled{% endif %} btn-sm m-1 coaview" role="button" data-toggle="modal" {% if buyerproduct.product.coafile_set.count > 0 %} {% else %} aria-disabled="true"{% endif %} data-target=".coaview-{{ buyerproduct.product.item_id }}" title="Quick View of Coa Files Uploaded" data-id="{{ buyerproduct.product.item_id }}" class="btn btn-outline-primary btn-block" >
+                {% if buyerproduct.product.coafile_set.count > 0 %}
+                  <i class="fas fa-eye"></i>
+                {% else %}
+                  <i class="fas fa-eye-slash"></i>
+                {% endif %} 
+                View 
+              </a> 
+              
+              <br> 
+              
+              {% if buyerproduct.product.coafile_set.count > 0 %}
+                <span style="font-weight:bold;">
+                  [ {{ buyerproduct.product.coafile_set.count }} COAs Uploaded]
+                </span>
+              {% else %}
+                <span style="color:red;font-weight:bold;">No COAs Uploaded</span> 
+              {% endif %}
+              
+              <div class="modal fade coaview-{{ buyerproduct.product.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content" style="left:-19%;width:141%">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">COA files:</h5>
+                      <h4 style="text-align:center;">
+                        <span style="text-decoration: underline;">{{ buyerproduct.product.name }} </span> 
+                      </h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer"> 
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            
+        </tr>
+        
+    </tbody>
+    </table>
+    
+
+    <div id="collapse-{{ buyerproduct.id }}" class="collapse" role="tabpanel" aria-labelledby="heading-{{ buyerproduct.id }}">
+      <div class="card-block">
+        <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Deal ID</th>
+                <th scope="col">Label Name</th>
+                <th scope="col">Specification</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Delivery Terms</th>
+                <th scope="col">Last Updated</th>
+                <th scope="col">Vendor Price</th>
+                <th scope="col">Expiry Status</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+ 
+        </table>
+      </div>
+    </div>
+        
+  </div>
+  </div>
+  {% endfor %}
+  <a id="back-to-top" href="#" class="btn btn-danger btn-lg back-to-top" role="button" title="Click to return on the top page" data-toggle="tooltip" data-placement="left" style="cursor: pointer;position: fixed;bottom: 20px;right: 20px;display:none;width:90px;"><i class="fas fa-arrow-up" ></i></a>
+	    
+</div>
+
+
+
+
+
+<script>
+$("#nav").scrollspy({ offset: -75 });
+$('input#freight').change(function(){
+$('#side-button-group').css('display','block');
+});
+$('select#add_product_select').on('change',function(){
+    product = $(this).find(':selected').data('product');
+    product_group = $(this).find(':selected').data('product_group');
+    unit = $(this).find(':selected').data('unit');
+    
+    
+    
+    product_id = $(this).find(':selected').data('product_id');
+    
+    
+    
+    console.log(product);
+    $('table#add_selectedproduct').html('<tr><td class="table-secondary">Product:</td><td>'+product+'</td></tr><tr><td class="table-secondary">Label Name:</td><td><input type="text" name="label_name"  class="form-control" ></td></tr><tr><td class="table-secondary">Product ID (ZOHO):</td><td><input type="hidden" value="'+product_id+'" name="productid"></td></tr><tr><td class="table-secondary">Product Group:</td><td>'+product_group+'</td></tr><tr><td class="table-secondary">Delivery Terms:</td><td class="form-group"><select class="form-control" id="delivery-terms" name="delivery_terms"><option value="Door Deliver">Door Deliver</option><option value="Ex-Godown">Ex-Godown</option><option value="FOR">FOR</option><option value="Local Transport">Local Transport</option></select></td></tr><tr><td class="table-secondary">Quantity:</td><td><input type="number" name="quantity" step="0.01" class="form-control" required>('+unit+')</td></tr><tr><td class="table-secondary">Specifications:</td><td><input type="text" name="specs"  class="form-control" ></td></tr><tr><td class="table-secondary">Vendor Price (INR):</td><td><input type="number" name="price" step="0.01" class="form-control" required></td></tr><tr><td class="table-secondary">Expiry Date:</td><td class="form-group"><input type="date" name="expiry" step="0.01" class="form-control" required><input type="hidden" name="product_id" value="'+product_id+'"></td></tr>');
+});
+</script>
+{% endblock application-active %}

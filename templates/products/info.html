@@ -1,0 +1,192 @@
+<a href="#" class="btn btn-outline-success btn-sm btn-block sales_history" data-toggle="modal" data-target=".sales-{{ record.item_id }}" data-id="{{ record.item_id }}" title="Sales History(Zoho Books Invoice)">
+    <i class="fas fa-dollar-sign"></i>
+    Sales
+</a> 
+<a href="#" class="btn btn-outline-danger btn-sm btn-block purchase_history" data-toggle="modal" data-target=".purchase-{{ record.item_id }}" data-id="{{ record.item_id }}" title="Purchase History(Zoho Books Bills)">
+    <i class="fas fa-dollar-sign"></i>
+    Purchase
+</a>
+<a href="#" class="btn btn-outline-info btn-sm btn-block graph" data-toggle="modal" data-target=".graph-{{ record.item_id }}" title="Detailed Summary Vendor Wise" data-id="{{ record.item_id }}">
+    <i class="fas fa-chart-area"></i>
+    Summary
+</a>
+<a href="#" class="btn btn-outline-info btn-sm btn-block googlechartsapp" data-toggle="modal" data-target=".googlechartsapp-{{ record.item_id }}" title="Google Charts To Filter Data" data-id="{{ record.item_id }}">
+    <i class="fas fa-chart-area"></i>
+    Google Charts App
+</a>
+<div class="modal fade sales-{{ record.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">
+                    Sales of :
+                </h5>
+                <h4 style="text-align:center;">
+                    <span style="text-decoration: underline;">
+                        {{ record.name }}
+                    </span>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- PURCHASES MODAL -->
+<div class="modal fade purchase-{{ record.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">
+                    Purchases of:
+                </h5>
+                <h4 style="text-align:center;">
+                    <span style="text-decoration: underline;">
+                        {{ record.name }}
+                    </span>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Graphical Summary MODAL -->
+<div class="modal fade graph-{{ record.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="left:-19%;width:141%">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">
+                    Summary
+                </h5>
+                <h4 style="text-align:center;">
+                    <span style="text-decoration: underline;">
+                        {{ record.name }}
+                    </span>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">
+                Close
+            </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Google Charts App MODAL -->
+<div class="modal fade googlechartsapp-{{ record.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="left:-32%;width:165%">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="">
+                    <img src="https://cdn.iconscout.com/icon/free/png-256/graph-286-84772.png" class="mr-1" style="height:53px">
+                </h5>
+                <h4>
+                    <span style="text-decoration: underline;">
+                        Product
+                    </span>
+                    : {{ record.name }}
+                </h4>
+                <h4>
+                    ( Make :<span style="text-decoration: underline;"> {{ record.make }} )
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">
+                Close
+            </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if record.group == null %}
+    <button type="button" class="btn btn-outline-warning btn-sm btn-block" data-toggle="modal" data-target="#exampleModal" style="margin-top: 2%">
+  Add Product To Group
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title">Add Product to Group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body">
+        <ul class="nav nav-tabs">
+            <li class="active"><button  style="width: 300%" data-toggle="tab" href="#home" class="btn btn-outline-secondary btn-sm btn-block"><a >Add to existing Group</a></button></li>
+            <li><button style="width: 300%; margin-left: 200%" data-toggle="tab" href="#menu1" class="btn btn-outline-secondary btn-sm btn-block"><a >Add to a new Group</a></button></li>
+        </ul>
+
+        <div class="tab-content">
+             <div id="home" class="tab-pane fade in active">
+
+                 <form action="{% url 'products_listing_post' %}" method="post">
+                    {% csrf_token %}
+                     <select class="form-control m-2" name="product_group">
+                         {% for group in product_group %}
+                        <option value="{{ group.pk }}">{{ group.name }}</option>
+                         {% endfor %}
+                     </select>
+
+                <div class="modal-footer">
+                <input name="groupselected" type="submit">
+                     <input type="number" name="pk" style="display: none" value="{{ record.item_id }}">
+                 </div>
+                 </form>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+
+            <form action="{%  url 'products_listing_post' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                         <label class="m-2" style="font-weight: bold; font-size: large" for="name"> Name:</label>
+                         <input class="form-control m-2" type="text" name="groupmade" id="name" required placeholder="Input Group Name">
+                         <input type="number" name="pk" style="display: none" value="{{ record.item_id }}">
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-outline-primary">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div>
+            </div>
+    </div>
+  </div>
+</div>
+
+    <script>
+
+    </script>
+{% endif %}

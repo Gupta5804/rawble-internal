@@ -1,0 +1,28 @@
+
+<form method="post" action="" id="estimate-addvendor-form" onsubmit="return estimateAddVendor(this);">
+    {% csrf_token %}
+        <select name="vendor" id="vendor" class="form-control form-control-lg">
+            <option value="">Select Vendor</option>
+            {% for vendor in vendors %}
+                              
+                <option value="{{ vendor.contact_id }}" data-unit="{{ product.unit }}" data-product_id="{{ product.pk }}" data-vendor_contact_id="{{ vendor.contact_id }}" data-payment_terms="{{ vendor.payment_terms }}" data-place_of_contact="{{ vendor.place_of_contact }}">{{ vendor.contact_name }} </option>
+                                  
+            {% endfor %}
+                            
+        </select>
+        <table class="table table-bordered mt-3" id="addvendor-{{ product.pk }}">
+        </table>
+        <input type="submit" name="add_vendor" value="Add Vendor" title="Add Vendor to the Product" class="btn btn-outline-success btn-lg btn-block">
+</form>
+
+<script>
+$('select#vendor').on('change',function(){
+  vendor_contact_id = $(this).find(':selected').data('vendor_contact_id');
+  place_of_contact = $(this).find(':selected').data('place_of_contact');
+  payment_terms = $(this).find(':selected').data('payment_terms');
+  product_id = $(this).find(':selected').data('product_id');
+  unit = $(this).find(':selected').data('unit');
+  
+$('table#addvendor-'+product_id).html('<tr><td class="table-secondary">Location:</td><td>'+place_of_contact+'</td></tr><tr><td class="table-secondary">Payment Terms:</td><td>'+payment_terms+'</td></tr><tr><td class="table-secondary">Label Name:</td><td><input type="text" id="label_name" name="label_name"  class="form-control" ></td></tr><tr><td class="table-secondary">Delivery Terms:</td><td class="form-group"><select class="form-control" id="delivery_terms" name="delivery_terms"><option value="Door Deliver">Door Deliver</option><option value="Ex-Godown">Ex-Godown</option><option value="FOR">FOR</option><option value="Local Transport">Local Transport</option></select></td></tr><tr><td class="table-secondary">Pack Size:</td><td><input type="number" name="quantity" id="quantity" step="0.01" class="form-control" required>('+unit+')</td></tr><tr><td class="table-secondary">Specifications:</td><td><input type="text" id="specs" name="specs"  class="form-control" ></td></tr><tr><td class="table-secondary">Vendor Price (INR):</td><td><input type="number" name="price" id="price" step="0.01" class="form-control" required></td></tr><tr><td class="table-secondary">Expiry Date:</td><td class="form-group"><input type="date" id="expiry" name="expiry" class="form-control" required><input type="hidden" name="product_id" id="product_id" value="'+product_id+'"><input type="hidden" name="contact_id" value="'+vendor_contact_id+'"></td></tr>');
+});
+</script>

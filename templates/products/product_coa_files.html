@@ -1,0 +1,82 @@
+{% extends 'home.html' %}
+{% block page-title-var %} Coa Files  {% endblock page-title-var %}
+{% block application-active %}
+
+<h5 style="text-align:center"> Product : {{ product }}</h5>
+<button type="button" class="btn btn-outline-primary js-upload-photos" style="display:block;margin:auto;margin-bottom:3%">
+  <span class="glyphicon glyphicon-cloud-upload"></span> Upload photos
+</button>
+
+{# 2. FILE INPUT TO BE USED BY THE PLUG-IN #}
+<input id="fileupload" type="file" name="file" multiple
+       style="display: none;"
+       data-url="{% url 'coa_upload' pk=product_pk %}"
+       data-product="{{ product_pk }}"
+       data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+{{ form }}
+       
+<div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Uploading...</h4>
+      </div>
+      <div class="modal-body">
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{# 3. TABLE TO DISPLAY THE UPLOADED PHOTOS #}
+<table id="gallery" class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Links</th>
+      <th>Uploaded At</th>
+      <th>Uploaded By</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for coa_file in coa_files %}
+      <tr>
+        <td><a class="btn btn-outline-primary btn-block" onclick="window.open('{{ coa_file.file.url }}','name','width=1000,height=700')" href="#">{{ coa_file.file.name }}</a></td>
+        <td>{{ coa_file.uploaded_at|date }}</td>
+        <td>{{ coa_file.uploaded_by }}</td>
+        <td>
+            <a href="" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-trash"></i>Delete</a>
+{#      =================================delete Modal===================================================#}
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Coa File</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                   {{ coa_file.file.name }}
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <form action="{% url 'products_listing_post' %}" method="post">
+                          {% csrf_token %}
+                    <button type="submit" class="btn btn-primary inline-group">Save changes</button>
+                          <input style="display: none" name="delete_coafile" value="{{ coa_file.id }}" type="text">
+                      </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+{#      ==================================end:-delete Modal==============================================#}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+{% endblock application-active %}

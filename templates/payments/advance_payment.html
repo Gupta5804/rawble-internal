@@ -1,0 +1,125 @@
+{% extends 'home.html' %}
+{% block page-title-var %} Advance Payments{% endblock page-title-var %}
+
+{% block application-active %}
+<div class="container" style="margin-bottom:5%;">
+  <div class="row">
+    <div class="col-sm">
+      <a href="{% url 'advance_payment_create' %}" class="btn btn-outline-primary btn-lg btn-block">Add New</a>
+    </div>
+    <div class="col-sm">
+      <a href="{% url 'advance_payment_reorder' %}" class="btn btn-outline-primary btn-lg btn-block">Re-Order Payments</a>
+    </div>
+
+  </div>
+</div>
+{% if advancepayments %}
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Vendor</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Payment Terms</th>
+      <th scope="col">Reason</th>
+      <th scope="col">Comment</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for advancepayment in advancepayments %}
+    <tr>
+      <th scope="row">{{ advancepayment.vendor }}</th>
+      <td>{{ advancepayment.amount }}</td>
+      <td>{{ advancepayment.payment_terms }}</td>
+      <td>{{ advancepayment.reason }}</td>
+      <td>{{ advancepayment.comment }}</td>
+      <td><a href="#" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal{{ advancepayment.id }}">View</a> </td>
+      <!-- Modal -->
+      <div class="modal fade" id="modal{{ advancepayment.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="exampleModalLabel">Advance Payment By {{ advancepayment.vendor }}</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Time Created: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ advancepayment.time_created }}</h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Amount: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ advancepayment.amount }}</h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Payment Terms: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ advancepayment.payment_terms }}</h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Date: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ advancepayment.date }}</h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Reason: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ advancepayment.reason }}</h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Comment: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ advancepayment.comment }}</h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Delivery Terms: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ advancepayment.delivery_terms }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+          </div>
+        </div>
+</div>
+      <td><a href="{% url 'advance_payment_delete' pk=advancepayment.id %}" class="btn btn-outline-danger btn-sm"> Delete </a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+<h3 style="text-align:center">No Payments To display</h3>
+
+{% endif %}
+{% endblock application-active %}

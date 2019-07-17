@@ -1,0 +1,189 @@
+<tr id="productrow-{{ product.item_id }}">
+      <th scope="row" style="vertical-align:middle;">
+        
+        
+            <h5 style="text-align:center;" class="alert alert-secondary" role="alert">
+               
+              <a href="{% url 'products_listing' %}?name=&name__icontains={{ product.name }}&make=&make__icontains=&status=&group=" target="_blank" class="btn btn-outline-primary"> 
+                {{ product.name }}
+              </a>
+              <a href="#" class="btn btn-outline-danger btn-sm float-right" onclick="return deleteRow(this);">
+                <i class="fas fa-times"></i>
+              </a> 
+              <br><br> 
+              Make: {{ product.make }} 
+               ==>
+              [ <span style="color:red;">{{ product.vendorproduct_set.count }}</span> Vendor(s)]
+            </h5>
+          
+        {% if product.group %}
+          <select class="form-control col-11" style="display:inline-block;" id="productaddselect-{{ product.item_id }}">
+            {% for product2 in product.group.product_set.all %}
+              {% if product2.status == "Ac" %}
+                <option {% if product.item_id == product2.item_id %}selected{% endif %} data-product_id="{{ product2.item_id }}" data-quantity="{{ quantity }}" data-pack_size="{{ pack_size }}" data-estimate_id="{{ estimate.estimate_id }}">{{ product2.name }} | Make: {{ product2.make }} | [ <span style="color:red;">{{ product2.vendorproduct_set.count }}</span> Vendor(s)]</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <a class="btn btn-outline-success mb-1" href="#" data-id="{{ product.item_id }}" onclick="return addProductRow(this);" ><i class="fas fa-plus"></i></a>
+        {% else %}
+          {{ product.name }}  [ Item Not Grouped ]
+        {% endif %}
+      </th>
+      
+      <td style="vertical-align:middle;padding:0"> 
+        <div class="container">
+         <div class="row">
+            <div class="col-6">
+              <input type="number" style="width:133%" class="input-group" name="quantity" step="0.01" value="{{ quantity }}" disabled>
+              <input type="hidden" style="width:133%" class="input-group" name="quantity" step="0.01" value="{{ quantity }}">
+              <input type="hidden" style="width:133%" class="input-group" name="rate" step="0.01" value="0">
+
+            </div>
+            <div class="col-6">
+            
+                {{ product.unit }}
+           
+             
+            </div>
+        </div>
+        </div>
+      </td>
+      <td style="vertical-align:middle;" >
+      
+          <input type='number' class="input-group" name='pack_size'  value='{{ pack_size }}' style="width:100%;" disabled>
+          <input type='hidden' class="input-group" name='pack_size'  value='{{ pack_size }}' style="width:100%;" >
+         
+      </td>
+      
+      <td style="vertical-align:middle;" >
+      <!-- Add Vendor Link-->
+      <a class="btn btn-outline-success btn-block btn-sm  mb-2 estimate_addvendor_ajax" data-toggle="modal" data-target=".estimate_addvendor_ajax-{{ product.item_id }}" data-id="{{ product.item_id }}" href="#">
+        <i class="fas fa-user-plus"></i> Add Vendor
+      </a>
+      <!-- Add Vendor MODAL-->
+      <div class="modal fade estimate_addvendor_ajax-{{ product.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">
+                <i class="fas fa-user-plus"></i> 
+                  Add Vendor to ->  
+                <i style="font-weight:800">{{ product.name }} </i>
+              </h5>
+                      
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            </div>
+                    
+          </div>
+        </div>
+      </div>
+      <!-- Add Vendor Variation Link-->
+      <a class="btn btn-outline-warning btn-block btn-sm mb-2 estimate_addvendorvariation_ajax" data-toggle="modal" data-target=".estimate_addvendorvariation_ajax-{{ product.item_id }}" data-id="{{ product.item_id }}" href="#">
+        <i class="fas fa-user-plus"></i> Add Variation From Vendor
+      </a>
+      <div class="modal fade estimate_addvendorvariation_ajax-{{ product.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">
+                <i class="fas fa-user-plus"></i> 
+                  Add Vendor Variation to ->  
+                <i style="font-weight:800">{{ product.name }} </i>
+              </h5>
+                      
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            </div>
+                    
+          </div>
+        </div>
+      </div>
+      
+      <!-- Update Vendor Variation Link-->
+      <a class="btn btn-outline-warning btn-block btn-sm mb-2 estimate_updatevendorvariation_ajax" data-toggle="modal" data-target=".estimate_updatevendorvariation_ajax-{{ product.item_id }}" data-id="{{ product.item_id }}" href="#">
+        <i class="fas fa-upload"></i> Select Vendor Variation to Update
+      </a>
+      <!-- Update Vendor Variation MODAL-->
+      <div class="modal fade estimate_updatevendorvariation_ajax-{{ product.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">
+                <i class="fas fa-user-plus"></i> 
+                  Update Vendor Variations of ->  
+                <i style="font-weight:800">{{ product.name }} </i>
+              </h5>
+                      
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="alert alert-success"role="alert">
+            <h4>Select and Update: Delivery Terms, Price and Expiry of the Variation</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+                    
+          </div>
+        </div>
+      </div>
+      <input name="product_id" value = "{{ product.item_id }}" type="hidden">
+      <div class="input-group">
+   <!--   
+<a href="{% url 'products_listing' %}?name=&name__icontains={{ item.name }}&make=&make__icontains=&status=&group=" target="_blank" class="btn btn-outline-primary btn-sm btn-block m-2">Update Price / Attach Vendor</a>-->
+        <select class="custom-select purchaseprice-{{ product.item_id }}" name="vendorproductvariation_id" id="purchaseprice">
+  <option value="" selected>Select Purchase Price From Active Deals</option>
+    
+        {% for vendorproduct in product.vendorproduct_set.all %}
+          <optgroup style="font-size:109%;color:black;" label="Vendor: {{ vendorproduct.vendor.contact_name }} || Payment Terms: {{ vendorproduct.vendor.payment_terms }} || Location: {{ vendorproduct.vendor.place_of_contact }}">
+            {% for vendorproductvariation in vendorproduct.vendorproductvariation_set.all %}
+
+              <option style="color:black;" class="{% if vendorproductvariation.dealvendorproduct.expiry_status > 0 %} bg-success {% elif vendorproductvariation.dealvendorproduct.expiry_status == 0 %} bg-warning {% else %} bg-danger{% endif %}" value="{{ vendorproductvariation.id }}" data-item_id = "{{ product.item_id }}" data-purchase_price="{{ vendorproductvariation.dealvendorproduct.vendor_price }}" data-customer_freight="{{ estimate.buyer.freight_per_kg }}" data-vendor_freight="{{ vendorproduct.vendor.freight_per_kg }}"  data-vpt="{{ vendorproduct.vendor.payment_terms_no }}" data-bpt ="{{ estimate.buyer.payment_terms_no }}">>> Variation - {{ forloop.counter }} || Specs:{{ vendorproductvariation.dealvendorproduct.specs }} | Pack-size:{{ vendorproductvariation.dealvendorproduct.quantity }} || Price:{{ vendorproductvariation.dealvendorproduct.vendor_price }} || ({% if vendorproductvariation.dealvendorproduct.expiry_status > 0 %} Will expire in {{ vendorproductvariation.dealvendorproduct.expiry_status }} day(s). {% elif vendorproductvariation.dealvendorproduct.expiry_status == 0 %} Expires Today {% else %} Expired {% widthratio vendorproductvariation.dealvendorproduct.expiry_status 1 -1 %} day(s) ago.{% endif %})
+              </option>
+
+            {% endfor %}
+          </optgroup>
+        {% endfor %}
+      
+</select>
+      </div>
+      <table id="{{ product.item_id }}" class="table table-sm mt-1">
+        
+      </table>
+      </td>
+      
+      
+           
+           <td>
+              <a class="btn btn-outline-primary btn-block" href="{% url 'coa_upload' pk=product.item_id %}">Upload</a>
+              <a  href="#" class="btn btn-outline-primary btn-sm btn-block coaview" data-toggle="modal" data-target=".coaview-{{ product.item_id }}" title="Quick View of Coa Files Uploaded" data-id='{{ product.item_id }}' class="btn btn-outline-primary btn-block" >View</a>
+              
+              <div class="modal fade coaview-{{ product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" style="left:-19%;width:141%">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">COA fjjiles</h5><h4 style="text-align:center;"><span style="text-decoration: underline;">{{ item.name }} </span> </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            </td>
+    </tr>

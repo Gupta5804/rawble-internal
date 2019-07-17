@@ -1,0 +1,325 @@
+{% autoescape off %} 
+<div class="container"><div class="row">
+<div class="col-3" ><h4>Location:</h4><div id="locationfilter"></div></div>
+<div class="col-3" ><h4>Customer:</h4><div id="customerfilter"></div></div>
+<div class="col-3" ><h4>Vendor:</h4><div id="vendorfilter"></div></div>
+<div class="col-3" ><h4>Product:</h4><div id="productfilter"></div></div>
+</div></div>
+
+<div id = "container" style = "width: 81%; height: 100%; margin: 0 auto"></div>
+      
+      <script language = "JavaScript">
+      
+       google.charts.load('45', {'packages':['corechart','controls']});
+         google.charts.setOnLoadCallback(drawVisualization)
+         function drawVisualization() {
+            // Define the chart to be drawn.
+            var data = new google.visualization.DataTable();
+            data.addColumn('date', 'Date');
+            data.addColumn('number', 'Sales');
+            data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+            data.addColumn('number', 'Purchase');
+            {% for deal in deals %}
+            //data.addColumn('number','Vendor Deal - {{ forloop.counter }} [{{ deal.product.name }}] ');
+            
+            {% endfor%}
+            //data.addColumn('string', 'Contact');
+            
+            //data.addColumn('string', 'Contact Type');
+            //data.addColumn('string', 'Tooltip');
+            data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+            data.addColumn('number', 'Vendor Deals');
+            data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
+            data.addColumn({'type': 'string', 'id': 'Location', 'role': 'annotationText' });
+            data.addColumn({'type': 'string', 'id': 'Customer' , 'role':'annotationText'});
+            data.addColumn({'type': 'string', 'id': 'Vendor' , 'role':'annotationText'});
+            data.addColumn({'type': 'string', 'id': 'Product' , 'role':'annotationText'});
+            data.addRows( [
+            {% for row in data %}[{% for col in row %}{% if col == 'null' %}null{% elif forloop.counter == 2 or forloop.counter == 4 or forloop.counter == 6 %}{{ col }}{% elif forloop.counter == 1 %}new Date{{ col }}{% else %}"{{ col }}"{% endif %},{% endfor %}],
+            {% endfor %}
+            ]);
+            
+            
+            // Set chart options
+            
+
+            // Instantiate and draw the chart.
+            var dashboard = new google.visualization.Dashboard(document.getElementById('container'));
+            var customerFilter = new google.visualization.ControlWrapper({
+               'controlType':'CategoryFilter',
+               'containerId':'customerfilter',
+               'options':{
+                  'filterColumnIndex':8,
+               },
+            });
+            var vendorFilter = new google.visualization.ControlWrapper({
+               'controlType':'CategoryFilter',
+               'containerId':'vendorfilter',
+               'options':{
+                  'filterColumnIndex':9,
+               },
+            });
+             var productFilter = new google.visualization.ControlWrapper({
+               'controlType':'CategoryFilter',
+               'containerId':'productfilter',
+               'options':{
+                  'filterColumnIndex':10,
+               },
+            });
+            var locationFilter = new google.visualization.ControlWrapper({
+               'controlType':'CategoryFilter',
+               'containerId':'locationfilter',
+               'options':{
+                  'filterColumnIndex':7,
+               },
+            });
+            var lineChart = new google.visualization.ChartWrapper({
+          'chartType': 'LineChart',
+          'containerId': 'container',
+          'options': {
+            'curveType':'function',
+            'pointSize': 9,
+               'hAxis': { title: 'Date',},
+               'vAxis': { title: 'Price (INR)',},
+            'width': 1000,
+            'height': 500,
+            
+            'legend': 'right',
+            'tooltip':{isHtml:true}
+         }
+        });
+        
+        dashboard.bind(locationFilter,customerFilter);
+        dashboard.bind(locationFilter,vendorFilter);
+        dashboard.bind(customerFilter,locationFilter);
+        dashboard.bind(vendorFilter,locationFilter);
+        dashboard.bind(customerFilter,productFilter);
+        dashboard.bind(vendorFilter,productFilter);
+            dashboard.bind(customerFilter,lineChart);
+            dashboard.bind(vendorFilter,lineChart);
+             dashboard.bind(locationFilter,lineChart);
+             dashboard.bind(productFilter,lineChart);
+              
+            //chart.draw(data, options);
+            var view = new google.visualization.DataView(data);
+            view.hideColumns([7,8]);
+            dashboard.draw(data);
+
+         };
+        $('select.product').change(function(){
+                var make = $(this.options[this.selectedIndex]).attr('data-make');
+                var unit = $(this.options[this.selectedIndex]).attr('data-unit');
+                console.log(make);
+                $('#new-vendor-deal input#make').val(make);
+                $('#new-vendor-deal input#unit').val(unit);
+              });
+         
+          $('#new-vendor-deal').on('submit',function(){
+          event.preventDefault();
+          console.log('working');
+          createNewDeal();
+       });
+       function createNewDeal(){
+          console.log('new deal funnction');
+          $.ajax({
+             url:'../../../../../ajax/googlechartsapp',
+             type:'POST',
+             data:{ 'vendor': $('select#vendor').val(),
+                   'product': $('select#product').val(),
+                   'make': $('input#make').val(),
+                   'quantity':$('input#quantity').val(),
+                   'unit':$('input#unit').val(),
+                   'price':$('input#price').val(),
+                   'expiry-date':$('input#expiry-date').val(),
+                   'delivery-terms':$('select#delivery-terms').val(),
+                   'label-name':$('input#label-name').val(),
+                   'specs':$('input#specs').val(),
+                   'lead-time':$('input#lead-time').val(),
+                   'csrfmiddlewaretoken': '{{ csrf_token }}' },
+             success : function(json) {
+                var item_id = '{{ product_pk }}';
+                console.log(item_id);
+                $('select#vendor').val("1");
+                $('select#product').val("1");
+                $('input#make').val("");
+                $('input#unit').val("");
+                $('input#quantity').val('');
+                $('input#price').val('');
+                $('input#expiry-date').val(''); // remove the value from the input
+                console.log(json); // log the returned json to the console
+                console.log("success");
+                
+                console.log("success-2");
+            $.ajax({
+                url: '../../../../../ajax/googlechartsapp',
+                type: "get",
+                data: {'slug': item_id},
+                success: function(data) {
+                 console.log(item_id);
+                  $('.googlechartsapp-'+item_id).find('.modal-body').empty();
+                  $('.googlechartsapp-'+item_id).find('.modal-body').html(data.product_snippet);
+
+                },
+                error: function(err) {
+                  console.log('error', err);
+                }
+              });
+              alert("Vendor Deal#"+json.deal_id+" from "+json.vendor+" Successfully Added !");
+                 // another sanity check
+             },
+
+          }); };
+      </script>
+
+<hr>
+  {% if live_prices %}
+<div class="container">
+    <div class="row">
+    <h3 style="display:block;margin:auto;">
+    <img src="http://www.anfieldedition.uk/wp-content/uploads/2018/05/LIVE.gif" style="height:24px;margin-bottom:7px;" > Live Prices
+      </h3>
+    </div>
+  <div class="row" >
+      <div class="card mt-3 tab-card" style="width:100%">
+        <div class="card-header tab-card-header">
+
+
+          <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+          {% for product in live_prices %}
+            <li class="nav-item">
+                <a class="nav-link {% if forloop.first %}active show {% endif %}"  data-toggle="tab" href="#product-{{ product.product.pk }}" role="tab"  {% if forloop.first %} aria-selected="true" {% else %} aria-selected="false" {% endif %}>{{ product.product.name }}</a>
+            </li>
+         {% endfor %}
+            
+          </ul>
+        </div>
+
+        <div class="tab-content" id="myTabContent">
+        {% for product in live_prices %}
+          <div class="tab-pane fade {% if forloop.first %}show active{% endif %} p-3" id="product-{{ product.product.pk }}" role="tabpanel" >
+           
+            <table class="card-text table table-hover">
+            <thead>
+               <tr>
+                  <th scope="col">Vendor</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Payment Terms</th>
+                  <th scope="col">Label Name</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Specifications</th>
+                  <th scope="col">Vendor Price</th>
+                  <th scope="col">Lead Time</th>
+                  <th scope="col">Expiry Status</th>
+               </tr>
+            </thead>
+            <tbody>
+            {% for deal in product.deals %}
+               <tr>
+                  <th scope="row"> {{ deal.vendor.contact_name }} </th>
+                  <td>{{ deal.vendor.place_of_contact }}</td>
+                  <td>{{ deal.vendor.payment_terms }}</td>
+                  <td>{{ deal.dealproduct.label_name }}</td>
+                  <td>{{ deal.dealproduct.quantity }} ({{ deal.dealproduct.product.unit }})</td>
+                  <td>{{ deal.dealproduct.specs }} </td>
+                  <td>{{ deal.dealproduct.vendor_price }} </td>
+                  <td>{{ deal.dealproduct.lead_time }} </td>
+                  <td>Deal Expires {% if deal.expires_in == 0 %} Today{% else %} in {{ deal.expires_in }} days{% endif %}.</td>
+               </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+                          
+          </div>
+         {% endfor %}
+         
+
+        </div>
+      </div>
+   {% else %}
+<hr>
+   <h2 style="display: block;margin-left: auto;color: red;margin-right: auto;"> Product Not Grouped Yet. Please Group The Product.</h2> <br> 
+  </h2>
+  </div>
+</div>
+<a href="#" onclick="window.open('{% url 'product_group_list' %}','newwindow','width=600,height=600');return false;" class="btn btn-outline-primary" style="display: block;text-align: center;font-size: 21px;"> Group List</a>
+   {% endif %} 
+<hr>
+<h4>Quick Vendor Deal Addition</h4>
+<form action="/ajax/googlechartsapp" method="POST" id="new-vendor-deal">
+<table class="table">
+<thead>
+    <tr>
+      <th scope="col">Vendor</th>
+      <th scope="col">Delivery Terms</th>
+      
+      <th scope="col">Product</th>
+      <th scope="col">Label Name</th>
+      <th scope="col">Specs</th>
+      
+      <th scope="col">Make</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Unit</th>
+      <th scope="col">Vendor Price</th>
+      <th scope="col">Lead Time</th>
+      <th scope="col">Expiry Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="form-group">
+         <select  class="form-control" id="vendor">
+         <option value="1">--------</option>
+         {% for vendor in vendors%}
+         <option value="{{ vendor.contact_id }}">{{ vendor.contact_name }}</option>
+         {% endfor %}
+         </select>
+      </td>
+      <td class="form-group">
+      <select class="form-control" id="delivery-terms" name='delivery_terms'>
+                    <option value="Door Deliver">Door Deliver</option>
+                    <option value="Ex-Godown">Ex-Godown</option>
+                    <option value="FOR">FOR</option>
+                    <option value="Local Transport">Local Transport</option>
+                </select>
+      </td>
+      <td class="form-group">
+         <select class="form-control product" id='product' style="" name="product" required>
+            <option value="1">--------</option>
+            {% for product in product_group.product_set.all %}
+            <option value="{{ product.pk }}" data-make="{{ product.make }}" data-unit="{{ product.unit }}">{{ product.name }}</option>
+            {% endfor %}
+         </select>
+      </td>
+      <td class='form-group' >
+         <input id='label-name' class='form-control' value='' >
+      </td>
+      <td class='form-group' >
+         <input id='specs' class='form-control' value='' >
+      </td>
+      <td class='form-group' >
+         <input id='make' class='form-control' value='' disabled>
+      </td>
+      <td class='form-group'>
+         <input id='quantity' class='form-control' type='number' step='0.01' required>
+      </td>
+      <td class='form-group'>
+         <input id='unit' class='form-control' disabled >         
+      </td>
+      <td class='form-group'>
+         <input id='price' class='form-control' type='number' step='0.01' required>
+      </td>
+      <td class='form-group'>
+         <input id='lead-time' class='form-control' value='0' type='number' step='1' required>
+      </td>
+      <td class='form-group'>
+         <input id='expiry-date' class='form-control' type='date' required>
+      </td>
+    </tr>
+
+   </tbody>
+
+</table>
+
+    <input type='submit' class='btn btn-outline-primary'  value='Add Deal' style='display:block;margin-left:auto;margin-right:auto;'>
+</form>
+{% endautoescape %}

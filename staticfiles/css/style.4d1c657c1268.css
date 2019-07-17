@@ -1,0 +1,37 @@
+.tdStyle
+{
+background-image:url("bg.449e25165bea.JPG");
+background-repeat:no-repeat;
+background-size:100%;
+}
+
+.login-container
+{
+    margin-top: 10%;
+    margin-bottom: 10%;
+    background-color: #eaf7e6;
+    padding: 3%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.login-container > .form-login > h2 
+{
+    text-align: center;
+    margin-bottom: 10%;
+    
+}
+
+.login-container > .form-login > form > p 
+{
+    padding: 10px;
+    text-align: center;
+}
+
+.login-container > .form-login > form > button
+{
+    display: block;
+    margin-left: auto;
+    margin-right:auto;
+    
+} 

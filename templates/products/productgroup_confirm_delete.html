@@ -1,0 +1,14 @@
+{% extends 'home.html' %}
+{% block page-title-var %} Delete Product Group  :  {{ productgroup.name }} {% endblock page-title-var %}
+{% block application-active %}
+<h1 style="text-align: center;margin-top:5%;"><span style="text-decoration: underline;"><strong></strong></span></h1>
+<p style="text-align: center;">&nbsp;</p>
+<form method="post">{% csrf_token %}
+    <p style="text-align:center">Are you sure you want to delete "{{ productgroup.name  }}"?</p>
+    <input type="submit" value="Confirm" style="margin-bottom: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;">
+</form>
+{% endblock application-active %}
+

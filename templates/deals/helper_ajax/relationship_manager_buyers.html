@@ -1,0 +1,31 @@
+{% for buyer in buyers %}
+<div class="mt-1" style="max-width:75%;margin-left:auto;margin-right:auto;">
+<a class="btn btn-primary btn-block" data-toggle="collapse" href="#buyer-{{ buyer.contact_id }}" role="button" aria-expanded="false" aria-controls="collapseExample">
+    {{ buyer.contact_name }}
+</a>
+<div class="collapse" id="buyer-{{ buyer.contact_id }}">
+  <div class="card card-body">
+   <table class="table table-bordered">
+   <thead>
+        <tr>
+            <th>Product</th>
+            
+            <th>Target Quantity</th>
+            <th>Target Price</th>
+        </tr>
+   </thead>
+   <tbody>
+    {% for buyerproduct in buyer.buyerproduct_set.all %}
+        <tr>
+            <td>{{ buyerproduct.product.name }}</td>
+            <td></td>
+            <td></td>
+        </tr>
+    {% endfor %}
+   </tbody>
+   </table>
+  </div>
+</div>
+</div>
+
+{% endfor %}

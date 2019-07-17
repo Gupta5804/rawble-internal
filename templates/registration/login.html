@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<!-- <div class="container">
+  <div class="row align-items-center">
+    <a href="#" onclick="window.open('https://rawble-admin.herokuapp.com/','name','width=600,height=400')" style="position: fixed;
+    top: 1%;
+    left: 38%;
+    font-size: -webkit-xxx-large;
+  z-index:1;" class="btn btn-outline-danger btn-lg"> Link To Portal </a>
+    <div class="col-md-6 login-container" style="margin:auto;margin-top:75px;">
+      <div class="form-login">
+          <img src="https://www.rawble.com/skin/frontend/sm_market/default/images/logo.png" style="margin: auto;display: block;padding: 15px;border-bottom-style: groove;border-top-style: groove;border-radius: 49%;">
+          <h2 style="font-family: 'Bad Script', cursive;font-weight:600">www.RAWBLE.com</h2>
+          <form method="post">
+
+            {% csrf_token %}
+            <div class="form-group input-group" style="width:75%;margin-left:auto;margin-right:auto;">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
+              </div>
+            {{ form.username |attr:"class=form-control"|attr:"placeholder:Enter User Name"}}
+            </div>
+            <div class="form-group input-group" style="width:75%;margin-left:auto;margin-right:auto;">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i class="fa fa-user-secret"></i></span>
+              </div>
+            {{ form.password |attr:"class=form-control"|attr:"placeholder:Enter Password"}}
+            </div>
+            <button type="submit" class="btn btn-secondary btn-lg">LOGIN</button>
+          </form>
+      </div>
+    <div class="col-md-3"></div>
+ -->
+ <div class="card mx-auto " id="card-block"style="margin-top:10% ">
+  
+  <div class="card-body container" style="width: 35rem; height: 30rem;">
+       
+          <img src="https://www.rawble.com/skin/frontend/sm_market/default/images/logo.png" style="margin: auto;display: block;padding: 15px;border-bottom-style: groove;border-top-style: groove;border-radius: 49%;"> 
+         <!-- <h2  style="font-family: 'Ramabhadra', sans-serif; margin: 25%">Member Login</h2> -->
+         <p  style="margin-left:30%; margin-top:5%;font-family: 'Paytone One', sans-serif; font-size: 200% ;color: black; ">Member Login</p>
+          <form method="post" style="margin-top: 10%;">
+
+              {% csrf_token %}
+              <div class="form-group input-group" style="width:75%;margin-left:auto;margin-right:auto;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
+                </div>
+              {{ form.username |attr:"class=form-control"|attr:"placeholder:Enter User Name"}}
+              </div>
+              <div class="form-group input-group" style="width:75%;margin-left:auto;margin-right:auto;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1"><i class="fa fa-user-secret"></i></span>
+                </div>
+              {{ form.password |attr:"class=form-control"|attr:"placeholder:Enter Password"}}
+              </div>
+              <button type="submit" class="btn btn-secondary btn-lg" style="margin-left:40%">LOGIN</button>
+            </form>
+
+
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+
+<table class="table table-hover" >
+                      <thead>
+                        <tr>
+                          <th scope="col">Date</th>
+                          <th scope="col">Customer Name</th>
+                          <th scope="col">Invoice Number</th>
+                          <th scope="col">Quantity</th>
+                          <th scope="col">Price</th>
+                          <th scope="col">Total</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for page in list_invoices %}
+
+                          {% for invoice in page  %}
+
+                                  <tr>
+                                     <td>{{ invoice.date }}</td>
+                                     <th scope="row" >{{ invoice.customer_name }}</th>
+                                     <td><a href="#" onClick="window.open('{{ invoice.invoice_url }}', '_blank')" class="btn btn-outline-primary btn-sm" >{{ invoice.invoice_number }} <a></td>
+                                     <td>{{ invoice.item_quantity }} </td>
+                                     <td style="color:red;font-weight:900">{{ invoice.currency_code }} {{ invoice.item_price }}</td>
+                                     <td>{{ invoice.currency_code }} {{ invoice.item_total_price }}</td>
+
+                                  </tr>
+
+                          {% endfor %}
+                      {% endfor %}
+
+                      </tbody>
+</table>

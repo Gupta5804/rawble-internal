@@ -1,0 +1,668 @@
+{% extends 'home.html' %}
+{% block page-title-var %} Sales-Orders From Zoho {% endblock page-title-var %}
+
+
+{% block application-active %}
+
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                     <div class="container">
+                                <a href="{% url 'update_so' %}" style="display: table;margin-right: auto;margin-left: auto" class="btn btn-outline-primary">Update sales order from Zoho</a>
+                                <br>
+                                <br>
+                            </div>
+                        <nav>
+                            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#so-noestimate" role="tab" aria-controls="nav-home" aria-selected="true">
+                                No Estimate
+                                </a>
+                                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#so-withestimate" role="tab" aria-controls="nav-profile" aria-selected="false">With Estimate</a>
+                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#so-pendingapproval" role="tab" aria-controls="nav-contact" aria-selected="false">Pending Approval</a>
+                            </div>
+                        </nav>
+                       <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="so-noestimate" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <table class="table table-bordered " style="width:100%" data-toggle="table" data-sort-name="date"   data-sort-order="desc">
+                                  <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Zoho Location</th>
+                                        <th>SalesOrder Number</th>
+                                        <th>Purchase Orders</th>
+                                        <th>Product Status</th>
+                                        <th>Buyer</th>
+                                        <th>Sales Person</th>
+                                        <th>Status</th>
+                                        <th>Total</th>
+                                        <th>Quote</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for salesorder in salesorders %}
+                                      {% if salesorder.status != 'invoiced' %}
+                                      {% if salesorder.estimate %}
+                                      {% else %}
+
+                                      <tr class="{% if salesorder.tool_status == 'in-progress' %} table-success {% else %} table-danger {% endif %}">
+                                        <th>{{ salesorder.date }}</th>
+                                        <td style="{% if salesorder.zoho_location == 'okhla' %} color:red{% elif salesorder.zoho_location == 'baddi' %}color:blue{% endif %};font-weight:bold;text-transform: uppercase;">{{ salesorder.zoho_location }}</td>
+                                        <th>
+                                          <a href='#' onClick="window.open('{{ salesorder.salesorder_url }}', 'estimate','width=600,height=400')" class='btn btn-outline-primary btn-sm'>{{ salesorder.salesorder_number }} </a>
+                                        </th>
+                                        <th>
+                                            <table>
+                                            {% for purchaseorder in salesorder.zohopurchaseorder_set.all %}
+                                                <tr><td><a href="{{ purchaseorder.purchaseorder_url }}"  class="btn btn-outline-primary btn-sm">{{ purchaseorder.purchaseorder_number }}</a></td></tr>
+                                            {% endfor %}
+                                          </table>
+                                        </th>
+                                        <th>
+                                        {% if salesorder.tool_status == '' %}
+                                        Not Quoted Yet
+                                          
+                                        {% elif salesorder.products_left == 0 %}
+                                          All Products Quoted
+                                        
+                                        {% else %}
+                                        <span style="color:red;">{{ salesorder.products_left }}<span> products left out of <span style="color:red;">{{ salesorder.total_products }}</span> products.
+                                          
+                                        {% endif %}
+                                        </th>
+                                        <th>{{ salesorder.buyer.contact_name }}</th>
+                                        <th>{{ salesorder.salesperson }}</th>
+                                        <th>{{ salesorder.status }}</th>
+                                        <th>{{ salesorder.total }}</th>
+                                        <th>
+                                          {% if salesorder.tool_status == '' %}
+                                            <a class="btn btn-outline-primary btn-sm btn-block" href="{% url 'zoho_salesorder' pk=salesorder.salesorder_id %}">Quote</a>
+                                          {% else %}
+                                            <a href="#" class="btn btn-success btn-sm btn-block" data-toggle="modal" data-target="#quickview-{{ salesorder.salesorder_number }}">
+                                              <i class="fas fa-binoculars"></i> Quick View
+                                            </a>
+                                            <div  class="modal fade" id="quickview-{{ salesorder.salesorder_number }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog modal-lg" style="max-width:89%;" role="document">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel"> 
+                                                      <i class="fas fa-envelope"></i> Quoted SalesOrder to 
+                                                      <span style="color:red">{{ salesorder.buyer.contact_name }}</span>
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <table class="table table-bordered table-sm">
+                                                      <tr>
+                                                        <td class="table-secondary">SalesOrder Number</td>
+                                                        <td>
+                                                          <a href="#" class="btn btn-outline-primary btn-sm" onclick="window.open('https://books.zoho.com/app#/quotes/{{ salesorder.salesorder_id }}','product_history','width=600,height=400')">{{ salesorder.salesorder_number }}</a>
+                                                        </td>
+                                                        <td class="table-secondary">Buyer</td>
+                                                        <td>{{ salesorder.buyer.contact_name }}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="table-secondary">Date Received</td>
+                                                        <td>{{ salesorder.date }}</td>
+                                                        <td class="table-secondary">Buyer Payment Terms</td>
+                                                        <td>{{ salesorder.buyer.payment_terms }}</td>
+                                                      </tr>
+                                                    </table>
+                          <hr>
+                          <table class="table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Make</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Pack Size</th>
+                                <th scope="col">Purchase Price</th>
+                                <th scope="col">Vendor Freight</th>
+                                <th scope="col">Customer Freight</th>
+                                <th scope="col">Selling Price</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for item in salesorder.salesorderproduct_set.all %}
+                                <tr class="{% if item.vendorproductvariation %} table-success {% else %} table-danger {% endif %}">
+                                  <th scope="row">{{ item.product.name }}</th>
+                                  <td>{{ item.product.make }}</td>
+                                  <td>{{ item.quantity }}</td>
+                                  <td>{{ item.pack_size }}</td>
+                                {% if item.vendorproductvariation %}
+                                  <td>{{ item.vendorproductvariation.dealvendorproduct.vendor_price }}</td>
+                                  <td>{{ item.vendorproductvariation.vendorproduct.vendor.freight_per_kg }}</td>
+                                  <td>{{ salesorder.buyer.freight_per_kg }}</td>
+                                  <td>{{ item.selling_price }}</td>
+                                {% endif %}
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="modal-footer" style="display:block">
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+    
+    
+                                            <a href="#" class="btn btn-danger btn-sm btn-block mt-2" data-target="#unquoteso-{{ salesorder.salesorder_number }}" data-toggle="modal"><i class="fas fa-undo"></i> Un-Quote</a>
+                                            
+                  <!-- Modal -->
+                    <div class="modal fade" id="unquoteso-{{ salesorder.salesorder_number }}" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                              <i class="fas fa-undo-alt"></i>- Un-Quote SO# - 
+                              <span style="color:red">{{ salesorder.salesorder_number }}</span> from 
+                              <span style="color:red;">{{ salesorder.buyer.contact_name }}</span>   ?
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <table class="table table-bordered table-sm">
+                              <tr>
+                                <td class="table-secondary">SalesOrder Number</td>
+                                <td>{{ salesorder.salesorder_number }}</td>
+                                <td class="table-secondary">Buyer</td>
+                                <td>{{ salesorder.buyer.contact_name }}</td>
+                              </tr>
+                              <tr>
+                                <td class="table-secondary">Date Received</td>
+                                <td>{{ salesorder.date }}</td>
+                                <td class="table-secondary">Buyer Payment Terms</td>
+                                <td>{{ salesorder.buyer.payment_terms }}</td>
+                              </tr>
+                            </table>
+                            <hr>
+                            <table class="table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th scope="col">Product</th>
+                                  <th scope="col">Make</th>
+                                  <th scope="col">Quantity</th>
+                                  <th scope="col">Pack Size</th>
+                                  <th scope="col">Purchase Price</th>
+                                  <th scope="col">Freight</th>
+                                  <th scope="col">Selling Price</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for item in salesorder.salesorderproduct_set.all %}
+                                  <tr class="{% if item.vendorproductvariation %} table-success {% else %} table-danger {% endif %}">
+                                    <th scope="row">{{ item.product.name }}</th>
+                                    <td>{{ item.product.make }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.pack_size }}</td>
+                                    {% if item.vendorproductvariation %}
+                                      <td>{{ item.vendorproductvariation.dealvendorproduct.vendor_price }}</td>
+                                      <td>{{ item.vendorproductvariation.vendorproduct.vendor.freight_per_kg }}</td>
+                                      <td>{{ item.selling_price }}</td>
+                                    {% endif %}
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="modal-footer" style="display:block">
+                            <form method="post" action="">
+                            {% csrf_token %}
+                              <input type="hidden" name="salesorder_id" value="{{ salesorder.salesorder_id }}">
+                              <input type="submit" class="btn btn-outline-danger btn-block btn" name="unquote-so" value="Un-Quote SO# {{ salesorder.salesorder_number }} " />
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+    
+    
+                                            <a href="{% url 'zoho_salesorder_inprogress' pk=salesorder.salesorder_id %}" class="btn btn-warning btn-sm btn-block"><i class="fas fa-redo"></i> Re-Quote</a>
+    
+                                            <a href="#" data-toggle="modal" data-target="#margin-{{ salesorder.salesorder_id }}" data-id="{{ salesorder.salesorder_id }}" class="btn btn-outline-success btn-block btn-sm salesorder-margin">
+                                              <i class="fas fa-check-circle" ></i> Check-Margin
+                                            </a>
+                                            <div class="modal fade" id="margin-{{ salesorder.salesorder_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog modal-lg estimate-margin-modal" style="max-width:80%;    width:100%" role="document">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                      <i class="fas fa-money-check-alt"></i>- Check Margin of {{     salesorder.salesorder_number }}
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"    aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          {% endif %}
+                                        </th>
+                                      </tr>
+                                      {% endif %}
+                                      {% endif %}
+                              {% endfor %}
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th>Date</th>
+                                <th>SalesOrder Number</th>
+                                <th>Estimate Number</th>
+                                <th>Buyer</th>
+                                <th>Sales Person</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                              </tr>
+                              </tfoot>
+                            </table>
+                            </div>
+                            <div class="tab-pane fade" id="so-withestimate" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                <table class="table table-bordered " style="width:100%" data-toggle="table" data-sort-name="date"   data-sort-order="desc">
+                                  <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Zoho Location</th>
+
+                                        <th>Estimate Number</th>
+                                        <th>SalesOrder Number</th>
+                                        <th>Purchase Order</th>
+                                        <th>Products Status</th>
+                                        <th>Buyer</th>
+                                        <th>Sales Person</th>
+                                        <th>Status</th>
+                                        <th>Total</th>
+                                        <th>Quote</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {% for salesorder in salesorders %}
+                                      {% if salesorder.estimate and salesorder.status != 'invoiced' %}
+                                      
+                                      <tr class="{% if salesorder.estimate.tool_status == 'in-progress' %} table-success {% else %} table-danger {% endif %}">
+                                        <th>{{ salesorder.date }}</th>
+                                        <td style="{% if salesorder.zoho_location == 'okhla' %} color:red{% elif salesorder.zoho_location == 'baddi' %}color:blue{% endif %};font-weight:bold;text-transform: uppercase;">{{ salesorder.zoho_location }}</td>
+                                        <th>
+                                        {% if salesorder.estimate %}
+                                          <a href='#' onClick="window.open('{{ salesorder.estimate.estimate_url }}', 'estimate','width=600,height=400')" class='btn btn-outline-primary btn-sm'>{{ salesorder.estimate.estimate_number }} </a>
+
+                                        {% else %}
+                                          No Estimate
+                                        {% endif %}
+                                        </th>
+                                        <th><a href='#' onClick="window.open('{{ salesorder.salesorder_url }}', 'estimate','width=600,height=400')" class='btn btn-outline-primary btn-sm'>{{ salesorder.salesorder_number }} </a></th>
+                                       <th>
+                                             <table>
+                                                {% for purchaseorder in salesorder.zohopurchaseorder_set.all %}
+                                                    <tr><td><a href="{{ purchaseorder.purchaseorder_url }}"  class="btn btn-outline-primary btn-sm">{{ purchaseorder.purchaseorder_number }}</a></td></tr>
+                                                {% endfor %}
+                                            </table>
+                                       </th>
+                                        <th class="{% if salesorder.estimate.products_left != 0 %} table-danger {% endif %}">
+                                        {% if salesorder.estimate.tool_status == 'in-progress' %}
+                                        {% if salesorder.estimate.products_left == 0 %}
+                                          All Products Quoted
+                                        {% else %}
+                                          <span style="color:red">{{ salesorder.estimate.products_left }} Producs left out of {{ salesorder.estimate.total_products }}.</span>
+                                        {% endif %}
+                                        {% else %}
+                                        Not Quoted Yet
+                                        {% endif %}
+                                        </th>
+                                        <th>{{ salesorder.buyer.contact_name }}</th>
+                                        <th>{{ salesorder.salesperson }}</th>
+                                        <th>{{ salesorder.status }}</th>
+                                        <th>{{ salesorder.total }}</th>
+                                        <th>
+                                        {% if salesorder.estimate.tool_status == '' %}
+                                        <a href="{% url 'zoho_estimate' pk=salesorder.estimate.estimate_id %}" class="btn btn-sm btn-outline-primary btn-block">Quote</a>
+                                        {% else %}
+                                        <a class="btn btn-success btn-block btn-sm" data-toggle="modal" data-target="#quickview-estimate-{{ salesorder.estimate.estimate_number }}" href="#"><i class="fas fa-binoculars"></i> Quick View</a>
+                                        
+                  
+                  <div  class="modal fade" id="quickview-estimate-{{ salesorder.estimate.estimate_number }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" style="max-width:89%;" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel"> 
+                            <i class="fas fa-envelope"></i> Quoted Estimate to 
+                            <span style="color:red">{{ salesorder.estimate.buyer.contact_name }}</span>
+                          </h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <table class="table table-bordered table-sm">
+                            <tr>
+                              <td class="table-secondary">Estimate Number</td>
+                              <td>
+                                <a href="#" class="btn btn-outline-primary btn-sm" onclick="window.open('https://books.zoho.com/app#/quotes/{{ salesorder.estimate.estimate_id }}','product_history','width=600,height=400')">{{ salesorder.estimate.estimate_number }}</a>
+                              </td>
+                              <td class="table-secondary">Buyer</td>
+                              <td>{{ salesorder.estimate.buyer.contact_name }}</td>
+                            </tr>
+                            <tr>
+                              <td class="table-secondary">Date Received</td>
+                              <td>{{ salesorder.estimate.date }}</td>
+                              <td class="table-secondary">Buyer Payment Terms</td>
+                              <td>{{ salesorder.buyer.payment_terms }}</td>
+                            </tr>
+                          </table>
+                          <hr>
+                          <table class="table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Make</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Pack Size</th>
+                                <th scope="col">Purchase Price</th>
+                                <th scope="col">Vendor Freight</th>
+                                <th scope="col">Customer Freight</th>
+                                <th scope="col">Selling Price</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for item in salesorder.estimate.estimateproduct_set.all %}
+                                <tr class="{% if item.vendorproductvariation %} table-success {% else %} table-danger {% endif %}">
+                                  <th scope="row">{{ item.product.name }}</th>
+                                  <td>{{ item.product.make }}</td>
+                                  <td>{{ item.quantity }}</td>
+                                  <td>{{ item.pack_size }}</td>
+                                {% if item.vendorproductvariation %}
+                                  <td>{{ item.vendorproductvariation.dealvendorproduct.vendor_price }}</td>
+                                  <td>{{ item.vendorproductvariation.vendorproduct.vendor.freight_per_kg }}</td>
+                                  <td>{{ salesorder.estimate.buyer.freight_per_kg }}</td>
+                                  <td>{{ item.selling_price }}</td>
+                                {% endif %}
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>  
+                                        <a class="btn btn-danger btn-block btn-sm" data-target="#unquote-estimate-{{ salesorder.estimate.estimate_number }}" data-toggle="modal" href="#"><i class="fas fa-undo"></i> Un-Quote</a>
+                                        
+                  <!-- Modal -->
+                    <div class="modal fade" id="unquote-estimate-{{ salesorder.estimate.estimate_number }}" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                              <i class="fas fa-undo-alt"></i>- Un-Quote Estimate# - 
+                              <span style="color:red">{{ salesorder.estimate.estimate_number }}</span> from 
+                              <span style="color:red;">{{ salesorder.estimate.buyer.contact_name }}</span>  ?
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <table class="table table-bordered table-sm">
+                              <tr>
+                                <td class="table-secondary">Estimate Number</td>
+                                <td>{{ salesorder.estimate.estimate_number }}</td>
+                                <td class="table-secondary">Buyer</td>
+                                <td>{{ salesorder.estimate.buyer.contact_name }}</td>
+                              </tr>
+                              <tr>
+                                <td class="table-secondary">Date Received</td>
+                                <td>{{ salesorder.estimate.date }}</td>
+                                <td class="table-secondary">Buyer Payment Terms</td>
+                                <td>{{ salesorder.estimate.buyer.payment_terms }}</td>
+                              </tr>
+                            </table>
+                            <hr>
+                            <table class="table">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th scope="col">Product</th>
+                                  <th scope="col">Make</th>
+                                  <th scope="col">Quantity</th>
+                                  <th scope="col">Pack Size</th>
+                                  <th scope="col">Purchase Price</th>
+                                  <th scope="col">Freight</th>
+                                  <th scope="col">Selling Price</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for item in salesorder.estimate.estimateproduct_set.all %}
+                                  <tr class="{% if item.vendorproductvariation %} table-success {% else %} table-danger {% endif %}">
+                                    <th scope="row">{{ item.product.name }}</th>
+                                    <td>{{ item.product.make }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.pack_size }}</td>
+                                    {% if item.vendorproductvariation %}
+                                      <td>{{ item.vendorproductvariation.dealvendorproduct.vendor_price }}</td>
+                                      <td>{{ item.vendorproductvariation.vendorproduct.vendor.freight_per_kg }}</td>
+                                      <td>{{ item.selling_price }}</td>
+                                    {% endif %}
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="modal-footer" style="display:block">
+                            <form method="post" action="">
+                            {% csrf_token %}
+                              <input type="hidden" name="estimate_id" value="{{ salesorder.estimate.estimate_id }}">
+                              <input type="submit" class="btn btn-outline-danger btn-block btn" name="unquote-estimate" value="Un-Quote Estimate# {{ salesorder.estimate.estimate_number }}" />
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>  
+                                        <a class="btn btn-warning btn-block btn-sm" href="{% url 'zoho_estimate_inprogress' pk=salesorder.estimate.estimate_id %}"><i class="fas fa-redo"></i> Re-Quote</a>  
+                                        <a data-toggle="modal" data-target="#margin-{{ salesorder.estimate.estimate_id }}" data-id="{{ salesorder.estimate.estimate_id }}" class="btn btn-outline-success btn-block btn-sm estimate-margin" href="#"><i class="fas fa-check-circle"></i> Check Margin</a>
+                                        
+                  <div class="modal fade" id="margin-{{ salesorder.estimate.estimate_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg estimate-margin-modal" style="max-width:80%;width:100%" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">
+                            <i class="fas fa-money-check-alt"></i>- Check Margin 
+                          </h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                        </div>
+                      </div>
+                    </div>
+                  </div>  
+                                        {% endif %}
+                                        </th>
+                                      </tr>
+                                      {% endif %}
+                                      
+                                      
+                              {% endfor %}
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th>Date</th>
+                                <th>SalesOrder Number</th>
+                                <th>Estimate Number</th>
+                                <th>Product Status</th>
+                                <th>Buyer</th>
+                                <th>Sales Person</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Quote</th>
+                              </tr>
+                              </tfoot>
+                            </table>
+                            </div>
+                            <div class="tab-pane fade" id="so-pendingapproval" role="tabpanel" aria-labelledby="nav-contact-tab">
+                          <table class="table table-striped table-bordered" style="width:100%" data-toggle="table" data-sort-name="date" data-sort-order="desc">
+                            <thead>
+                              <tr>
+                                <th>Date</th>
+                                <th>SalesOrder Number</th>
+                                <th>Estimate Number</th>
+                                <th>Buyer</th>
+                                <th>Sales Person</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Check Margin</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for salesorder in salesorders %}
+                                {% if salesorder.status == 'pending_approval' %}
+                                    <tr>
+                                      <th>{{ salesorder.date }}</th>
+                                      <th>
+                                        <a href='#' onClick="window.open('{{ salesorder.salesorder_url }}', 'estimate','width=600,height=400')" class='btn btn-outline-primary btn-sm'>{{ salesorder.salesorder_number }} </a>
+                                      </th>
+                                      <th>
+                                        {% if salesorder.estimate %}
+                                        <a href='#' onClick="window.open('{{ salesorder.estimate.estimate_url }}', 'estimate','width=600,height=400')" class='btn btn-outline-primary btn-sm'>{{ salesorder.estimate.estimate_number }} </a>
+                                          
+                                        {% else %}
+                                          No Estimate
+                                        {% endif %}
+                                      </th>
+                                      <th>{{ salesorder.buyer.contact_name }}</th>
+                                      <th>{{ salesorder.salesperson }}</th>
+                                      <th>{{ salesorder.status }}</th>
+                                      <th>{{ salesorder.total }}</th>
+                                      <th>
+                                        <a data-toggle="modal" data-target="{% if salesorder.estimate %}#margin-{{ salesorder.estimate.estimate_id }}{% else %}#margin-{{ salesorder.salesorder_id }}{% endif %}" data-id="{% if salesorder.estimate %}{{ salesorder.estimate.estimate_id }}{% else %}{{ salesorder.salesorder_id }}{% endif %}" class="btn btn-outline-success btn-block btn-sm {% if salesorder.estimate %}estimate-margin{%else%}salesorder-margin{% endif %}">
+                                          <i class="fas fa-money-check-alt"></i> 
+                                              Check Margin and Approve
+                                        </a>
+                                        <div class="modal fade" id="{% if salesorder.estimate %}margin-{{ salesorder.estimate.estimate_id }}{% else %}margin-{{ salesorder.salesorder_id }}{% endif %}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog modal-lg" style="max-width:80%;width:100%" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                  <i class="fas fa-money-check-alt"></i>- Check Margin And Approve {{ salesorder.salesorder_number }}
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                              <div class="modal-body">
+                            
+                                              </div>
+                                              <div class="modal-footer" style="display:block">
+                                                <div class="alert alert-primary" role="alert">
+                                                  <p style="text-align:center;color:black;">
+                                                    <a href="{% url 'salesorder_approve' salesorder_id=salesorder.salesorder_id %}" class='btn btn-outline-success btn-sm'>Click Here</a> to approve Sales Order
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </th>
+                                    </tr>
+                                {% endif %}
+                              {% endfor %}
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th>Date</th>
+                                <th>SalesOrder Number</th>
+                                <th>Estimate Number</th>
+                                <th>Buyer</th>
+                                <th>Sales Person</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Check Margin</th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+        
+      
+    
+    <div class="tab-pane fade" id="pills-po" role="tabpanel" aria-labelledby="pills-po-tab">
+      <table class="table table-striped table-bordered " style="width:100%" data-toggle="table" data-sort-name="date"   data-sort-order="desc">
+          <thead>
+              <tr>
+                <th>Estimate Number</th>
+                <th>Buyer</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Expiry Date</th>
+                <th>Delivery Terms</th>
+                <th>Total</th>
+                <th>Check Margin</th>
+              </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>Estimate Number</th>
+              <th>Buyer</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Expiry Date</th>
+              <th>Delivery Terms</th>
+              <th>Total</th>
+              <th>Check Margin</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+<script>
+$('.salesorder-margin').click(
+  function(){
+  var salesorder_id = ($(this).data('id'));
+  $('#margin-'+salesorder_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/flickr/index.orbit-balls-loading-gif.gif' />");
+  $.ajax({
+    url: '../../../../../ajax/salesorder-margin',
+    type: "get",
+    data: {'slug': salesorder_id },
+    success: function(data) {
+      $('#margin-'+salesorder_id).modal('show');
+      $('#margin-'+salesorder_id).find('.modal-body').html(data.salesorder_margin_snippet);
+    },
+    error: function(err) {
+      console.log('error', err);
+      }
+    })
+                //});
+});
+$('.estimate-margin').click(
+  function(){
+  var estimate_id = ($(this).data('id'));
+  $('#margin-'+estimate_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/flickr/index.orbit-balls-loading-gif.gif' />");
+  $.ajax({
+    url: '../../../../../ajax/estimate-margin',
+    type: "get",
+    data: {'slug': estimate_id },
+    success: function(data) {
+      $('#margin-'+estimate_id).modal('show');
+      $('#margin-'+estimate_id).find('.modal-body').html(data.margin_snippet);
+    },
+    error: function(err) {
+      console.log('error', err);
+      }
+    })
+                //});
+});
+</script>
+{% endblock application-active %}

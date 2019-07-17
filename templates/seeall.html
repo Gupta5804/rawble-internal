@@ -1,0 +1,40 @@
+{% extends 'home.html' %}
+
+{% block page-title-var %} See All expiring product {% endblock page-title-var %}
+
+
+{% block application-active %}
+    <table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Vendor Name</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Expiring in</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for vpv in vendorproductvariation  %}
+        {% if vpv.dealvendorproduct.expiry_status < 4 %}
+
+                <tr class='clickable-row' data-href='{% url 'products_listing' %}?name=&name__icontains={{ vpv.vendorproduct.product.name }}&make=&make__icontains=&status=&group='>
+                  <th>{{ vpv.vendorproduct.vendor }}</th>
+                  <td><strong>{{ vpv.vendorproduct.product }}</strong></td>
+                    {% if vpv.dealvendorproduct.expiry_status > 0 %}
+                  <td>Expiring in{{ vpv.dealvendorproduct.expiry_status }} days</td>
+                    {% else %}
+                         <td>Expired from {{ vpv.dealvendorproduct.expiry_status|slugify|slice:"1:" }} days</td>
+                    {% endif %}
+                </tr>
+    {% endif %}
+    {% endfor %}
+
+  </tbody>
+</table>
+    <script>
+    jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+    </script>
+{% endblock application-active %}

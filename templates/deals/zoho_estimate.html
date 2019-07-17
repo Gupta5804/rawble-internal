@@ -1,0 +1,516 @@
+{% extends 'home.html' %}
+
+{% block page-title-var %} Estimate {{ estimate.estimate_number }} {% endblock page-title-var %}
+{% block application-active %}
+
+    
+        <div class="col-4" style="margin-bottom:7%">
+        <a href="{% url 'zoho_estimates'%}" class="btn btn-outline-primary">
+          <i class="fas fa-backward"></i> Go Back To Estimates
+        </a>
+        </div>
+    
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+        <input type="hidden" id="estimate_id" value="{{ estimate_db.estimate_id }}">
+        <p style="text-align:center;color:black;"><strong>Estimate Number :&nbsp;</strong>
+            <a href="#" class="btn btn-outline-primary btn-sm" onclick="window.open('https://books.zoho.com/app#/quotes/{{ estimate.estimate_id }}/edit','product_history','width=600,height=400')">{{ estimate.estimate_number }}</a>
+        </p>
+        </div>
+        <div class="col-sm">
+        <p style="text-align:center;color:black;"><strong>Date :&nbsp;</strong>{{ estimate.date }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+        <p style="text-align:center;color:black;"><strong>Buyer :&nbsp;</strong><a class="btn btn-outline-info" href="{% url 'buyer_profile' contact_id=estimate_db.buyer.contact_id %}">{{ estimate_db.buyer }}</a></p>
+        </div>
+        <div class="col-sm">
+        <p style="text-align:center;color:black;"><strong>Status :&nbsp;</strong>{{ estimate.status }}</p>
+        </div>
+    </div>
+
+</div>
+
+  <form method="post">
+  {% csrf_token %}
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Product Name</th>
+      
+      
+      <th scope="col">Quantity</th>
+      <th scope="col">Pack Size</th>
+      
+     
+      <th scope="col">Purchase Prices</th>
+      
+
+      
+      
+      <th scope="col">COA files</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in estimate.line_items %}
+    <tr id="productrow-{{ item.item_id }}">
+      <th scope="row" style="vertical-align:middle;">
+        
+        {% for product in item.group.product_set.all %}
+          {% if item.item_id == product.item_id_str %}
+            <h5 style="text-align:center;" class="alert alert-secondary" role="alert">
+               
+              <a href="{% url 'products_listing' %}?name=&name__icontains={{ item.name }}&make=&make__icontains=&status=&group=" target="_blank" class="btn btn-outline-primary"> 
+                {{ product.name }}
+              </a>
+              <a href="#" class="btn btn-outline-danger btn-sm float-right" onclick="return deleteRow(this);">
+                <i class="fas fa-times"></i>
+              </a> 
+              <br><br> 
+              Make: {{ product.make }} 
+               ==>
+              [ <span style="color:red;">{{ product.vendorproduct_set.count }}</span> Vendor(s)]
+            </h5>
+          {% endif %}
+        {% endfor %}
+        {% if item.group %}
+          <select class="form-control col-11" style="display:inline-block;" id="productaddselect-{{ item.item_id }}">
+            {% for product in item.group.product_set.all %}
+              {% if product.status == "Ac" %}
+                <option {% if item.item_id == product.item_id_str %}selected{% endif %} data-product_id="{{ product.item_id }}" data-quantity="{{ item.quantity }}" data-pack_size="{% for custom_field in item.item_custom_fields %}{% if custom_field.placeholder == 'cf_pack_size' %}{{ custom_field.value }}{% endif %}{% endfor %}" data-estimate_id="{{ estimate_db.estimate_id }}">{{ product.name }} | Make: {{ product.make }} | [ <span style="color:red;">{{ product.vendorproduct_set.count }}</span> Vendor(s)]</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <a class="btn btn-outline-success mb-1" href="#" data-id="{{ item.item_id }}" onclick="return addProductRow(this);" ><i class="fas fa-plus"></i></a>
+        {% else %}
+          {{ item.name }}  [ Item Not Grouped ]
+        {% endif %}
+      </th>
+      
+      <td style="vertical-align:middle;padding:0"> 
+        <div class="container">
+         <div class="row">
+            <div class="col-6">
+              <input type="number" style="width:133%" class="input-group" name="quantity" step="0.01" value="{{ item.quantity }}" disabled>
+              <input type="hidden" style="width:133%" class="input-group" name="quantity" step="0.01" value="{{ item.quantity }}">
+              <input type="hidden" style="width:133%" class="input-group" name="rate" step="0.01" value="{{ item.rate }}">
+            </div>
+            <div class="col-6">
+            
+                {% for custom_field in item.item_custom_fields %}
+                  {% if custom_field.placeholder == 'cf_unit_of_measurement' %}
+                    {{ custom_field.value }}
+                  {% endif %}
+                {% endfor %}
+           
+             
+            </div>
+        </div>
+        </div>
+      </td>
+      <td style="vertical-align:middle;" >
+      {% for custom_field in item.item_custom_fields %}
+        {% if custom_field.placeholder == 'cf_pack_size' %}
+          <input type='number' class="input-group" name='pack_size' step="1" value='{{ custom_field.value }}' style="width:100%;" disabled>
+          <input type='hidden' class="input-group" name='pack_size' step="1" value='{{ custom_field.value }}' style="width:100%;" >
+         {% endif %}
+      {% endfor %}
+      </td>
+      
+      <td style="vertical-align:middle;" >
+      <!-- Add Vendor Link-->
+      <a class="btn btn-outline-success btn-block btn-sm  mb-2 estimate_addvendor_ajax" data-toggle="modal" data-target=".estimate_addvendor_ajax-{{ item.item_id }}" data-id="{{ item.item_id }}" href="#">
+        <i class="fas fa-user-plus"></i> Add Vendor
+      </a>
+      <!-- Add Vendor MODAL-->
+      <div class="modal fade estimate_addvendor_ajax-{{ item.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">
+                <i class="fas fa-user-plus"></i> 
+                  Add Vendor to ->  
+                <i style="font-weight:800">{{ item.name }} </i>
+              </h5>
+                      
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            </div>
+                    
+          </div>
+        </div>
+      </div>
+      <!-- Add Vendor Variation Link-->
+      <a class="btn btn-outline-warning btn-block btn-sm mb-2 estimate_addvendorvariation_ajax" data-toggle="modal" data-target=".estimate_addvendorvariation_ajax-{{ item.item_id }}" data-id="{{ item.item_id }}" href="#">
+        <i class="fas fa-user-plus"></i> Add Variation From Vendor
+      </a>
+      <div class="modal fade estimate_addvendorvariation_ajax-{{ item.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">
+                <i class="fas fa-user-plus"></i> 
+                  Add Vendor Variation to ->  
+                <i style="font-weight:800">{{ item.name }} </i>
+              </h5>
+                      
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            </div>
+                    
+          </div>
+        </div>
+      </div>
+      
+      <!-- Update Vendor Variation Link-->
+      <a class="btn btn-outline-warning btn-block btn-sm mb-2 estimate_updatevendorvariation_ajax" data-toggle="modal" data-target=".estimate_updatevendorvariation_ajax-{{ item.item_id }}" data-id="{{ item.item_id }}" href="#">
+        <i class="fas fa-upload"></i> Select Vendor Variation to Update
+      </a>
+      <!-- Update Vendor Variation MODAL-->
+      <div class="modal fade estimate_updatevendorvariation_ajax-{{ item.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">
+                <i class="fas fa-user-plus"></i> 
+                  Update Vendor Variations of ->  
+                <i style="font-weight:800">{{ item.name }} </i>
+              </h5>
+                      
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="alert alert-success"role="alert">
+            <h4>Select and Update: Delivery Terms, Price and Expiry of the Variation</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+                    
+          </div>
+        </div>
+      </div>
+      <input name="product_id" value = "{{ item.item_id }}" type="hidden">
+      <div class="input-group">
+   <!--   
+<a href="{% url 'products_listing' %}?name=&name__icontains={{ item.name }}&make=&make__icontains=&status=&group=" target="_blank" class="btn btn-outline-primary btn-sm btn-block m-2">Update Price / Attach Vendor</a>-->
+        <select class="custom-select purchaseprice-{{ item.item_id }}" name="vendorproductvariation_id" id="purchaseprice">
+          <option value="" selected>Select Purchase Price From Active Deals</option>
+            {% for item2 in items %}
+              {% if item2.item_id == item.item_id %}
+                {% for vendorproduct in item2.vendorproducts %}
+                  <optgroup style="font-size:109%;color:black;" label="Vendor: {{ vendorproduct.vendor.contact_name }} || Payment Terms: {{ vendorproduct.vendor.payment_terms }} || Location: {{ vendorproduct.vendor.place_of_contact }}">
+                    {% for vendorproductvariation in vendorproduct.vendorproductvariation_set.all %}
+
+                      <option style="color:black;" class="{% if vendorproductvariation.dealvendorproduct.expiry_status > 0 %} bg-success {% elif vendorproductvariation.dealvendorproduct.expiry_status == 0 %} bg-warning {% else %} bg-danger{% endif %}" value="{{ vendorproductvariation.id }}" data-item_id = "{{ item.item_id }}" data-purchase_price="{{ vendorproductvariation.dealvendorproduct.vendor_price }}" data-customer_freight="{{ estimate_db.buyer.freight_per_kg }}" data-vendor_freight="{{ vendorproduct.vendor.freight_per_kg }}"  data-vpt="{{ vendorproduct.vendor.payment_terms_no }}" data-bpt ="{{ estimate_db.buyer.payment_terms_no }}">>> Variation - {{ forloop.counter }} || Specs:{{ vendorproductvariation.dealvendorproduct.specs }} | Pack-size:{{ vendorproductvariation.dealvendorproduct.quantity }} || Price:{{ vendorproductvariation.dealvendorproduct.vendor_price }} || ({% if vendorproductvariation.dealvendorproduct.expiry_status > 0 %} Will expire in {{ vendorproductvariation.dealvendorproduct.expiry_status }} day(s). {% elif vendorproductvariation.dealvendorproduct.expiry_status == 0 %} Expires Today {% else %} Expired {% widthratio vendorproductvariation.dealvendorproduct.expiry_status 1 -1 %} day(s) ago.{% endif %})
+                      </option>
+
+                    {% endfor %}
+                  </optgroup>
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          </select>
+      </div>
+      <table id="{{ item.item_id }}" class="table table-sm mt-1">
+        
+      </table>
+
+      
+      </td>
+      
+      
+           
+           <td>
+              <a class="btn btn-outline-primary btn-block" href="{% url 'coa_upload' pk=item.item_id %}">Upload</a>
+              <a  href="#" class="btn btn-outline-primary btn-sm btn-block coaview" data-toggle="modal" data-target=".coaview-{{ item.item_id }}" title="Quick View of Coa Files Uploaded" data-id='{{ item.item_id }}' class="btn btn-outline-primary btn-block" >View</a>
+              
+              <div class="modal fade coaview-{{ item.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" style="left:-19%;width:141%">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">COA files</h5><h4 style="text-align:center;"><span style="text-decoration: underline;">{{ item.name }} </span> </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <br>
+            <hr>
+              <a href="#" class="btn btn-outline-success btn-sm btn-block sales_history" data-toggle="modal" data-target=".sales-{{ item.item_id }}" data-id="{{ item.item_id }}" title="Sales History(Zoho Books Invoice)">
+                  <i class="fas fa-dollar-sign"></i>
+    Sales
+</a> 
+              <div class="modal fade sales-{{ item.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="color:black" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">
+                    Sales of :
+                </h5>
+                <h4 style="text-align:center;">
+                    <span style="text-decoration: underline;">
+                        {{ item.name }}
+                    </span>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+            </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+  <div class="row">
+    <div class="col-1"></div>
+    
+    <input type="submit" value="Save and Send Mail to Sales Team" class="btn btn-outline-primary btn-block m-5">
+  </div> 
+</form>
+<script>
+ // ======>>> Complete this
+ function estimateUpdateVendorVariation(form){
+  var estimate_id = $('#estimate_id').val()
+  var vendor = $(form).find('select#vendor').val();
+  var product_id = $(form).find('#product_id').val();
+  var expiry = $(form).find('#expiry').val();
+  var price = $(form).find('#price').val();
+  var specs = $(form).find('#specs').val();
+  var quantity = $(form).find('#quantity').val();
+  var delivery_terms = $(form).find('#delivery_terms').val();
+  var label_name = $(form).find('#label_name').val();
+  var contact_id = $(form).find('#contact_id').val();
+  var dealproduct_id = $(form).find('#dealproduct_id').val();
+  
+  $.ajax({
+    url : '../../../../../ajax/estimate_updatevendorvariation_ajax/', // the endpoint
+    type : "POST", // http method
+    data : { vendor : vendor , product_id:product_id , expiry:expiry,price:price,specs:specs,quantity:quantity,delivery_terms:delivery_terms,estimate_id:estimate_id,label_name:label_name,contact_id:contact_id,dealproduct_id:dealproduct_id}, // data sent with the post request
+
+    // handle a successful response
+    success : function(json) {
+        $('.estimate_updatevendorvariation_ajax-'+product_id).modal('hide'); // remove the value from the input
+        console.log(json); // log the returned json to the console
+        console.log("success"); // another sanity check
+        alert("Vendor Variation Successfully updated. !");
+        $('select.purchaseprice-'+product_id).html(json['purchase_price_html']);
+    },
+
+    // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+        $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+            " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+});
+  return false;
+}
+function estimateAddVendor(form){
+  var estimate_id = $('#estimate_id').val()
+  var vendor = $(form).find('select#vendor').val();
+  var product_id = $(form).find('#product_id').val();
+  var expiry = $(form).find('#expiry').val();
+  var price = $(form).find('#price').val();
+  var specs = $(form).find('#specs').val();
+  var quantity = $(form).find('#quantity').val();
+  var delivery_terms = $(form).find('#delivery_terms').val();
+  var label_name = $(form).find('#label_name').val();
+  
+  $.ajax({
+    url : '../../../../../ajax/estimate_addvendor_ajax/', // the endpoint
+    type : "POST", // http method
+    data : { vendor : vendor , product_id:product_id , expiry:expiry,price:price,specs:specs,quantity:quantity,delivery_terms:delivery_terms,estimate_id:estimate_id,label_name:label_name}, // data sent with the post request
+
+    // handle a successful response
+    success : function(json) {
+        $('.estimate_addvendor_ajax-'+product_id).modal('hide'); // remove the value from the input
+        $('.estimate_addvendorvariation_ajax-'+product_id).modal('hide'); // remove the value from the input
+        console.log(json); // log the returned json to the console
+        console.log("success"); // another sanity check
+        alert("Vendor Successfully added to the Product !");
+        //$('select.purchaseprice-'+product_id).html("<option>TUTUTU</option><option>TUTUTU</option><option>TUTUTU</opton><option>TUTUTU</option><option>TUTUTU</option>");
+        $('select.purchaseprice-'+product_id).html(json['purchase_price_html']);
+        console.log(json['purchase_price_html']);
+    },
+
+    // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+        $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+            " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+});
+  return false;
+}
+
+$(document).on("click",".estimate_updatevendorvariation_ajax",function(){ 
+  //alert(jQuery(this).data("id"));
+  var item_id = ($(this).data('id'));
+  //$.get("https://www.rawble.com/rfq/userrfq/ajaxestimatelist?item_id="+item_id, function(data, status){
+  //alert(data);
+  $('.estimate_updatevendorvariation_ajax-'+item_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/coffee/lg.coffee-cup-drink-loader.gif' />");
+  $.ajax({
+      url: '../../../../../ajax/estimate_updatevendorvariation_ajax',
+      type: "get",
+      data: {'slug': item_id},
+
+      success: function(data) {
+        $('.estimate_updatevendorvariation_ajax-'+item_id).modal('show');
+        $('.estimate_updatevendorvariation_ajax-'+item_id).find('.modal-body').html(data.estimate_updatevendorvariation_ajax_snippet);
+        
+      },
+      error: function(err) {
+        console.log('error', err);
+      }
+    })
+  //});
+  });
+
+
+//// Ajax To Get Add Vendor Form in Estimate
+$(document).on("click",".estimate_addvendor_ajax",function(){ 
+  //alert(jQuery(this).data("id"));
+  var item_id = ($(this).data('id'));
+  //$.get("https://www.rawble.com/rfq/userrfq/ajaxestimatelist?item_id="+item_id, function(data, status){
+  //alert(data);
+  $('.estimate_addvendor_ajax-'+item_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/coffee/lg.coffee-cup-drink-loader.gif' />");
+  $.ajax({
+      url: '../../../../../ajax/estimate_addvendor_ajax',
+      type: "get",
+      data: {'slug': item_id},
+
+      success: function(data) {
+        $('.estimate_addvendor_ajax-'+item_id).modal('show');
+        $('.estimate_addvendor_ajax-'+item_id).find('.modal-body').html(data.estimate_addvendor_ajax_snippet);
+        
+      },
+      error: function(err) {
+        console.log('error', err);
+      }
+    })
+  //});
+  });
+$(document).on("click",".estimate_addvendorvariation_ajax",function(){ 
+  //alert(jQuery(this).data("id"));
+  var item_id = ($(this).data('id'));
+  //$.get("https://www.rawble.com/rfq/userrfq/ajaxestimatelist?item_id="+item_id, function(data, status){
+  //alert(data);
+  $('.estimate_addvendorvariation_ajax-'+item_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/coffee/lg.coffee-cup-drink-loader.gif' />");
+  $.ajax({
+      url: '../../../../../ajax/estimate_addvendorvariation_ajax',
+      type: "get",
+      data: {'slug': item_id},
+
+      success: function(data) {
+        $('.estimate_addvendorvariation_ajax-'+item_id).modal('show');
+        $('.estimate_addvendorvariation_ajax-'+item_id).find('.modal-body').html(data.estimate_addvendorvariation_ajax_snippet);
+        
+      },
+      error: function(err) {
+        console.log('error', err);
+      }
+    })
+  //});
+  });
+function addProductRow(btn){
+
+  var product_id = btn.getAttribute("data-id");
+  var product_selected = btn.parentNode;
+  var new_product_id = $('select#productaddselect-'+product_id).find(":selected").data("product_id");
+  var quantity = $('select#productaddselect-'+product_id).find(":selected").data("quantity");
+  var pack_size = $('select#productaddselect-'+product_id).find(":selected").data("pack_size");
+  var estimate_id = $('select#productaddselect-'+product_id).find(":selected").data("estimate_id");
+  console.log(product_id);
+  console.log(new_product_id);
+  if(product_id == new_product_id){
+    alert("Product Already in the Estimate");
+
+  }
+  else {
+    $.ajax({
+    url : '../../../../../ajax/estimate_addproduct_ajax/', // the endpoint
+    type : "get", // http method
+    data : { new_product_id : new_product_id , quantity:quantity , pack_size:pack_size , estimate_id:estimate_id}, // data sent with the post request
+
+    // handle a successful response
+    success : function(data) {
+        //$('.estimate_updatevendorvariation_ajax-'+product_id).modal('hide'); // remove the value from the input
+        console.log(data.estimate_addproduct_ajax_snippet); // log the returned json to the console
+        console.log("success");
+        var new_item = $(data.estimate_addproduct_ajax_snippet).hide();
+        $('#productrow-'+product_id).after(new_item); // another sanity check
+        new_item.show("slow");//alert("Vendor Variation Successfully updated. !");
+        //$('select.purchaseprice-'+product_id).html(json['purchase_price_html']);
+    },
+     // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+        $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+            " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+});
+  }
+  return false;
+}
+function deleteRow(btn){
+  var row = btn.parentNode.parentNode.parentNode;
+  row.parentNode.removeChild(row);
+  return false;
+}
+$(document).on("change","select#purchaseprice",function(){
+    item_id = $(this).find(':selected').data('item_id');
+    purchase_price = $(this).find(':selected').data('purchase_price');
+    customer_freight = $(this).find(':selected').data('customer_freight');
+    vendor_freight = $(this).find(':selected').data('vendor_freight');
+    bpt = $(this).find(':selected').data('bpt');
+    vpt = $(this).find(':selected').data('vpt');
+    
+    purchase_price_float = parseFloat(purchase_price);
+    customer_freight_float = parseFloat(customer_freight);
+    vendor_freight_float = parseFloat(vendor_freight);
+    purchase_price_float_2 = purchase_price_float + vendor_freight_float
+    bpt_float = parseFloat(bpt);
+    vpt_float = parseFloat(vpt);
+   
+    selling_price_float = purchase_price_float*(1.07 + 0.0005 * ( bpt_float - vpt_float )) + vendor_freight_float + customer_freight_float ; 
+    selling_price = selling_price_float.toString()
+    $('table#'+item_id).html('<tr><td class="table-secondary">Purchase Price</td><td>'+purchase_price+'</td></tr><tr><td class="table-secondary">Vendor Freight</td><td>'+vendor_freight+'</td></tr><tr><td class="table-secondary">Customer Freight</td><td>'+customer_freight+'</td></tr><tr><td class="table-secondary">Selling Price</td><td>'+selling_price+'</td></tr><input name="selling_price" type="hidden" value="'+selling_price+'">');
+    
+});
+</script>
+{% endblock application-active %}
+

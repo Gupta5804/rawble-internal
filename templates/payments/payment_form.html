@@ -1,0 +1,59 @@
+{% extends 'home.html' %}
+{% block page-title-var %}Add New Advance Payment{% endblock page-title-var %}
+{% load widget_tweaks %}
+{% block application-active %}
+<form method="post">{% csrf_token %}
+
+    <div class="container">
+      <div class="row" style="margin-bottom:2%">
+        <div class="col-6">
+          {{ form.date.label }}
+        </div>
+        <div class="col-6">
+          {% render_field form.date type="date" class="form-control" %}
+        </div>
+      </div>
+      <div class="row" style="margin-bottom:2%">
+        <div class="col-6">
+          {{ form.vendor.label }}
+        </div>
+        <div class="col-6">
+          {% render_field form.vendor class="form-control" %}
+        </div>
+      </div>
+      <div class="row" style="margin-bottom:2%">
+        <div class="col-6">
+          {{ form.amount.label }}
+        </div>
+        <div class="col-6">
+          {% render_field form.amount class="form-control" %}
+        </div>
+      </div>
+      <div class="row" style="margin-bottom:2%">
+        <div class="col-6">
+          {{ form.reason.label }}
+        </div>
+        <div class="col-6">
+          {% render_field form.reason class="form-control" %}
+        </div>
+      </div>
+      <div class="row" style="margin-bottom:2%">
+        <div class="col-6">
+          {{ form.comment.label }}
+        </div>
+        <div class="col-6">
+          {% render_field form.comment class="form-control" %}
+        </div>
+      </div>
+      <div class="row" style="margin-bottom:2%">
+        <div class="col-6">
+          {{ form.delivery_terms.label }}
+        </div>
+        <div class="col-6">
+          {% render_field form.delivery_terms class="form-control" %}
+        </div>
+      </div>
+    </div>
+    <input type="submit" class="btn btn-outline-primary btn-lg btn-block" value="Save">
+</form>
+{% endblock application-active %}

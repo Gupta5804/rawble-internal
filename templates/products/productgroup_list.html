@@ -1,0 +1,108 @@
+{% extends 'home.html' %}
+{% block page-title-var %} Product Group List {% endblock page-title-var %}
+{% block application-active %}
+
+
+<p style="text-align: center;"><strong><button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-outline-primary btn-lg" >Add New Group </button></strong></p>
+
+
+
+{% if productgroup_list %}
+<div class="container" style="margin-top:4%;margin-bottom:4%">
+<table id="example" class="table table-striped table-bordered " style="width:100%">
+        <thead>
+            <tr>
+                <th>Group Name</th>
+
+                <th>Total Products</th>
+                <th></th>
+                <th></th>
+                <th></th>
+
+            </tr>
+        </thead>
+        <tbody id="t-body">
+            {% for productgroup in productgroup_list%}
+            <tr>
+                <td>{{ productgroup.name }}</td>
+
+                <td>{{ productgroup.product_set.count }}</td>
+                <td><a class="btn btn-outline-primary btn-sm" href="{% url 'product_group_detail' pk=productgroup.id %}"> View Group</a></td>
+                <td><a class="btn btn-outline-primary btn-sm" href="{% url 'product_group_add_product' pk1=productgroup.id %}">Add Products to the Group</a></td>
+                <td><a class="btn btn-outline-primary btn-sm" href="{% url 'product_group_delete' pk=productgroup.id %}">Delete Group</a></td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Group Name</th>
+                <th>Total Products</th>
+
+                <th></th>
+                <th></th>
+                <th></th>
+
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{% else %}
+<h2> No Groups Created </h2>
+{% endif %}
+    <script>
+
+    </script>
+{#===========================================modal start==============================================================#}
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form id="group-form" action="{% url 'product_group_create' %}" method="post">
+    {% csrf_token %}
+      <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add a new Group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        {% for field in form %}
+                <p>
+                  {{ field.label_tag }}<br>
+                  {{ field }}
+                </p>
+                {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+{#===========================================modal end=================================================================#}
+    <script>
+    $('#group-form').on('submit',function(event){
+        event.preventDefault()
+        create_post()
+    });
+    function create_post() {
+    console.log($('#post-text').val())
+    $.ajax({
+        url:"{% url 'product_group_create' %}",
+        type: "POST",
+        data : {'the_post':$('#post-text').val()},
+        success: function (json) {
+            $('#post-text').val('');
+            $('#exampleModal').modal('hide');
+             console.log(json);
+            var v=" <tr><td>"+ json.name +"</td><td>0</td><td><a  class=\"btn btn-outline-primary btn-sm\" href=\""+ json.pk +"/\"> View Group</a></td> <td><a class=\"btn btn-outline-primary btn-sm\" href=\"add_more_products/"+ json.pk +"\">Add Products to the Group</a></td> <td><a class=\"btn btn-outline-primary btn-sm\" href=\"delete/"+ json.pk +"/\">Delete Group</a></td> </tr>";
+             $("#t-body").prepend(v);
+    }
+    });
+    };
+
+    </script>
+{% endblock application-active %}

@@ -1,0 +1,199 @@
+{% extends 'home.html' %}
+ 
+{% block page-title-var %} <span>Vendor Profile of {{ vendor.contact_name }}</span>{% endblock page-title-var %}
+{% block application-active %}
+<div class="container">
+    <table class="table table-bordered">
+    <tbody>
+        <tr>
+            <td class="table-secondary">Vendor:</td>
+            <td>{{ vendor.contact_name }}</td>
+            <td class="table-secondary">Location:</td>
+            <td>{{ vendor.place_of_contact}}</td>
+        </tr>
+        <tr>
+            <td class="table-secondary">Payment Terms:</td>
+            <td>{{ vendor.payment_terms }}</td>
+            <td class="table-secondary">Outstanding-Payable:</td>
+            <td>{{ vendor.outstanding_payable }}</td>
+            
+        </tr>
+        <tr>
+            <td class="table-secondary">Contact Person:</td>
+            <td>{{ vendor.first_name }} {{ vendor.last_name }} </td>
+            <td class="table-secondary">Email-id:</td>
+            <td>[ {{ vendor.email }} ]</td>
+            
+        </tr>
+        <tr>
+            <td class="table-secondary">Relationship Manager:</td>
+            <td>{{ vendor.relationship_manager }}</td>
+            <td class="table-secondary">Gst No.: </td>
+            <td>{{ vendor.gst_no }}</td>
+        </tr>
+    </tbody>
+    </table>
+    
+    
+    
+    
+    
+</div>
+<hr>
+<div class="container">
+<div class="row">
+    <div class="col-6">
+        <a class="btn btn-primary btn-block" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Update Price</a>
+    </div>
+    <div class="col-6">
+         <button class="btn btn-primary btn-block" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Add Product</button>
+    </div>
+  
+</div>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="collapse multi-collapse" id="multiCollapseExample1">
+      <div class="card card-body">
+      <form method="post" action="">
+      {% csrf_token %}
+       <div class="container">
+        <div class="row form-group">
+            <label for="exampleFormControlSelect1">Select Product</label>
+                <select class="form-control" name="dealproduct" id="update_product">
+                  <option></option>
+                  {% for product in all_products %}
+                    {% for variation in product.variations %}
+                    
+    
+    
+    
+    
+    
+    
+                    <option  data-product="{{ product.product.name }}" data-product_group="{{ product.product.group.name }} " data-quantity=" {{ variation.quantity }}" data-unit="{{ product.product.unit }}" data-specs="{{ variation.specs }}" data-price="{{ variation.price }}" data-last_updated="{{ variation.last_updated|date:'jS F,Y H:i' }}" data-expiry_status="{% if variation.expires_in > 0 %} Deal will Expire in {{ variation.expires_in }} day(s). {% elif variation.expires_in == 0 %} Deal will expire TODAY {% else %} Deal Expired {% widthratio variation.expires_in 1 -1 %} day(s) ago. {% endif %}" data-updated_by="{{ variation.updated_by }}" data-dealproduct_id="{{ variation.dealproduct_id }}" data-delivery_terms="{{ variation.delivery_terms }}" {% if variation.expires_in > 0 %} style="background-color:#00800078;color:black;" {% elif variation.expires_in == 0 %}  style="background-color:#ffff008a;color:black;" {% else %} style="background-color:#ff00004a;color:black;" {% endif %} value="{{ variation.dealproduct_id }}">{{ product.product.name }} | {{ variation.specs }} | {{ variation.quantity }} ({{ product.product.unit }}) </option>
+                    {% endfor %}
+                  {% endfor %}
+                </select>
+
+        </div>
+        <div class="row">
+         <table class="table table-bordered" id="update_selectedproduct">
+         
+         </table>
+        </div>
+       </div>
+       <input type="submit" name="update_product" value="Update Product" class="btn btn-outline-warning btn-block">
+       </form>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="collapse multi-collapse" id="multiCollapseExample2">
+      <div class="card card-body">
+        <form method="post" action="">
+        {% csrf_token %}
+       <div class="container">
+        <div class="row">
+
+        </div>
+       </div>
+       <input type="submit" name="add_product" value="Add Product" class="btn btn-outline-success btn-block">
+       </form>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+<h4 style="text-align:center" >PRODUCTS</h4>
+<div class="container" >
+
+    
+                                <table class="table table-bordered" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Group</th>
+                                            <th>Product Name</th>
+                                            <th>Make</th>
+                                            <th>Deal ID</th>
+                                            <th>Last Updated</th>
+                                            <th>Specs</th>
+                                            <th>Quantity</th>
+                                            <th>Vendor Price</th>
+                                            <th>Delivery Terms</th>
+                                            <th>Expiry Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for product in all_products %}
+                                        <tr>
+                                            
+                                            <td rowspan="{{ product.variations|length }}">{{ product.product.group }}</td>
+                                            <td rowspan="{{ product.variations|length }}">{{ product.product.name }}</td>
+                                            <td rowspan="{{ product.variations|length }}">{{ product.product.make }}</td>
+                                            {% for variation in product.variations %}    
+                                                {% if forloop.first %}
+                                            <td {% if variation.expires_in > 0 %} class="table-success" {% elif variation.expires_in == 0 %} class="table-warning" {% else %} class="table-danger" {% endif %}>{{ variation.deal_id }}</td>
+                                            <td {% if variation.expires_in > 0 %} class="table-success" {% elif variation.expires_in == 0 %} class="table-warning" {% else %} class="table-danger" {% endif %}>
+                                                <blockquote class="blockquote text-right" style="font-weight:600;">
+                                                    <p class="mb-0" style="font-size:14px;color:black;">{{ variation.last_updated|date:'jS F,Y H:i' }}</p>
+                                                    <footer class="blockquote-footer" style="font-size:12px"> By: <cite title="{{ variation.updated_by }}">{{ variation.updated_by }}</cite></footer>
+                                                </blockquote>
+                                            </td>
+                                            <td {% if variation.expires_in > 0 %} class="table-success" {% elif variation.expires_in == 0 %} class="table-warning" {% else %} class="table-danger" {% endif %}>{{ variation.specs }}</td>
+                                            <td {% if variation.expires_in > 0 %} class="table-success" {% elif variation.expires_in == 0 %} class="table-warning" {% else %} class="table-danger" {% endif %}>{{ variation.quantity }} ({{ product.product.unit }})</td>
+                                            <td {% if variation.expires_in > 0 %} class="table-success" {% elif variation.expires_in == 0 %} class="table-warning" {% else %} class="table-danger" {% endif %}>{{ variation.price }} </td>
+                                            <td {% if variation.expires_in > 0 %} class="table-success" {% elif variation.expires_in == 0 %} class="table-warning" {% else %} class="table-danger" {% endif %}>{{ variation.delivery_terms }} </td>
+                                            <td {% if variation.expires_in > 0 %} class="table-success" {% elif variation.expires_in == 0 %} class="table-warning" {% else %} class="table-danger" {% endif %}>{% if variation.expires_in > 0 %} Deal will Expire in {{ variation.expires_in }} day(s). {% elif variation.expires_in == 0 %} Deal will expire TODAY {% else %} Deal Expired {% widthratio variation.expires_in 1 -1 %} day(s) ago. {% endif %}  </td>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                            {% for variation in product.variations %}
+                                            {% if forloop.first %}
+                                            {% else %}    
+                                        <tr {% if variation.expires_in > 0 %} class="table-success" {% elif variation.expires_in == 0 %} class="table-warning" {% else %} class="table-danger" {% endif %}>
+                                            <td>{{ variation.deal_id }}</td>
+                                            <td>
+                                                <blockquote class="blockquote text-right" style="font-weight:600;">
+                                                    <p class="mb-0" style="font-size:14px;color:black;">{{ variation.last_updated|date:'jS F,Y H:i' }}</p>
+                                                    <footer class="blockquote-footer" style="font-size:12px"> By: <cite title="{{ variation.updated_by }}">{{ variation.updated_by }}</cite></footer>
+                                                </blockquote>
+                                            </td>
+                                            <td>{{ variation.specs }}</td>
+                                            <td>{{ variation.quantity }} ({{ product.product.unit }})</td>
+                                            <td>{{ variation.price }} </td>
+                                            <td>{{ variation.delivery_terms }} </td>
+                                            <td >{% if variation.expires_in > 0 %} Deal will Expire in {{ variation.expires_in }} day(s). {% elif variation.expires_in == 0 %} Deal will expire TODAY {% else %} Deal Expired {% widthratio variation.expires_in 1 -1 %} day(s) ago. {% endif %}  </td>
+                                            
+                                        </tr>
+                                        {% endif %}
+                                            {% endfor %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            
+                            
+                    </div>
+
+<script>
+$('select#update_product').on('change',function(){
+    product = $(this).find(':selected').data('product');
+    product_group = $(this).find(':selected').data('product_group');
+    quantity = $(this).find(':selected').data('quantity');
+    unit = $(this).find(':selected').data('unit');
+    specs = $(this).find(':selected').data('specs');
+    price = $(this).find(':selected').data('price');
+    last_updated = $(this).find(':selected').data('last_updated');
+    expiry_status = $(this).find(':selected').data('expiry_status');
+    updated_by = $(this).find(':selected').data('updated_by');
+    dealproduct_id = $(this).find(':selected').data('dealproduct_id');
+    delivery_terms = $(this).find(':selected').data('delivery_terms');
+    
+    
+    console.log(product);
+    $('table#update_selectedproduct').html('<tr><td class="table-secondary">Product:</td><td>'+product+'</td><tr><td class="table-secondary">Product Group:</td><td>'+product_group+'</td></tr><tr><td class="table-secondary">Delivery Terms:</td><td>'+delivery_terms+'</td></tr><tr><td class="table-secondary">New Delivery Terms:</td><td class="form-group"><select class="form-control" id="delivery-terms" name="delivery_terms"><option value="Door Deliver">Door Deliver</option><option value="Ex-Godown">Ex-Godown</option><option value="FOR">FOR</option><option value="Local Transport">Local Transport</option></select></td></tr><tr><td class="table-secondary">Quantity:</td><td>'+quantity+'('+unit+')</td></tr><tr><td class="table-secondary">Specifications:</td><td>'+specs+'</td></tr><tr><td class="table-secondary">Last Price (INR):</td><td>'+price+'</td></tr><tr><td class="table-secondary">New Price:</td><td class="form-group"><input type="number" name="newprice" steps="0.01" class="form-control" required></td></tr><tr><td class="table-secondary">Expiry Date:</td><td class="form-group"><input type="date" name="expiry" steps="0.01" class="form-control" required><input type="hidden" name="dealproduct_id" value="'+dealproduct_id+'"></td></tr><tr><td class="table-secondary">Last Price (INR):</td><td></td></tr><tr><td class="table-secondary">Last updated:</td><td>'+last_updated+'</td></tr><tr><td class="table-secondary">Expiry Status:</td><td>'+expiry_status+'</td></tr><tr><td class="table-secondary">Updated By:</td><td>'+updated_by+'</td></tr>');
+});
+
+</script>
+
+{% endblock application-active %}

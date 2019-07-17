@@ -1,0 +1,76 @@
+.tdStyle
+{
+background-image:url('bg.JPG');
+background-repeat:no-repeat;
+background-size:100%;
+}
+
+.login-container
+{
+    margin-top: 10%;
+    margin-bottom: 10%;
+    background-color: #eaf7e6;
+    padding: 3%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.login-container > .form-login > h2 
+{
+    text-align: center;
+    margin-bottom: 10%;
+    
+}
+
+.login-container > .form-login > form > p 
+{
+    padding: 10px;
+    text-align: center;
+}
+
+.login-container > .form-login > form > button
+{
+    display: block;
+    margin-left: auto;
+    margin-right:auto;
+    
+} 
+.fixed {
+    position: fixed;
+    top: 0;
+  }
+  
+  .navigation {
+    width: 100%;
+    background-color: white;
+    height: 75px;
+  }
+  
+  .navigation ul {
+    list-style: none;
+    margin: 20px 0 0 0;
+    padding: 0;
+  }
+  
+  .navigation ul li {
+    display: inline-block;
+    margin: 0 0 0 30px;
+    padding: 0;
+  }
+  
+  .navigation ul li.active a {
+    border-bottom-width: 4px;
+    border-bottom-style: solid;
+    border-bottom-color: inherit;
+  }
+  
+  .navigation ul li a:link,
+  .navigation ul li a:visited,
+  .navigation ul li a:active,
+  .navigation ul li a:hover,
+  .navigation ul li a:focus {
+    color: #333;
+    text-decoration: none;
+    padding-bottom: 10px;
+  }
+  

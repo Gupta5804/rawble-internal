@@ -1,0 +1,47 @@
+
+<p>Dear {{ buyer }},</p>
+<p>This message is to inform you the Current Status of following Items </p>
+
+<p>LR No. : {{ lr_number }}</p>
+<p>Current Status. : {{ tracking_status }}</p>
+<p>ETA . : {{ eta }}</p>
+
+<table style="height: 38px;" border="2" width="597">
+<tbody>
+<tr>
+
+
+<td style="width: 60px;">Product</td>
+
+
+<td style="width: 60px;"> Quantity</td>
+
+<td style="width: 60px;">Transporter Detail</td>
+<td style="width: 60px;">Dispatched at</td>
+
+
+
+</tr>
+{% for sopp in sopps %}
+<tr>
+
+
+<td style="width: 60px;">{{ sopp.salesorderproduct.product.name }}</td>
+
+
+<td style="width: 60px;">{{ sopp.planned_quantity }} ({{ sopp.salesorderproduct.product.unit }})</td>
+
+<td style="width: 60px;font-size:smaller;">
+    <span style="font-weight:bold">Transporter Name</span>: {{ sopp.transporter.name }} <br> <hr>
+    <span style="font-weight:bold">Transporter Address</span>: {{ sopp.transporter.address }} <br> <hr>
+    <span style="font-weight:bold">Website</span>: <a href="{{ sopp.transporter.website_url }}">{{ sopp.transporter.name }}</a><br> <hr>
+    <span style="font-weight:bold">Contact Numbers</span>: {{ sopp.transporter.phone_number }}
+</td>
+<td style="width: 60px;">{{ sopp.shipped_date_time }}</td>
+
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+

@@ -1,0 +1,268 @@
+{% extends 'home.html' %}
+{% block page-title-var %} Deal Details ( Buyer ){% endblock page-title-var%}
+{% block application-active %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">    
+            <h1 style="text-align:center;margin-top:5%;"></h1>
+            <h4 style="text-align:center;margin-bottom:5%"> </h4>
+        </div>
+    </div>
+    <form method="post">
+    {% csrf_token %}
+        <div class="row">
+            <div class="col-6 form-group ">
+                <label for="date" class="col-form-label">Date</label>
+                <span class="asterixField">*</span>
+                <input type="text" class="form-control form-control-sm" value="{{ dealbuyer.date }}" name="date" id="date" disabled> 
+                <small id="date" class="form-text text-muted"> Date On Which Deal is Received</small> 
+            
+            </div>
+            <div class="col-6 form-group">
+                <label for="buyer" class="col-form-label">Buyer</label>
+                <input type="text" class="form-control form-control-sm" value="{{ dealbuyer.buyer.contact_name }}" name="buyer" id="date" disabled>
+                <small id="" class="form-text text-muted"> Select Buyer</small>
+            </div>
+            <div class="col-4 form-group">
+                <label for="reference" class="col-form-label">Reference</label>
+                <input type="text" class="form-control form-control-sm" value="{{ dealbuyer.reference }}line" name="reference" id="date" disabled>
+                <small id="reference" class="form-text text-muted"> Select Reference</small>
+            </div>
+            <div class="col-4 form-group">
+                <label for="delivery_terms" class="col-form-label">Delivery Terms</label>
+                <input type="text" class="form-control form-control-sm" value="{{ dealbuyer.delivery_terms }}" name="delivery_terms" id="date" disabled>
+                <small id="delivery_terms" class="form-text text-muted"> Select Delivery Terms</small>
+            </div>
+            <div class="col-4 form-group ">
+                <label for="lead_time" class="col-form-label">Lead Time</label>
+                <span class="asterixField">*</span>
+                <input type="number" value="{{ dealbuyer.lead_time }}" class="form-control form-control-sm" id="lead_time" name='lead_time' required> 
+                <small id="lead_time" class="form-text text-muted"> Enter Lead Time(In Days)  </small>
+                 
+            
+            </div>
+            <div class="col-4 form-group ">
+                <label for="average_payment_terms" class="col-form-label">Average Payment Terms</label>
+                
+                <input type="text" value="{{ dealbuyer.average_payment_terms }}" class="form-control form-control-sm" id="average_payment_terms" name='average_payment_terms' > 
+                <small id="average_payment_terms" class="form-text text-muted"> Enter Average Payment Terms(Optional) </small>
+
+            
+            </div>
+            <div class="col-4 form-group ">
+                <label for="average_lead_time" class="col-form-label">Average Lead Time</label>
+                
+                <input type="text" value="{{ dealbuyer.average_lead_time }}" class="form-control form-control-sm" id="average_lead_time" name='average_lead_time'> 
+                <small id="average_lead_time" class="form-text text-muted"> Enter Average Lead Time (Optional)</small>
+                 
+            
+            </div>
+            <div class="col-4 form-group ">
+                <label for="purpose" class="col-form-label">Purpose</label>
+                
+                <input type="text" value="{{ dealbuyer.purpose }}" class="form-control form-control-sm" id="purpose" name='purpose'> 
+                <small id="purpose" class="form-text text-muted"> Enter Purpose (Optional) </small>
+                 
+            
+            </div>
+   
+        </div>
+        <hr>
+        <hr>
+        <h4 style="text-align:center;margin-bottom:5%"> Requirement List</h4>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                  <th scope="col">Label Name</th>
+                  <th scope="col">Product Group</th>
+                  <th scope="col">Make</th>
+                  <th scope="col">Preferred Vendor</th>
+                  <th scope="col">Specs</th>
+                  
+                  <th scope="col">Target Price</th>
+                  <th scope="col"> Past Info</th>
+
+                </tr>
+            </thead>
+            <tbody>
+            {% for product in dealbuyer.dealbuyerproduct_set.all %}
+              <tr>
+                <th scope="row">{{ product.label_name }}</th>
+                <td>{{ product.product_group.name }}</td>
+                <td>{{ product.make }}</td>
+                <td>{{ product.preferred_vendor }}</td>
+                <td>{{ product.specs }}</td>
+                
+                <td>{{ product.target_price }}</td>
+                <td>
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target=".myModal_{{ product.id }}">?</button>
+                        
+                        <!-- Modal -->
+                        <div id="myModal" class="modal fade myModal_{{ product.id }}" role="dialog">
+                          <div class="modal-dialog modal-lg" style="max-width:200%;width:86%;margin-left:auto;margin-right:auto;">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h4 class="modal-title" style="margin-left:auto">Previous Transactions</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <br>
+                              </div>
+                                <h6 class="modal-title" style="margin-left:auto;margin-right:auto;">Product Group: {{ product.product_group.name }}</h6>
+                              <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-6 table-responsive table-body">
+                                    <h5 style="text-align:center;"> Sales </h5>
+                                    <table class="table table-hover" >
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">Customer Name</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Price</th>
+                                            
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for product in product.product_group.product_set.all %}
+                                            {% regroup product.invoice_set.all by customer_name as grouped_invoice%}
+                                            {% for group in grouped_invoice  %}
+                                                {% for invoice in group.list %}
+                                                    <tr>
+                                                       {% ifchanged %} <th scope="row" rowspan="{{ group.list|length}}">{{ invoice.customer_name }}</th> {% endifchanged%}
+                                                        <td><a href="#" onClick="window.open('{{ invoice.url }}', '_blank')" >{{ invoice.product.name }} <a></td>
+                                                        <td>{{ invoice.date }}</td>
+                                                        <td>{{ invoice.quantity }}({{ invoice.product.unit }})</td>
+                                                        <td>{{ invoice.price }}</td>
+                                            
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                         
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                    <div class = "col-6 table-responsive table-body">
+                                    <h5 style="text-align:center;"> Purchases </h5>
+                                    <table class="table table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">Vendor Name</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Price</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for product in product.product_group.product_set.all %}
+                                        {% regroup product.bill_set.all by vendor_name as grouped_bill %}
+                                            {% for group in grouped_bill  %}
+                                                {% for bill in group.list %}
+                                                    <tr>
+                                                        {% ifchanged %} <th scope="row" rowspan="{{ group.list|length}}">{{ bill.vendor_name }}</th> {% endifchanged %}
+                                                        <td>{{ bill.product.name }} <a></td>
+                                                        <td>{{ bill.date }}</td>
+                                                        <td>{{ bill.quantity }}({{ bill.product.unit }})</td>
+                                                        <td>{{ bill.price }}</td>
+                                            
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                        </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                </td>
+              </tr>
+            {% endfor %}  
+              
+            </tbody>
+        </table>
+        <hr>
+        <hr>
+        <h4 style="text-align:center;margin-bottom:5%"> Select Products </h4>
+        <table id="tblAddRow" class="table order-list table-bordered">
+            <thead>
+                <tr>
+
+                    <th>Label Name</th>
+                    <th>Product</th>
+                    <th>Make</th>
+                    
+                    
+                    <th>Pack Size</th>
+                    <th>Quantity </th>
+                    <th>Rawble Price</th>
+                </tr>
+            </thead>
+            <tbody class="">
+            {% for product in dealbuyer.dealbuyerproduct_set.all %}
+                 <input type="hidden" id="custId" name="dealproduct_id" value="{{ product.id }}">
+                <tr>
+
+                    <td>
+                        <input type="text" name="label_name" value="{{ product.label_name }}" class="form-control form-control-sm" disabled>
+                    </td>
+                    <td>
+                        <select class="form-control form-control-sm" name="product_option">
+                                <option value=""></option>
+                            {% for product_option in product.product_group.product_set.all %}
+                                <option value="{{ product_option.pk }}" {% if product.product.pk == product_option.pk %}selected="selected" {% endif%}> {{ product_option.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <small id="product_option" class="form-text text-muted">Products in Group </small>
+                        <small id="product_option" class="form-text text-muted"><a href="#" onClick="window.open('{% url 'product_group_detail' pk=product.product_group.id  %}', '_blank')"> (Edit Group)</a>  </small>
+                    </td>
+                    <td>
+                        <select class="form-control form-control-sm" name="make" >
+                                <option value="">  </option>
+                            {% for make in makes %}
+                                
+                                <option value="{{ make.id }}"{% if  product.make.id == make.id %} selected="selected"{% endif %}> {{ make.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <small id="make" class="form-text text-muted"><a href="#" onClick="window.open('{% url      'make_create' %}', '_blank')"> + New</a>  </small>
+                    </td>
+                    
+                    
+                    <td>
+                        <input name="pack_size" value = "{{ product.pack_size }}" type="number" class="form-control form-control-sm" required>
+                    </td>
+
+                    <td>
+                        <input name="quantity" value = "{{ product.quantity }}" type="number" class="form-control form-control-sm" required>
+                        <small id="quantity" class="form-text text-muted"> IN ({{ product.unit.name}})</small>
+
+                    </td>
+                    
+                    <td>
+                        <input name="rawble_price" type="number" value="{{ product.rawble_price }}" class="form-control form-control-sm"/>
+
+                        
+
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    <input type="submit" value="Save" style="display:block;margin-left:auto;margin-right:auto; margin-bottom:5%">
+    </form>   
+</div>
+
+
+{% endblock application-active %}
+
+

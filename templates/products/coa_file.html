@@ -1,0 +1,46 @@
+<a class="btn btn-outline-success btn-block" href="{% url "coa_upload" pk=record.item_id %}">
+    <i class="fas fa-cloud-upload-alt"></i>
+    Upload
+</a>
+<a
+        href="#" class="btn {% if record.coafile_set.count > 0 %} btn-outline-info {% else %} btn-outline-dark disabled{% endif %} btn-sm btn-block coaview" role="button" data-toggle="modal" {% if record.coafile_set.count > 0 %} {% else %} aria-disabled="true"{% endif %} data-target=".coaview-{{ record.item_id }}" title="Quick View of Coa Files Uploaded" data-id="{{ record.item_id }}" class="btn btn-outline-primary btn-block" >
+    {% if record.coafile_set.count > 0 %}
+        <i class="fas fa-eye"></i>
+    {% else %}
+        <i class="fas fa-eye-slash"></i>
+    {% endif %}
+    View
+</a>
+{% if record.coafile_set.count > 0 %}
+<a href="{% url "coa_upload" pk=record.item_id %}" class="btn btn-outline-danger  btn-block">
+    <i class="fas fa-trash"></i>
+    Delete
+</a>
+{% endif %}
+<br>
+{% if record.coafile_set.count > 0 %}
+    <span style="font-weight:bold;">[ {{ record.coafile_set.count }} COAs Uploaded]</span>
+{% else %}
+    <span style="color:red;font-weight:bold;">No COAs Uploaded</span>
+{% endif %}
+<div class="modal fade coaview-{{ record.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="left:-19%;width:141%">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">COA files:</h5>
+                <h4 style="text-align:center;">
+                    <span style="text-decoration: underline;">{{ record.name }} </span>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>'

@@ -1,0 +1,18 @@
+{% extends 'home.html' %}
+{% load crispy_forms_tags %}
+{% block page-title-var %} Create New Product Group {% endblock page-title-var %}
+{% block application-active %}
+
+<p style="text-align: center;">&nbsp;</p>
+<form method="post">
+{% csrf_token %}
+    {{ form.name |as_crispy_field}}
+    <input type="submit" value="Save" style="    margin-bottom: 5%;
+    display: block;
+    
+    margin-left: auto;
+    margin-right: auto;">
+</form>
+
+{% endblock application-active %}
+

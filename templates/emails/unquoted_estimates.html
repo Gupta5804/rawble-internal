@@ -1,0 +1,21 @@
+<table  border="1" style="border: black 1px solid; border-collapse: initial;">
+<thead>
+        <tr>
+            <th>Estimate</th>
+            <th>Date</th>
+            <th>Buyer</th>
+            <th>Expiry</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for estimate in estimates %}
+        <tr>
+            <td style="width: 169px">{{ estimate.estimate_number }}</td>
+            <td style="width: 140px">{{ estimate.date }}</td>
+            <td style="width: 300px">{{ estimate.buyer }}</td>
+            <td style="width: 140px">{{ estimate.expiry_date }}</td>
+            <td style="width: 130px"><a href="https://rawble-admin.herokuapp.com{% url 'zoho_estimate' estimate.estimate_id   %}"><button style="color: black"">Click Here to quote</button></a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

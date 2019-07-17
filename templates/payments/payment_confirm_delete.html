@@ -1,0 +1,9 @@
+{% extends 'home.html' %}
+{% block page-title-var %} Delete Advance Payment {% endblock page-title-var %}
+{% block application-active %}
+<form action="" method="post">{% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <input type="submit" value="Confirm" />
+</form>
+
+{% endblock application-active%}

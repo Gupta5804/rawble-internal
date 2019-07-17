@@ -1,0 +1,136 @@
+{% extends 'home.html' %}
+{% block page-title-var %} <i class="fas fa-calendar-alt"></i> Plan Outward  {% endblock page-title-var %}
+
+{% block application-active %}
+     <div class="btn-toolbar" style="align-self: center" >
+        <a href="{% url 'refresh_sales_orders' %}" class="btn btn-outline-info form-group">Update Sales orders from Zoho</a>
+        <a href="{% url 'send_mail_outward' %}" class="btn btn-outline-info form-group" style="position: absolute;left: 0;margin-left: 2%;">Send mail for Today's Dispatch</a>
+        <a href="#" id="todaysdispatch" style="position: absolute; right: 0; margin-right: 2%" data-toggle="modal" data-target="#todaysdispatchmodal" class="btn btn-outline-info form-group">Todays Dispatch</a>
+     <!-- Modal -->
+                <div class="modal fade" id="todaysdispatchmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg" style="max-width:95%" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Todays Dispatches</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <form method="post" action="" enctype="multipart/form-data">
+                      <div class="modal-body">
+
+                      </div>
+                      <input type="submit" name="sopp-save" value="Save" class="btn btn-outline-success ml-5 col-5 mb-4">
+                      <input type="submit" value="Dispatched" class="btn btn-outline-success ml-5 col-6 mb-4" name="dispatched-outward">
+                      </form>
+                    </div>
+                  </div>
+                </div>
+     </div>
+    <hr>
+
+    
+        
+        <table  class="table table-hover table-bordered" style="width:100%">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Buyer</th>
+                <th>Zoho Location</th>
+                <th>Sales order</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Select Outward Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for salesorder in salesorders_unplanned  %}
+              {% if salesorder.planned_status == False and salesorder.status != "invoiced" and salesorder.status != "overdue" and salesorder.status != "void" and salesorder.status != "closed" %}
+
+
+                <tr >
+                    <td>{{ salesorder.date }}</td>
+                    <th>
+                        {{ salesorder.buyer.contact_name }}
+                    </th>
+                    <td style="{% if salesorder.zoho_location == 'okhla' %} color:red{% elif salesorder.zoho_location == 'baddi' %}color:blue{% endif %};font-weight:bold;text-transform: uppercase;">{{ salesorder.zoho_location }}</td>
+                    <td><a class="btn btn-outline-primary btn-block btn-sm" href="{{ salesorder.salesorder_url }}">{{ salesorder.salesorder_number }}</a></td>
+                    <td> {{ salesorder.status }}</td>
+                    <td> {{ salesorder.total }}</td>
+                    <td>
+                        <a href="#" class="btn btn-outline-primary btn-sm btn-block select-outward" data-id="{{ salesorder.salesorder_id }}" data-toggle="modal" data-target="#so-outward-{{ salesorder.salesorder_id }}">
+                            <i class="fas fa-external-link-alt"></i> Plan Outward Date
+                        </a>
+                        <div class="modal fade" id="so-outward-{{ salesorder.salesorder_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" style="max-width:95%" role="document">
+                              <div class="modal-content" >
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Plan Outward Dates of SO# - <span style="color:red;">{{ salesorder.salesorder_number }}</span> of {{ salesorder.buyer.contact_name }}</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <form action="" method="post" enctype="multipart/form-data">
+                                <div class="modal-body">
+                                  ...
+                                </div>
+                                
+                                <input type="submit" name="so-outward" value="Save Outward Date and Time" class="btn btn-outline-success btn-block" >
+                                <hr>
+                                </form>
+                              </div>
+                            </div>
+                        </div>
+                        
+                    </td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    
+    <hr style="border-width:thick;">
+
+<script>
+
+            $(function () {
+                $('#datetimepicker1').datetimepicker();
+            });
+
+$(document).on("click",".select-outward",function(){
+    var salesorder_id = $(this).data('id');
+    
+        
+        $('#so-outward-'+salesorder_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
+        $.ajax({
+            url: '../../../../../ajax/salesorder_outward',
+            type: "get",
+            data: {'slug': salesorder_id},
+            success: function(data) {
+              $('#so-outward-'+salesorder_id).modal('show');
+              $('#so-outward-'+salesorder_id).find('.modal-body').html(data.so_snippet);
+            },
+            error: function(err) {
+              console.log('error', err);
+            }
+          })
+});
+</script>
+     <script>
+    $('#todaysdispatch').on("click",function () {
+
+        $('#todaysdispatchmodal').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
+         $.ajax({
+            url: '../../../../../ajax/todays_dispatch',
+            type: "get",
+            success: function(data) {
+              $('#todaysdispatchmodal').find('.modal-body').html(data.po_snippet);
+            },
+            error: function(err) {
+              console.log('error', err);
+            }
+          })
+
+    })
+    </script>
+{% endblock application-active %}

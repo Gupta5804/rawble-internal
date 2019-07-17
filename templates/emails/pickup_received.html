@@ -1,0 +1,49 @@
+<p>Dear Team,</p>
+<p>These Items are recieved from todays PickUp</p>
+<table style="height: 38px;" border="2" width="597">
+<tbody>
+<tr>
+<td style="width: 60px;">PO#</td>
+<td style="width: 60px;">Vendor</td>
+<td style="width: 60px;">Product</td>
+<td style="width: 60px;">SO #</td>
+<td style="width: 60px;">Buyer</td>
+<td style="width: 60px;">Purchase Price</td>
+<td style="width: 60px;">Quantity Ordered</td>
+<td style="width: 60px;">Quantity Received Till Now</td>
+<td style="width: 60px;">Quantity Received Today</td>
+
+<td style="width: 60px;">Transporter Detail</td>
+<td style="width: 60px;">Freight</td>
+<td style="width: 60px;">Pickup Date And Time</td>
+
+</tr>
+{% for pop in pop_email %}
+<tr>
+<td style="width: 60px;">
+    <a href="{{ pop.purchaseorder.purchaseorder_url }}">{{ pop.purchaseorder.purchaseorder_number }}</a>
+</td>
+<td style="width: 60px;">
+    <a href="http://rawble-admin.herokuapp.com{% url 'vendor_profile' contact_id=pop.purchaseorder.vendor.contact_id %}">
+        {{ pop.purchaseorder.vendor.contact_name }}
+    </a>
+</td>
+<td style="width: 60px;"><a href="http://rawble-admin.herokuapp.com{% url 'products_listing' %}?name__icontains={{ pop.product.name }}"> {{ pop.product.name }} </a></td>
+<td style="width: 60px;"><a href="{{ pop.purchaseorder.salesorder.salesorder_url }}">{{ pop.purchaseorder.salesorder.salesorder_number }}</a></td>
+<td style="width: 60px;">{{ pop.purchaseorder.salesorder.buyer.contact_name }}</td>
+<td style="width: 60px;">{{ pop.purchase_price }}</td>
+<td style="width: 60px;">{{ pop.quantity }}</td>
+<td style="width: 60px;">{{ pop.quantity_received }}</td>
+<td style="width: 60px;">{{ pop.quantity_to_receive }}</td>
+<td style="width: 60px;">{{ pop.transporter_detail }}</td>
+<td style="width: 60px;">{{ pop.freight }}</td>
+<td style="width: 60px;">{{ pop.pickup_date_time }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<a href="http://rawble-admin.herokuapp.com{% url 'report_servicedelivery' %}" >Click Here</a> To See Today's Inward And Outward Report
+
+<p style="text-align: center;">Total Quantity: {{ total_quantity }}</p>
+<p style="text-align: center;">Total Amount: {{ total_amount }}</p>

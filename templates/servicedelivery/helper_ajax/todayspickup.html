@@ -1,0 +1,49 @@
+ {% csrf_token %}
+<div class="alert alert-warning" role="alert" style="text-align:center;">
+                            Checkout received products / Click products
+</div>
+<table class="table table-striped table-bordered" >
+    <thead>
+        <tr>
+            <th>Purchase order</th>
+            <th>Vendor</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity Ordered</th>
+            <th>Quantity Received Till Now</th>
+            <th>Quantity Received Today</th>
+            <th>Transporter Detail</th>
+            <th>Final Freight</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for purchaseorderproduct in purchaseorderproducts %}
+        {% if purchaseorderproduct.received_status == False %}
+            <tr>
+                <td>{{ purchaseorderproduct.purchaseorder.purchaseorder_number }}<input value="{{ purchaseorderproduct.id }}" name="pop_id" type="hidden"></td>
+                <td>{{ purchaseorderproduct.purchaseorder.vendor}}</td>
+                <td>{{ purchaseorderproduct.product }}</td>
+                <td>{{ purchaseorderproduct.purchase_price }}</td>
+                <td>{{ purchaseorderproduct.quantity }}</td>
+                <td>{{ purchaseorderproduct.quantity_received }}</td>
+                <td>
+                    <input class="form-control" value="{{ purchaseorderproduct.quantity_to_receive }}" type="number" max="{{ purchaseorderproduct.quantity_to_receive_max }}" name="quantity_to_receive">
+                </td>
+                <td>
+                    <input class="form-control" value="{{ purchaseorderproduct.transporter_detail }}" type="text" name="transporter_detail">
+                </td>
+                <td>
+                    <input type="number" step="0.01" class="form-control" name="freight" value="{{ purchaseorderproduct.freight }}">
+                </td>
+                <td class="form-group">
+                    <div class="checkbox">
+                        <input type="checkbox" value="{{ purchaseorderproduct.id }}" id="defaultCheck1" name="received">
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+    
+</table>
+

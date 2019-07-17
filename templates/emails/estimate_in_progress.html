@@ -1,0 +1,90 @@
+{% load django_template_maths %}
+<p>Dear Sales Team,</p>
+<p>&nbsp;</p>
+<p><strong>Estimate #</strong>&nbsp;<strong><span style="color: #ff0000;">{{ estimate.estimate_number }}</span></strong> from <strong>{{ estimate.buyer.contact_name }}</strong> is Quoted ( <a href="https://books.zoho.com/app#/quotes/{{ estimate.estimate_id }}/edit">Click Here</a> to edit esimate in ZOHO ):</p>
+<table style="border-color: black; margin-left: auto; margin-right: auto; height: 99px;" border="1" width="593" cellspacing="0">
+<tbody>
+<tr>
+<td style="width: 186px;">Product Name</td>
+<td style="width: 69px;">Make</td>
+<td style="width: 114px;">Quantity</td>
+<td style="width: 63px;">Pack Size</td>
+<td style="width: 127px;">Purchase Price</td>
+<td style="width: 127px;">Selling Price(BASE)</td>
+<td style="width: 69px;">(Buyer's Payment Terms) - (Vendor's Payment Terms)</td>
+<td style="width: 69px;">COA Files</td>
+
+
+</tr>
+{% for estimateproduct in estimate.estimateproduct_set.all %}
+<tr>
+<td style="width: 186px;"><a href="http://rawble-admin.herokuapp.com{% url 'products_listing' %}?name__icontains={{ estimateproduct.product.name }}">{{ estimateproduct.product.name }}</a></td>
+<td style="width: 69px;">{{ estimateproduct.product.make }}</td>
+<td style="width: 114px;">{{ estimateproduct.quantity }} ({{ estimateproduct.product.unit }})</td>
+<td style="width: 63px;">{{ estimateproduct.pack_size }}</td>
+<td style="width: 127px;">{% if estimateproduct.vendorproductvariation %} {{ estimateproduct.vendorproductvariation.dealvendorproduct.vendor_price }}{% else %} Purchase Price Yet not selected {% endif %}</td>
+<td style="width: 127px;">
+    
+        {{ estimateproduct.selling_price }}
+        
+    
+</td>
+<td style="width: 63px;">{{ estimateproduct.payment_cycle }}
+    <br>
+    {% if estimateproduct.vendorproductvariation %}
+        {% if estimateproduct.payment_cycle <= -15 %}
+            ( Margin = 10% )
+        {% else %}
+            ( Margin = 7% )
+        {% endif %}
+    {% endif %}
+</td>
+<td style="width: 63px;">
+    {% if estimateproduct.product.coafile_set.all %}
+        {% for coafile in estimateproduct.product.coafile_set.all %}
+            <a style="font-size:x-small;" href="{{ coafile.file.url }}">File - {{ forloop.counter }}</a>
+            <i>Uploaded by - {{ coafile.uploaded_by.username }}</i>
+            <br>
+            <hr>
+        {% endfor %}
+    {% else %}
+        No COAs Uploaded on PORTAL 
+        <br>
+        <hr>
+        <a href="http://rawble-admin.herokuapp.com{% url 'products_listing' %}?name__icontains={{ estimateproduct.product.name }}">Click Here</a>
+         To Upload
+    {% endif %}
+</td>
+
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+<p>Products which are not quoted yet  will be updated soon.</p>
+<p><a title="Estimate #{{ estimate.estimate_number }} in progress" href="http://rawble-admin.herokuapp.com{% url 'zoho_estimate_inprogress' pk=estimate.estimate_id %}">Click here</a> to know the live status of estimate purchase price.</p>
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+<p>Sales Team:</p>
+<table style="height: 26px; margin-left: auto; margin-right: auto;" border="1" width="330" cellspacing="0">
+<tbody>
+<tr>
+<td style="width: 54px;">Name</td>
+<td style="width: 94px;">Username</td>
+<td style="width: 94px;">Email-ID</td>
+<td style="width: 160px;">Default Password</td>
+</tr>
+{% for user in users_sales %}
+<tr>
+<td style="width: 54px;">{{ user.first_name }} {{ user.last_name }}</td>
+<td style="width: 94px;">{{ user.username }}</td>
+<td style="width: 94px;">{{ user.email }}</td>
+<td style="width: 160px;">rawble@123</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>

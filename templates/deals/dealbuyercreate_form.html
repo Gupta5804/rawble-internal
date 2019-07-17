@@ -1,0 +1,179 @@
+{% extends 'home.html' %}
+{% block page-title-var %} Add Deal (From Buyer){% endblock page-title-var %}
+{% block application-active %}
+
+
+
+    <div class="row">
+        <div class="col-12">
+
+            <h4 style="text-align:center;margin-bottom:5%"> New Quote Received (From Buyer)</h4>
+        </div>
+    </div>
+    <form method="post">
+    {% csrf_token %}
+        <div class="row">
+            <div class="col-6 form-group ">
+                <label for="date" class="col-form-label">Date</label>
+                <span class="asterixField">*</span>
+                <input type="date" class="form-control form-control-sm" name="date" id="date" required>
+                <small id="date" class="form-text text-muted"> Date On Which Deal is Received</small>
+
+            </div>
+            <div class="col-6 form-group">
+                <label for="buyer" class="col-form-label">Buyer</label>
+                <select class="form-control form-control-sm" id="buyer" name = 'buyer'>
+                    {% for buyer in buyers%}
+                    <option value="{{ buyer.pk }}">{{ buyer.contact_name}}</option>
+                    {% endfor %}
+                </select>
+                <small id="buyer" class="form-text text-muted"> Select Buyer</small>
+            </div>
+            <div class="col-4 form-group">
+                <label for="reference" class="col-form-label">Reference</label>
+                <select class="form-control form-control-sm"  id="reference" name = 'reference'>
+                    <option value="On">Online</option>
+                    <option value="Off">Offline</option>
+
+                </select>
+                <small id="reference" class="form-text text-muted"> Select Reference</small>
+            </div>
+            <div class="col-4 form-group">
+                <label for="delivery_terms" class="col-form-label">Delivery Terms</label>
+                <select class="form-control form-control-sm" id="delivery_terms" name='delivery_terms'>
+                    <option value="Door Deliver">Door Deliver</option>
+                    <option value="Ex-Godown">Ex-Godown</option>
+                    <option value="FOR">FOR</option>
+                    <option value="Local Transport">Local Transport</option>
+                </select>
+                <small id="delivery_terms" class="form-text text-muted"> Select Delivery Terms</small>
+            </div>
+            <div class="col-4 form-group ">
+                <label for="lead_time" class="col-form-label">Lead Time</label>
+                <span class="asterixField">*</span>
+                <input type="number" class="form-control form-control-sm" id="lead_time" name='lead_time' required>
+                <small id="lead_time" class="form-text text-muted"> Enter Lead Time(In Days)  </small>
+
+
+            </div>
+            <div class="col-4 form-group ">
+                <label for="average_payment_terms" class="col-form-label">Average Payment Terms</label>
+
+                <input type="text" class="form-control form-control-sm" id="average_payment_terms" name='average_payment_terms' >
+                <small id="average_payment_terms" class="form-text text-muted"> Enter Average Payment Terms(Optional) </small>
+
+
+            </div>
+            <div class="col-4 form-group ">
+                <label for="average_lead_time" class="col-form-label">Average Lead Time</label>
+
+                <input type="text" class="form-control form-control-sm" id="average_lead_time" name='average_lead_time'>
+                <small id="average_lead_time" class="form-text text-muted"> Enter Average Lead Time (Optional)</small>
+
+
+            </div>
+            <div class="col-4 form-group ">
+                <label for="purpose" class="col-form-label">Purpose</label>
+
+                <input type="text" class="form-control form-control-sm" id="purpose" name='purpose'>
+                <small id="purpose" class="form-text text-muted"> Enter Purpose (Optional) </small>
+
+
+            </div>
+
+
+
+        </div>
+        <hr style="border-style: dotted;
+    border-width: thin;">
+
+        <h4 style="text-align:center;margin-bottom:5%">Products</h4>
+
+
+
+<table id="tblAddRow" class="table order-list table-bordered">
+    <thead>
+        <tr>
+
+            <th>Label Name</th>
+            <th>Product Group</th>
+            <th>Make</th>
+            <th>Preferred Vendor</th>
+            <th>Specs</th>
+            <th>Pack Size</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody class="dealbuyer">
+        <tr>
+
+            <td>
+                <input type="text" name="label_name" class="form-control form-control-sm" required>
+            </td>
+            <td>
+                <select class="form-control form-control-sm" name="product_group">
+                    {% for product_group in product_groups %}
+                        <option value="{{ product_group.id }}"> {{ product_group.name }}</option>
+                    {% endfor %}
+                </select>
+                <small id="product_group" class="form-text text-muted"><a href="#" class="btn btn-outline-primary btn-sm" onClick="window.open('{% url 'product_group_create' %}', '_blank')"> + New</a>  </small>
+            </td>
+            <td>
+                <select class="form-control form-control-sm" name="make">
+                        <option value="">  </option>
+                    {% for make in makes %}
+                        <option value="{{ make.id }}"> {{ make.name }}</option>
+                    {% endfor %}
+                </select>
+                <small id="make" class="form-text text-muted"><a href="#" class="btn btn-outline-primary btn-sm" onClick="window.open('{% url 'make_create' %}', '_blank')"> + New</a>  </small>
+            </td>
+            <td>
+                <select class="form-control form-control-sm" name="vendor">
+                    <option value="">  </option>
+                    {% for vendor in vendors %}
+                        <option value="{{ vendor.pk }}"> {{ vendor.contact_name }}</option>
+                    {% endfor %}
+                </select>
+
+            </td>
+            <td>
+                <input name="spec" type="text" class="form-control form-control-sm">
+            </td>
+            <td>
+                <input name="pack_size" type="number" class="form-control form-control-sm" >
+            </td>
+            <td>
+                <input name="quantity" type="number" class="form-control form-control-sm" required>
+            </td>
+            <td>
+                <select class="form-control form-control-sm" name="unit">
+                    {% for unit in units %}
+                        <option value="{{ unit.id }}"> {{ unit.name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <input name="price" type="number" value="0" class="form-control form-control-sm"/>
+            </td>
+        </tr>
+
+    </tbody>
+    <tfoot>
+                    <tr>
+                        <td colspan="9" style="text-align: left;">
+                            <button type="button" class="btn btn-outline-primary btn-lg btn-block tr_clone_add " id="btnAddRow" value="Add Product" > Add Product
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </tfoot>
+</table>
+
+<input type="submit" value="Submit" style="display:block;margin-left:auto;margin-right:auto;">
+    </form>
+
+
+{% endblock application-active%}

@@ -1,0 +1,687 @@
+{% extends 'home.html' %}
+ 
+{% block page-title-var %} <span>Vendor Profile of {{ vendor.contact_name }}</span>{% endblock page-title-var %}
+{% block application-active %}
+
+<div class="container">
+    <table class="table table-bordered shadow p-3 mb-5 bg-white rounded-lg">
+    <tbody>
+        <tr>
+          <td class="bg-info table-dark" colspan="4" style="text-align:center;font-weight:800;">
+          {{ vendor.contact_name }}
+          </td>
+        </tr>
+        <tr>
+            <td class="table-secondary">Location:</td>
+            <td>{{ vendor.place_of_contact}}</td>
+            <form method="post" action="">
+            {% csrf_token %}
+              <td class="table-secondary">Freight (per kg):</td>
+              <td>
+                
+                <div class="input-group mb-3">
+                  <input type="number" step="0.01" name="freight" id="freight" class="form-control" value="{{ vendor.freight_per_kg }}" aria-label="Freight Per Kg" aria-describedby="button-addon2" >
+                  <div class="input-group-append" id="side-button-group" style="display:none;">
+                    <button class="btn btn-outline-warning" name="update_freight" type="submit" id="button-addon2" title="Update Freight">
+                      <i class="fas fa-exchange-alt" ></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </form>
+          </tr>
+        <tr>
+            <td class="table-secondary">Payment Terms:</td>
+            <td>{{ vendor.payment_terms }}</td>
+            <td class="table-secondary">Outstanding-Payable:</td>
+            <td>{{ vendor.outstanding_payable }}</td>
+            
+        </tr>
+        <tr>
+            <td class="table-secondary">Contact Person:</td>
+            <td>{{ vendor.first_name }} {{ vendor.last_name }} </td>
+            <td class="table-secondary">Email-id:</td>
+            <td>[ {{ vendor.email }} ]</td>
+            
+        </tr>
+        <tr>
+            <td class="table-secondary">Relationship Manager:</td>
+            <td>{{ vendor.relationship_manager }}</td>
+            <td class="table-secondary">Gst No.: </td>
+            <td>{{ vendor.gst_no }}</td>
+        </tr>
+    </tbody>
+    </table>
+    
+     
+    
+    
+    
+</div>
+<hr>
+
+
+<!-- ================================new scrollspy================================= -->
+<nav class="navigation fixed" id="nav">
+<div class="container">
+  <h2 style="color: black ; text-align: center;">Products From <span style="color:red; text-decoration: underline; "> {{ vendor.contact_name }}</span> </h2>
+</div>
+  <div class="container">
+    <div class="row">
+      {% for vendorproduct in vendorproducts %}
+      <div class="col-4">
+        <a href="#head-{{ vendorproduct.id }}"><button type="button" onclick="document.getElementById('but-{{ vendorproduct.id }}').click()" class="btn btn-outline-dark btn-block" style="margin: 3%;" >{{ vendorproduct.product.name }} </button></a>
+      </div>
+      {% endfor %}
+    </div>
+    </div>    
+  </nav>
+  <br>
+  <hr>
+<!-- ===========================================end:-new scrollspy========================= -->
+<!-- Add Product To Vendor Button -->
+<a type="button" class="btn btn-success" style="color:white;display: block;margin-left: auto;width: 50%;margin-right: auto;" data-toggle="modal" data-target="#add_product"><i class="fas fa-plus"> </i> Add Product</a>
+
+<!-- Add Product To Vendor Modal -->
+<div class="modal fade" id="add_product" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-plus-square"></i>- Add Product to {{ vendor.contact_name }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <form method="post" action="">
+      {% csrf_token %}
+       <div class="container">
+        <div class="row form-group">
+            <label for="exampleFormControlSelect1">Select Product</label>
+                <select class="custom-select custom-select-lg mb-3" name="dealproduct" id="add_product_select">
+                  <option></option>
+                  {% for group in all_product_groups %}
+                  <optgroup label="{{ group.name }}">
+                    {% for product in group.product_set.all %}
+                    
+    
+                  {% if product not in vendorproduct_list %}
+    
+
+    
+    
+                    <option  data-product="{{ product.name }}" data-product_group="{{ group.name }} "  data-unit="{{ product.unit }}" data-product_id="{{ product.item_id }}">{{ product.name }} | ({{ product.unit }}) </option>
+                    {% endif %}
+                    {% endfor %}
+                    </optgroup>
+                  {% endfor %}
+                </select>
+
+        </div>
+        <div class="row">
+          <table class="table table-bordered" id="add_selectedproduct">
+          
+         </table>
+        </div>
+       </div>
+      </div>
+      <div class="modal-footer">
+       <input type="submit" name="add_product" value="Add Product" title="Add Product To Vendor" class="btn btn-outline-success btn-block">
+       </form>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="accordion" role="tablist" aria-multiselectable="true" style="height: 400px; overflow: auto; margin-top:1%; ">
+{% for vendorproduct in vendorproducts %}
+  <div class="card m-1 p-3" id="head-{{ vendorproduct.id }}">
+    <div class="card-header" role="tab" id="heading-{{ vendorproduct.id }}">
+      <h5 class="mb-0" style="">
+        <a data-toggle="collapse" id="but-{{ vendorproduct.id }}" class="btn btn-outline-dark btn-block" data-parent="#accordion" href="#collapse-{{ vendorproduct.id }}" aria-expanded="true" aria-controls="collapse-{{ vendorproduct.id }}" title="Click To View Variations">
+          {{ vendorproduct.product.name }}  
+        </a>
+      </h5>
+      <table class="table table-bordered">
+    <tbody>
+        <tr>
+            <td class="table-secondary">Make:</td>
+            <td>{{ vendorproduct.product.make }}</td>
+            <td class="table-secondary">Group:</td>
+            <td>{{ vendorproduct.product.group }}</td>
+        </tr>
+        <tr>
+            <td class="table-secondary">Informations:</td>
+            <td>
+              <a href="#" class="btn btn-outline-success btn-sm sales_history m-1" data-toggle="modal" data-target=".sales-{{ vendorproduct.product.item_id }}" data-id="{{ vendorproduct.product.item_id }}" title="Sales History(Zoho Books Invoice)">
+                <i class="fas fa-dollar-sign"></i> Sales
+              </a>
+
+              <a href="#" class="btn btn-outline-danger btn-sm m-1 purchase_history" data-toggle="modal" data-target=".purchase-{{ vendorproduct.product.item_id }}" data-id="{{ vendorproduct.product.item_id }}" title="Purchase History(Zoho Books Bills)">
+                <i class="fas fa-dollar-sign"></i> Purchase
+              </a>
+              
+              <a href="#" class="btn btn-outline-info btn-sm m-1 graph" data-toggle="modal" data-target=".graph-{{ vendorproduct.product.item_id }}" title="Detailed Summary Vendor Wise" data-id="{{ vendorproduct.product.item_id }}">
+                <i class="fas fa-chart-area"></i> Summary
+              </a>
+
+              <a href="#" class="btn btn-outline-info btn-sm m-1 googlechartsapp" data-toggle="modal" data-target=".googlechartsapp-{{ vendorproduct.product.item_id }}" title="Google Charts To Filter Data" data-id="{{ vendorproduct.product.item_id }}">
+                <i class="fas fa-chart-area"></i> Google Charts App
+              </a>
+              
+              <div class="modal fade sales-{{ vendorproduct.product.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">Sales of :</h5>
+                      <h4 style="text-align:center;">
+                        <span style="text-decoration: underline;"> {{ vendorproduct.product.name }} </span>
+                      </h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- PURCHASES MODAL -->
+              <div class="modal fade purchase-{{ vendorproduct.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">Purchases of:</h5>
+                      <h4 style="text-align:center;">
+                        <span style="text-decoration: underline;"> {{ vendorproduct.product.name }} </span>
+                      </h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Graphical Summary MODAL -->
+              <div class="modal fade graph-{{ vendorproduct.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content" style="left:-19%;width:141%">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">Summary</h5>
+                        <h4 style="text-align:center;">
+                          <span style="text-decoration: underline;">{{ vendorproduct.product.name }} </span> 
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Google Charts App MODAL -->
+              <div class="modal fade googlechartsapp-{{ vendorproduct.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content" style="left:-32%;width:165%">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle" style="">
+                        <img src="https://cdn.iconscout.com/icon/free/png-256/graph-286-84772.png" class="mr-1" style="height:53px">
+                      </h5>
+                      <h4>
+                        <span style="text-decoration: underline;"> Product</span>: {{ vendorproduct.product.name }} 
+                      </h4>
+                      <h4> ( Make :<span style="text-decoration: underline;"> {{ vendorproduct.product.make }} )
+                      </h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            
+            
+            <td class="table-secondary">COA Files:</td>
+            <td>
+              <a class="btn btn-outline-success m-1" href="{% url "coa_upload" pk=vendorproduct.product.item_id %}">
+                <i class="fas fa-cloud-upload-alt"></i> Upload
+              </a>
+              <a  href="#" class="btn {% if vendorproduct.product.coafile_set.count > 0 %} btn-outline-info {% else %} btn-outline-dark disabled{% endif %} btn-sm m-1 coaview" role="button" data-toggle="modal" {% if vendorproduct.product.coafile_set.count > 0 %} {% else %} aria-disabled="true"{% endif %} data-target=".coaview-{{ vendorproduct.product.item_id }}" title="Quick View of Coa Files Uploaded" data-id="{{ vendorproduct.product.item_id }}" class="btn btn-outline-primary btn-block" >
+                {% if vendorproduct.product.coafile_set.count > 0 %}
+                  <i class="fas fa-eye"></i>
+                {% else %}
+                  <i class="fas fa-eye-slash"></i>
+                {% endif %} 
+                View 
+              </a> 
+              
+              <br> 
+              
+              {% if vendorproduct.product.coafile_set.count > 0 %}
+                <span style="font-weight:bold;">
+                  [ {{ vendorproduct.product.coafile_set.count }} COAs Uploaded]
+                </span>
+              {% else %}
+                <span style="color:red;font-weight:bold;">No COAs Uploaded</span> 
+              {% endif %}
+              
+              <div class="modal fade coaview-{{ vendorproduct.product.item_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content" style="left:-19%;width:141%">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">COA files:</h5>
+                      <h4 style="text-align:center;">
+                        <span style="text-decoration: underline;">{{ vendorproduct.product.name }} </span> 
+                      </h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer"> 
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            
+        </tr>
+        
+    </tbody>
+    </table>
+    <a class="btn btn-success" style="float:left;color:white;"  data-toggle="modal" data-target="#add_product_variation-{{ vendorproduct.id }}" ><i class="fas fa-plus-square"></i>  - Add Product Variation</a>
+    <!-- Modal -->
+<div class="modal fade" id="add_product_variation-{{ vendorproduct.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-plus-square"></i>- Add Product Variation to {{ vendorproduct.product.name }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <form method="post" action="">
+      {% csrf_token %}
+       <div class="container">
+        <div class="row form-group">
+            
+         <table class="table table-bordered" >
+         <tr>
+            <td class="table-secondary">Product:</td>
+            <td>{{ vendorproduct.product.name }}</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Make:</td>
+            <td>{{ vendorproduct.product.make }}</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Product ID (ZOHO):</td>
+            <td>{{ vendorproduct.product.item_id }}</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Product Group:</td>
+            <td>{{ vendorproduct.product.group }}</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Label Name:</td>
+            <td><input name="label_name" type="text" class="form-control"></td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Delivery Terms:</td>
+            <td class="form-group">
+              <select class="form-control" id="delivery-terms" name="delivery_terms">
+                <option value="Door Deliver">Door Deliver</option>
+                <option value="Ex-Godown">Ex-Godown</option>
+                <option value="FOR">FOR</option>
+                <option value="Local Transport">Local Transport</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Quantity:</td>
+            <td><input type="number" name="quantity" step="0.01" class="form-control" required>({{ vendorproduct.product.unit }})</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Specifications:</td>
+            <td><input type="text" name="specs"  class="form-control" ></td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Vendor Price (INR):</td>
+            <td><input type="number" name="price" step="0.01" class="form-control" required></td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Expiry Date:</td>
+            <td class="form-group"><input type="date" name="expiry" step="0.01" class="form-control" required><input type="hidden" name="product_id" value="{{ vendorproduct.product.item_id }}"></td>
+          </tr>
+         </table>
+        </div>
+       </div>
+      </div>
+      <div class="modal-footer">
+       <input type="submit" name="add_product_variation" value="Add Product Variation to {{ vendorproduct.product.name }}" title="Add Product To Vendor" class="btn btn-outline-success btn-block">
+       </form>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+      
+      
+      
+      
+      
+  <a class="btn btn-danger" style="float:right;color:white;"  data-toggle="modal" data-target="#delete_product-{{ vendorproduct.id }}" ><i class="fas fa-trash-alt"></i>  - Delete Product From Vendor</a>
+  </div>
+    <!-- Modal -->
+    <div class="modal fade" id="delete_product-{{ vendorproduct.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-trash"></i>- Delete <i>{{ vendorproduct.product.name }}</i> from <i>{{ vendorproduct.vendor.contact_name }}</i> ?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <form method="post" action="">
+         <h5> This will Delete all the deals which contains : </h5>
+         <hr>
+      {% csrf_token %}
+       <div class="container">
+        <div class="row form-group">
+            
+         <table class="table table-bordered" >
+         <tr>
+            <td class="table-secondary">Product:</td>
+            <td>{{ vendorproduct.product.name }}</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Make:</td>
+            <td>{{ vendorproduct.product.make }}</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Product ID (ZOHO):</td>
+            <td>{{ vendorproduct.product.item_id }}"</td>
+            <input value="{{ vendorproduct.product.item_id }}" name ="product_id" type="hidden">
+            <input value="{{ vendorproduct.vendor.contact_id }}" name ="vendor_id" type="hidden">
+            <input value="{{ vendorproduct.id }}" name ="vendorproduct_id" type="hidden">
+          </tr>
+          <tr>
+            <td class="table-secondary">Product Group:</td>
+            <td>{{ vendorproduct.product.group }}</td>
+          </tr>
+         
+          
+         </table>
+         <hr>
+         <h5 style="display:block;text-align:center;"> From {{ vendor.contact_name }} ?</h5>
+        </div>
+       </div>
+      </div>
+      <div class="modal-footer">
+       <input type="submit" name="delete_product" value="Delete  {{ vendorproduct.product.name }}" title="Delete Product From Vendor" class="btn btn-outline-danger btn-lg btn-block">
+       </form>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div id="collapse-{{ vendorproduct.id }}" class="collapse" role="tabpanel" aria-labelledby="heading-{{ vendorproduct.id }}">
+      <div class="card-block">
+        <table class="table table-bordered table-hover">
+        <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Deal ID</th>
+      <th scope="col">Label Name</th>
+      <th scope="col">Specification</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Delivery Terms</th>
+      <th scope="col">Last Updated</th>
+      <th scope="col">Vendor Price</th>
+      <th scope="col">Expiry Status</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for variation in vendorproduct.vendorproductvariation_set.all %}
+    <tr class="{% if variation.dealvendorproduct.expiry_status == 0 %} table-warning {% elif variation.dealvendorproduct.expiry_status < 0%} table-danger {% else %} table-success {% endif %}">
+      <th scope="row">Variation - {{ forloop.counter }}</th>
+      
+      <td>{{ variation.dealvendorproduct.deal.id }}</td>
+      <td>{{ variation.dealvendorproduct.label_name }}</td>
+      <td>{{ variation.dealvendorproduct.specs }}</td>
+      <td>{{ variation.dealvendorproduct.quantity }}</td>
+      <td>{{ variation.dealvendorproduct.deal.delivery_terms }}</td>
+      <td>{{ variation.dealvendorproduct.deal.time_created |date:'jS F,Y H:i' }} <br> <h6 style="float:right;font-style:italic;"> - By[ {{ variation.dealvendorproduct.deal.created_by.first_name }} {{ variation.dealvendorproduct.deal.created_by.last_name }} ]</h6></td>
+      <td style="text-align: center;">{{ variation.dealvendorproduct.vendor_price }} <br>
+      
+      <a class="btn btn-warning btn-sm btn-block" style="position:relative;bottom:0px;" data-toggle="modal" data-target="#update_product_variation-{{ variation.id }}">Update Price</a>
+       <!-- Modal -->
+<div class="modal fade" id="update_product_variation-{{ variation.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-up"></i>- Update Price of <i>{{ vendorproduct.product.name }}</i> from <i>{{ vendorproduct.vendor.contact_name }}</i> ?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <form method="post" action="">
+         {% csrf_token %}
+         <div class="container">
+        <div class="row form-group">
+            
+         <table class="table table-bordered" >
+         <tr>
+            <td class="table-secondary">Product:</td>
+            <td>{{ vendorproduct.product.name }}</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Make:</td>
+            <td>{{ vendorproduct.product.make }}</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Product ID (ZOHO):</td>
+            <td>{{ vendorproduct.product.item_id }}</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Product Group:</td>
+            <td>{{ vendorproduct.product.group }}</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Label Name:</td>
+            <td><input name="label_name" type="text" class="form-control" value="{{ variation.dealvendorproduct.label_name }}" disabled></td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Old Delivery Terms:</td>
+            <td><input name="label_name" type="text" class="form-control" value="{{ variation.dealvendorproduct.deal.delivery_terms }}" disabled></td>
+          </tr>
+          
+          <tr>
+            <td class="table-secondary">New Delivery Terms:</td>
+            <td class="form-group">
+              <select class="form-control" id="delivery-terms" name="delivery_terms">
+                <option value="Door Deliver" {% if variation.dealvendorproduct.deal.delivery_terms == "Door Deliver" %}selected{% endif %}>Door Deliver</option>
+                <option value="Ex-Godown" {% if variation.dealvendorproduct.deal.delivery_terms == "Ex-Godown" %}selected{% endif %}>Ex-Godown</option>
+                <option value="FOR" {% if variation.dealvendorproduct.deal.delivery_terms == "FOR" %}selected{% endif %}>FOR</option>
+                <option value="Local Transport" {% if variation.dealvendorproduct.deal.delivery_terms == "Local Transport" %}selected{% endif %}>Local Transport</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Quantity:</td>
+            <td><input type="number" name="quantity" value="{{ variation.dealvendorproduct.quantity }}" step="0.01" class="form-control" disabled>({{ vendorproduct.product.unit }})</td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Specifications:</td>
+            <td><input type="text" name="specs" value="{{ variation.dealvendorproduct.specs }}" class="form-control" disabled></td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Old Vendor Price (INR):</td>
+            <td><input type="number"  value="{{ variation.dealvendorproduct.vendor_price }}" step="0.01" class="form-control" disabled></td>
+          </tr>
+          <tr>
+            <td class="table-secondary">New Vendor Price (INR):</td>
+            <td><input type="number" name="newprice" step="0.01" class="form-control" required></td>
+          </tr>
+          <tr>
+            <td class="table-secondary">Expiry Status</td>
+            <td><input type="text" value="{{ variation.dealvendorproduct.expiry_status }}" step="0.01" class="form-control" disabled></td>
+          </tr> 
+          <tr>
+            <td class="table-secondary">Expiry Date:</td>
+            <td class="form-group"><input type="date" name="expiry" step="0.01" class="form-control" required><input type="hidden" name="dealproduct_id" value="{{ variation.dealvendorproduct.id }}"></td>
+          </tr>
+         </table>
+        </div>
+       </div>
+        
+      
+       
+      </div>
+      <div class="modal-footer">
+       <input type="submit" name="update_product" value="Update {{ vendorproduct.product.name }} Variation-{{ forloop.counter }}" title="Update Product Variation From Vendor" class="btn btn-outline-warning btn-lg btn-block">
+       </form>
+        
+      </div>
+    </div>
+  </div>
+</div></td>
+      <td>
+        {% if variation.dealvendorproduct.expiry_status == 0 %} Price will expire <h4>TODAY</h4> {% elif variation.dealvendorproduct.expiry_status < 0%} Price Expired <h4>{% widthratio variation.dealvendorproduct.expiry_status 1 -1 %}</h4> Day(s) ago.{% else %} Deal will expire in <h4>{{ variation.dealvendorproduct.expiry_status }}</h4> Day(s). {% endif %}
+      </td>
+      <td>
+          <a class="btn btn-danger btn-block" style="color:white" data-toggle="modal" data-target="#exampleal"  >
+              <i class="fas fa-trash"></i></a>
+    {#========================================delete Modal=================================================#}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleal" tabindex="-1" role="dialog" aria-labelledby="examplealLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="examplealLabel"><i class="fas fa-trash"></i> Do you want to delete this variations</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <table class="table table-bordered table-hover">
+            <thead>
+            </thead>
+            <tbody >
+
+                <tr>
+                    <td>Deal ID </td>
+                    <td>{{ variation.dealvendorproduct.deal.id }}</td>
+                </tr>
+                <tr>
+                    <td>Label Name</td>
+                    <td>{{ variation.dealvendorproduct.label_name }}</td>
+                </tr>
+                <tr>
+                    <td>Specification</td>
+                    <td>{{ variation.dealvendorproduct.specs }}</td>
+                </tr>
+                <tr>
+                    <td>Quantity</td>
+                    <td>{{ variation.dealvendorproduct.quantity }}</td>
+                </tr>
+                <tr>
+                    <td>Delivery Terms</td>
+                    <td>{{ variation.dealvendorproduct.deal.delivery_terms }}</td>
+                </tr>
+                <tr>
+                    <td>Vendor Price</td>
+                    <td>{{ variation.dealvendorproduct.vendor_price }}</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <form method="post">
+              {% csrf_token %}
+        <button type="submit" class="btn btn-primary inline-group">Save changes</button>
+              <input style="display: none" value="{{ variation.id }}" name="delete_variation">
+              </form>
+      </div>
+    </div>
+  </div>
+</div></td>
+{#==========================================end delete Modal===========================================    #}
+    </tr>
+    {% endfor %}
+  </tbody>
+        </table>
+      </div>
+    </div>
+        
+  </div>
+  
+  {% endfor %}
+  <a id="back-to-top" href="#" class="btn btn-danger btn-lg back-to-top" role="button" title="Click to return on the top page" data-toggle="tooltip" data-placement="left" style="cursor: pointer;position: fixed;bottom: 20px;right: 20px;display:none;width:90px;"><i class="fas fa-arrow-up" ></i></a>
+	    
+</div>
+
+
+
+
+
+<script>
+$("#nav").scrollspy({ offset: -75 });
+$('input#freight').change(function(){
+$('#side-button-group').css('display','block');
+});
+$('select#add_product_select').on('change',function(){
+    product = $(this).find(':selected').data('product');
+    product_group = $(this).find(':selected').data('product_group');
+    unit = $(this).find(':selected').data('unit');
+    
+    
+    
+    product_id = $(this).find(':selected').data('product_id');
+    
+    
+    
+    console.log(product);
+    $('table#add_selectedproduct').html('<tr><td class="table-secondary">Product:</td><td>'+product+'</td></tr><tr><td class="table-secondary">Label Name:</td><td><input type="text" name="label_name"  class="form-control" ></td></tr><tr><td class="table-secondary">Product ID (ZOHO):</td><td><input type="hidden" value="'+product_id+'" name="productid"></td></tr><tr><td class="table-secondary">Product Group:</td><td>'+product_group+'</td></tr><tr><td class="table-secondary">Delivery Terms:</td><td class="form-group"><select class="form-control" id="delivery-terms" name="delivery_terms"><option value="Door Deliver">Door Deliver</option><option value="Ex-Godown">Ex-Godown</option><option value="FOR">FOR</option><option value="Local Transport">Local Transport</option></select></td></tr><tr><td class="table-secondary">Quantity:</td><td><input type="number" name="quantity" step="0.01" class="form-control" required>('+unit+')</td></tr><tr><td class="table-secondary">Specifications:</td><td><input type="text" name="specs"  class="form-control" ></td></tr><tr><td class="table-secondary">Vendor Price (INR):</td><td><input type="number" name="price" step="0.01" class="form-control" required></td></tr><tr><td class="table-secondary">Expiry Date:</td><td class="form-group"><input type="date" name="expiry" step="0.01" class="form-control" required><input type="hidden" name="product_id" value="'+product_id+'"></td></tr>');
+});
+</script>
+
+{% endblock application-active %}

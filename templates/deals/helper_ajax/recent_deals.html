@@ -1,0 +1,45 @@
+
+                  <h5 style="text-align:center;"><span style="text-decoration: underline;">  Group</span>: {{ product_group }}</h5>
+                    
+                    
+                   {% if product_group %}
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Vendor</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Label Name</th>
+                            <th scope="col">Make</th>
+                            <th scope="col">Specs</th>
+                            <th scope="col">Deal ID</th>
+                            <th scope="col">Quantity</th>
+
+                            <th scope="col">Price</th>
+                            <th scope="col">Expiry Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for deal in recent_deals %}
+                          <tr>
+                            <td>{{ deal.deal.date }}</td>
+                            <th scope="row">{{ deal.deal.vendor }}</th>
+                            <th scope="row">{{ deal.product }}</th>
+                            <td>{{ deal.label_name }}</td>
+                            <td>{{ deal.make }}</td>
+                            <td>{{ deal.specs }}</td>
+                            <td><a href="#" class="btn btn-outline-primary">{{ deal.deal.id }}</a></td>
+                            <td>
+                             
+                              {{ deal.quantity }}( {{ deal.unit }} )
+                              
+                            </td>
+                            <td style="color:red;font-weight:900">{{ deal.vendor_price }}</td>
+                            <td>{{ deal.price_valid_till }}</td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                      {% else %}
+                      <h6> Error: Product Not in any Group </h6>
+                    {% endif %}

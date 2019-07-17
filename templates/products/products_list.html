@@ -1,0 +1,121 @@
+{% extends 'home.html' %}
+{% load render_table from django_tables2 %}
+{% block page-title-var %} Products List {% endblock page-title-var %}
+{% block application-active %}
+ {% load bootstrap4 %}
+    {% if request.get_full_path == '/products_listing/' %}
+    <script>
+    console.log("{{ request.get_full_path }}");
+    location.replace("https://rawble-admin.herokuapp.com/products_listing/?per_page=5&page=1");
+    </script>
+    {% endif %}
+<div class="container" >
+<div class="row">
+<div class="col-12">
+<button class="btn btn-outline-info btn-block" type="button" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseExample"> <i class="fas fa-search"></i> 
+    Search For Product
+</button>
+</div> 
+</div>
+</div>
+<div class="collapse" id="collapseFilter">
+<div class="container" style="margin-top:2%">
+<div class="row">
+{% if filter %}
+    <div class="container">
+     <nav class="nav nav-tabs nav-justified">
+                    <a class="nav-item nav-link col-lg-6" id="hag" data-toggle="tab" href="#home">Filter Product</a>
+                    <a class="nav-item nav-link col-lg-6" data-toggle="tab" href="#menu1">Filter Product and Export to Excel</a>
+     </nav>
+    <div class="tab-content">
+    <div id="home" class="tab-pane fade in">
+        <div class="col-12">
+    <form action=" " method="get" class="form">
+
+            <div class="card card-border-primary mb-3">
+              <div class="card-header text-white bg-info">
+                Filter Products
+              </div>
+              <div class="card-body">
+              <div class="row">
+                {% for field in filter.form %}
+                <div class="col-6 {% if forloop.counter == 1 or forloop.counter == 3 or forloop.counter == 5 %}border-right{% else %}border-left{% endif %} border-info">
+                {% bootstrap_field field field_class="display:inline" %}
+                </div>
+
+
+                {% endfor %}
+                </div>
+              </div>
+              <div class="card-footer">
+                {% bootstrap_button '------->[ Filter Products ]<------' button_class="btn-info btn-block" %}
+                </div>
+            </div>
+
+
+
+    </form>
+          </div>
+    </div>
+    <div id="menu1" class="tab-pane fade in">
+      <div class="card card-border-primary mb-3">
+              <div class="card-header text-white bg-info">
+                Filters to The Excel
+              </div>
+          <form action="{% url 'export_filtered_query' %}" method="post">
+              {% csrf_token %}
+              <div class="card-body">
+                  <div class="row">
+                      <div class="col-12 border-info form-group">
+                          <label for="name">Name or Name contains:</label>
+                          <br>
+                          <input id="name" class="form-control" name="name_field" placeholder="Enter the product Name or Name contains" type="text">
+                      </div>
+                       <div class="col-12 border-info form-group">
+                          <label for="make">Make or Make contains:</label>
+                          <br>
+                          <input id="make" class="form-control" name="make_field" placeholder="Enter the product Make or Make contains" type="text">
+                      </div>
+                      <div class="col-12 border-info form-group">
+                          <label for="inlineFormCustomSelect">Status</label>
+                          <br>
+             <select class="custom-select mr-sm-2" name="status_field" id="inlineFormCustomSelect">
+                    <option selected value="Ac">Active</option>
+                    <option value="In">Inactive</option>
+                    <option value="both">Both Active and Inactive</option>
+                  </select>
+                      </div>
+                  </div>
+              </div>
+          <div class="card-footer">
+              <button type="submit" class="btn btn-info btn-block">Export to Excel</button>
+          </div>
+          </form>
+    </div>
+    </div>
+    </div>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+
+<div class="container" style="margin-top:4%;margin-bottom:4%;font-size:12px">
+{% render_table table %}
+</div>
+
+<script>
+$('select#vendor').on('change',function(){
+  vendor_contact_id = $(this).find(':selected').data('vendor_contact_id');
+  place_of_contact = $(this).find(':selected').data('place_of_contact');
+  payment_terms = $(this).find(':selected').data('payment_terms');
+  product_id = $(this).find(':selected').data('product_id');
+  unit = $(this).find(':selected').data('unit');
+  
+$('table#addvendor-'+product_id).html('<tr><td class="table-secondary">Location:</td><td>'+place_of_contact+'</td></tr><tr><td class="table-secondary">Payment Terms:</td><td>'+payment_terms+'</td></tr><tr><td class="table-secondary">Label Name:</td><td><input type="text" name="label_name"  class="form-control" ></td></tr><tr><td class="table-secondary">Delivery Terms:</td><td class="form-group"><select class="form-control" id="delivery-terms" name="delivery_terms"><option value="Door Deliver">Door Deliver</option><option value="Ex-Godown">Ex-Godown</option><option value="FOR">FOR</option><option value="Local Transport">Local Transport</option></select></td></tr><tr><td class="table-secondary">Pack Size:</td><td><input type="number" name="quantity" step="0.01" class="form-control" required>('+unit+')</td></tr><tr><td class="table-secondary">Specifications:</td><td><input type="text" name="specs"  class="form-control" ></td></tr><tr><td class="table-secondary">Vendor Price (INR):</td><td><input type="number" name="price" step="0.01" class="form-control" required></td></tr><tr><td class="table-secondary">Expiry Date:</td><td class="form-group"><input type="date" name="expiry" step="0.01" class="form-control" required><input type="hidden" name="product_id" value="'+product_id+'"><input type="hidden" name="contact_id" value="'+vendor_contact_id+'"></td></tr>');
+});
+
+</script>
+
+
+{% endblock application-active %}

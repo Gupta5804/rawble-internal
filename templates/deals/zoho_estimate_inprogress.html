@@ -1,0 +1,294 @@
+{% extends 'home.html' %}
+
+{% block page-title-var %} Estimate {{ estimate.estimate_number }} {% endblock page-title-var %}
+{% block application-active %}
+
+    
+        <div class="col-4" style="margin-bottom:7%">
+        <a href="{% url 'zoho_estimates'%}" class="btn btn-outline-primary"><i class="fas fa-backward"></i> Go Back To Estimates </a>
+        </div>
+    
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+        <p style="text-align:center;color:black;"><strong>Estimate Number :&nbsp;</strong>
+            <a href="#" class="btn btn-outline-primary btn-sm" onclick="window.open('https://books.zoho.com/app#/quotes/{{ estimate.estimate_id }}/edit','product_history','width=600,height=400','product_history','width=600,height=400')">{{ estimate.estimate_number }}</a>
+        </p>
+        </div>
+        <div class="col-sm">
+        <p style="text-align:center;color:black;"><strong>Date :&nbsp;</strong>{{ estimate.date }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+        <p style="text-align:center;color:black;"><strong>Buyer :&nbsp;</strong><a class="btn btn-outline-info" href="{% url 'buyer_profile' contact_id=estimate.buyer.contact_id %}">{{ estimate.buyer }}</a></p>
+        </div>
+        <div class="col-sm">
+        <p style="text-align:center;color:black;"><strong>Status :&nbsp;</strong>{{ estimate.status }}</p>
+        </div>
+    </div>
+
+</div>
+
+  <form method="post">
+  {% csrf_token %}
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Product Name</th>
+      <th scope="col" style="text-align:center">Make</th>
+      
+      <th scope="col">Quantity</th>
+      <th scope="col">Pack Size</th>
+      
+      
+      <th scope="col">Purchase Prices</th>
+
+      
+      <th scope="col"  style="text-align:center;"> Help </th>
+      <th scope="col">COA files </th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in estimate.estimateproduct_set.all %}
+    <tr>
+      <th scope="row" style="vertical-align:middle;">{{ item.product.name }}</th>
+      <input type="hidden" value="{{ item.id }}" name="estimateproduct_id">
+      <td scope="row" style="vertical-align:middle;">
+     {{ item.product.make }}
+      </select>
+      
+      </td>
+      <td style="vertical-align:middle;padding:0"> 
+        {{ item.quantity }}
+      </td>
+      <td style="vertical-align:middle;" >
+      {{ item.pack_size }}
+      </td>
+     
+      <td style="vertical-align:middle;" class="{% if item.vendorproductvariation %} table-success{% else %}table-danger{% endif %}">
+      <input name="product_id" value = "{{ item.product.item_id }}" type="hidden">
+      <div class="input-group">
+        <select class="custom-select" name="vendorproductvariation_id" id="purchaseprice">
+
+  <option value="" selected>Select Purchase Price From Active Deals</option>
+  
+  {% for vendorproduct in item.product.vendorproduct_set.all %}
+  <optgroup label="Vendor: {{ vendorproduct.vendor.contact_name }} || Payment Terms: {{ vendorproduct.vendor.payment_terms }} || Location: {{ vendorproduct.vendor.place_of_contact }}">
+  {% for vendorproductvariation in vendorproduct.vendorproductvariation_set.all %}
+  
+  <option value="{{ vendorproductvariation.id }}" data-item_id = "{{ item.product.item_id }}" data-purchase_price="{{ vendorproductvariation.dealvendorproduct.vendor_price }}" data-customer_freight="{{ estimate.buyer.freight_per_kg }}" data-vendor_freight="{{ vendorproduct.vendor.freight_per_kg }}" data-vpt="{{ vendorproduct.vendor.payment_terms_no }}" data-bpt ="{{ estimate.buyer.payment_terms_no }}" {% if item.vendorproductvariation %}{% if vendorproductvariation.id == item.vendorproductvariation.id %} selected {% endif %}{% endif %} >Variation - {{ forloop.counter }} || Specs:{{ vendorproductvariation.dealvendorproduct.specs }} || Pack-size:{{ vendorproductvariation.dealvendorproduct.quantity }} || Price:{{ vendorproductvariation.dealvendorproduct.vendor_price }}</option>
+  
+  {% endfor %}
+  </optgroup>
+  {% endfor %}
+  
+</select>
+      </div>
+      <table id="{{ item.product.item_id }}" class="table table-sm mt-1">
+      {% if item.vendorproductvariation %}
+        <tr>
+          <td class="table-secondary">Vendor</td>
+          <td><a href="{% url 'vendor_profile' contact_id=item.vendorproductvariation.vendorproduct.vendor.contact_id %}" class="btn btn-outline-warning btn-sm btn-block">{{ item.vendorproductvariation.vendorproduct.vendor.contact_name }}</a></td>
+        </tr>
+        
+        <tr>
+          <td class="table-secondary">Purchase Price</td>
+          <td>{{ item.vendorproductvariation.dealvendorproduct.vendor_price }}</td>
+        </tr>
+        <tr>
+          <td class="table-secondary"> Vendor Freight</td>
+          <td>{{ item.vendorproductvariation.vendorproduct.vendor.freight_per_kg }}</td>
+        </tr>
+        <tr>
+          <td class="table-secondary"> Customer Freight</td>
+          <td>{{ estimate.buyer.freight_per_kg }}</td>
+        </tr>
+        <tr>
+          <td class="table-secondary">Selling Price</td>
+          <td>{{ item.selling_price }}</td>
+        </tr>
+      {% endif %}
+      </table>
+      </td>
+      
+      <td style="">
+        {% if item.product.item_id %}
+            
+            <a href="#" class="btn btn-outline-primary btn-sm btn-block sales_history" title = "Sales History(Zoho Books Invoice)" data-toggle="modal" data-target=".sales-{{ item.product.item_id }}" data-id='{{ item.product.item_id }}'>Sales</a>
+            
+            <a href="#" class="btn btn-outline-primary btn-sm btn-block purchase_history" title="Purchase History(Zoho Books Bills)" data-toggle="modal" data-target=".purchase-{{ item.product.item_id }}" data-id='{{ item.product.item_id }}'>Purchase</a>
+            
+            <a href="#" class="btn btn-outline-primary btn-sm btn-block recent_deals" title="Recent Vendor Deals" data-toggle="modal" data-target=".recent-{{ item.product.item_id }}" data-id='{{ item.product.item_id }}'>Recent Deals</a>
+            
+            <a href="#" class="btn btn-outline-primary btn-sm btn-block graph" data-toggle="modal" data-target=".graph-{{ item.product.item_id }}" title="Detailed Summary Vendor Wise" data-id='{{ item.product.item_id }}'><i class="fas fa-chart-area"></i>Summary</a>
+            
+            <a href="#" class="btn btn-outline-primary btn-sm btn-block googlechartsapp" data-toggle="modal" data-target=".googlechartsapp-{{ item.product.item_id }}" title="Google Charts To Filter Data" data-id='{{ item.product.item_id }}'><i class="fas fa-chart-area"></i>Google Charts App</a>
+
+
+            <!-- MODALS -->
+            <!-- SALES MODAL -->
+            <div class="modal fade sales-{{ item.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">Sales of :</h5>
+                    <h4 style="text-align:center;"><span style="text-decoration: underline;"> {{ item.product.name }} </span></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- PURCHASES MODAL -->
+            <div class="modal fade purchase-{{ item.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">Purchases of:</h5><h4 style="text-align:center;"><span style="text-decoration: underline;"> {{ item.product.name }} </span></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RECENT VENDOR DEALS MODAL -->
+            <div class="modal fade recent-{{ item.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" style="left:-19%;width:141%">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">Recent Vendor Deals of:</h5><h4 style="text-align:center;"><span style="text-decoration: underline;">{{ item.product.name }} </span> </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Graphical Summary MODAL -->
+            <div class="modal fade graph-{{ item.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" style="left:-19%;width:141%">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">Summary</h5><h4 style="text-align:center;"><span style="text-decoration: underline;">{{ item.product.name }} </span> </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Google Charts App MODAL -->
+            <div class="modal fade googlechartsapp-{{ item.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" style="left:-19%;width:141%">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">Google Charts</h5><br><h4 style="text-align:center;"><span style="text-decoration: underline;">{{ item.product.name }} </span> </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endif %} 
+           </td> 
+           
+           <td>
+              <a class="btn btn-outline-primary btn-block" href="{% url 'coa_upload' pk=item.product.item_id %}">Upload</a>
+              <a  href="#" class="btn btn-outline-primary btn-sm btn-block coaview" data-toggle="modal" data-target=".coaview-{{ item.product.item_id }}" title="Quick View of Coa Files Uploaded" data-id='{{ item.product.item_id }}' class="btn btn-outline-primary btn-block" >View</a>
+              
+              <div class="modal fade coaview-{{ item.product.item_id }}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" style="left:-19%;width:141%">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="margin-left:auto;">COA files</h5><h4 style="text-align:center;"><span style="text-decoration: underline;">{{ item.product.name }} </span> </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+    <input type="submit" value="Save Purchase Prices" class="btn btn-outline-primary btn-block">
+    <h6 style="text-align:center">This Will save <i style="color:red">In Progress</i> estimate product's Purchase Prices .</h6>
+</form>
+<script>
+
+$('select#purchaseprice').change(function(){
+    item_id = $(this).find(':selected').data('item_id');
+    purchase_price = $(this).find(':selected').data('purchase_price');
+    customer_freight = $(this).find(':selected').data('customer_freight');
+    vendor_freight = $(this).find(':selected').data('vendor_freight');
+    bpt = $(this).find(':selected').data('bpt');
+    vpt = $(this).find(':selected').data('vpt');
+    
+    purchase_price_float = parseFloat(purchase_price);
+    customer_freight_float = parseFloat(customer_freight);
+    vendor_freight_float = parseFloat(vendor_freight);
+    purchase_price_float_2 = purchase_price_float + vendor_freight_float
+    bpt_float = parseFloat(bpt);
+    vpt_float = parseFloat(vpt);
+    selling_price_float = purchase_price_float*(1.07 + 0.0005 * ( bpt_float - vpt_float )) + customer_freight_float + vendor_freight_float; 
+    selling_price = selling_price_float.toString()
+    $('table#'+item_id).html('<tr><td class="table-secondary">Purchase Price</td><td>'+purchase_price+'</td></tr><tr><td class="table-secondary">Vendor Freight</td><td>'+vendor_freight+'</td></tr><tr><td class="table-secondary">Customer Freight</td><td>'+customer_freight+'</td></tr><tr><td class="table-secondary">Selling Price</td><td>'+selling_price+'</td></tr>');
+    
+});
+</script>
+{% endblock application-active %}
+

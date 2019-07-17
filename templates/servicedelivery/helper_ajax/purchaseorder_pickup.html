@@ -1,0 +1,76 @@
+{% csrf_token %}
+<table class="table table-bordered table-sm">
+    <tr>
+        <td class="table-secondary">Purchase Order</td>
+        <td>
+            <a href="#" class="btn btn-outline-primary btn-sm" onclick="window.open('https://books.zoho.com/app#/purchaseorders/{{ purchaseorder.purchaseorder_id }}','product_history','width=600,height=400')">{{ purchaseorder.purchaseorder_number }}</a>
+            <input type="hidden" value="{{ purchaseorder.purchaseorder_id }}" name="purchaseorder_id">
+        </td>
+        <td class="table-secondary">Vendor</td>
+        <td>{{ purchaseorder.vendor.contact_name }}</td>
+    </tr>
+    <tr>
+        <td class="table-secondary">Date </td>
+        <td>{{ purchaseorder.date }}</td>
+        <td class="table-secondary">Vendor Payment Terms</td>
+        <td>{{ purchaseorder.vendor.payment_terms }}</td>
+    </tr>
+</table>
+
+<div class="alert alert-warning" role="alert">
+    <p style="display:block;font-weight:bolder;color:black;text-align:center;">Select Pickup Dates and click Save</p>
+</div>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Make</th>
+            <th scope="col">Pack Size</th>
+            <th scope="col">Purchase Price</th>
+            <th scope="col">Quantity Ordered</th>
+            <th scope="col">Quantity Received</th>
+            <th scope="col">Quantity To Receive</th>
+            <th scope="col">Transporter Detail</th>
+            <th scope="col">Freight</th>
+            <th scope="col">PickUp Date</th>
+            
+
+        </tr>
+    </thead>
+    <tbody>
+
+    {% for item in purchaseorder_api.line_items %}
+        {% if item.pop.received_status == False %}
+        <tr>
+            <th>{{ item.product.name }}<input name="product_id" value="{{ item.product.item_id }}" type="hidden"></th>
+            <th>{{ item.product.make }}</th>
+            <th>{{ item.pack_size }}<input type="hidden" value="{{ item.pack_size }}" name="pack_size"></th>
+            <th>{{ item.rate }}<input type="hidden" value="{{ item.rate }}" name="purchase_price"></th>
+            <th>{{ item.quantity }} ({{ item.product.unit }}) <input type="hidden" value="{{ item.quantity }}" name="quantity"></th>
+            <th>
+                {% if item.pop_saved %}
+                    {{ item.pop.quantity_received }} ({{ item.product.unit }}) 
+                    
+                {% else %}
+                    0.0 ({{ item.product.unit }})
+                {% endif %}
+            </th>
+
+            <th>
+                {% if item.pop_saved %}
+                    <input class="form-control" type="number" step="0.01" value="{{ item.pop.quantity_to_receive }}" max="{{ item.pop.quantity_to_receive_max }}" name="quantity_to_receive" >
+                {% else %}
+                    <input class="form-control" type="number" value="0.0" step="0.01" max="{{ item.quantity }}" name="quantity_to_receive" >
+                {% endif %}
+            </th>
+            <th><input class="form-control" type="text" value="{{ item.transporter_detail }}" name="transporter_detail"></th>
+            <th><input class="form-control" type="number" step="0.01" value="{{ item.freight }}" name="freight"></th>
+            <th><input class="form-control" value='{{ item.pickup_date_time|date:"c" }}' type="datetime-local" name="pickup_date_time">
+            <div class="alert alert-warning" role="alert"> {{ item.pickup_date_time }}</div></th>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+    </table>
+    <hr>
+    

@@ -1,0 +1,45 @@
+{% extends 'home.html' %}
+{% block page-title-var %}Product Purchase History{% endblock page-title-var %}
+{% block application-active %}
+<h5 style="text-align:center;">PRODUCT : {{ product.name }}</h5>
+<hr>
+
+<div class="container">
+<div class="row" style="padding:4%">
+
+      <table class="table table-hover" id="purchasestable">
+          <thead>
+            <tr>
+              <th scope="col">Vendor Name</th>
+              <th scope="col">Bill Number </th>
+              <th scope="col">Date</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Price</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          {% for page in bills %}
+
+              {% for bill in page  %}
+
+                      <tr>
+                          <th scope="row">{{ bill.vendor_name }}</th>
+                          <td>{{ bill.bill_number }} </td>
+                          <td>{{ bill.date }}</td>
+                          <td>{{ bill.item_quantity }}</td>
+                          <td>{{ bill.currency_code }} {{ bill.item_price }} </td>
+                          <td>{{ bill.currency_code }} {{ bill.item_total_price }}</td>
+
+                      </tr>
+
+              {% endfor %}
+          {% endfor %}
+          </tbody>
+          </table>
+      
+ </div>
+</div>
+
+{% endblock application-active %}

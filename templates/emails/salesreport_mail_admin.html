@@ -1,0 +1,45 @@
+{% load humanize %}
+{% load deals_extras %}
+<table style="height: 68px; width: 609px;" border="2" cellpadding="2">
+    <tbody>
+<tr>
+<th style="width: 289px; text-align: center;">Total Sales</th>
+<td style="width: 306px; text-align: center;"><span style="color: #000000;"><strong>{{ total_sales|intcomma }}</strong></span></td>
+</tr>
+<tr>
+<th style="width: 289px; text-align: center;">Total Profit</th>
+<td style="width: 306px; text-align: center;"><span style="color: #000000;"><strong>{{ total_profit|intcomma }}</strong></span></td>
+</tr>
+<tr>
+<th style="width: 289px; text-align: center;">Profit Percentage</th>
+<td style="width: 306px; text-align: center;"><strong>{{ profit_percentage|intcomma }}</strong></td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+{% for salesperson,stats in salespersons.items %}
+<table style="height: 124px; width: 613px;" border="2" cellpadding="2">
+<tbody>
+<tr style="height: 23px;">
+<th style="width: 599px; height: 23px;" colspan="2">{{ salesperson }}</th>
+</tr>
+<tr style="height: 23px;">
+<th style="width: 305px; height: 23px;">&nbsp;Total Sales</th>
+<td style="width: 294px; height: 23px;">&nbsp; {{ stats|get_item:"total_sales"|intcomma }}</td>
+</tr>
+<tr style="height: 23px;">
+<th style="width: 305px; height: 23px;">Total Profit</th>
+<td style="width: 294px; height: 23px;">&nbsp; {{ stats|get_item:"total_profit"|intcomma }}</td>
+</tr>
+<tr style="height: 22px;">
+<th style="width: 305px; height: 22px;">Profit Percentage</th>
+<td style="width: 294px; height: 22px;">&nbsp; {{ stats|get_item:"profit_percentage"|intcomma }}</td>
+</tr>
+</tbody>
+</table>
+{% endfor %}
+</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>

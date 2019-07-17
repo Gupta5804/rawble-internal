@@ -1,0 +1,255 @@
+{% extends 'home.html' %}
+{% block page-title-var %} <i class="fas fa-shipping-fast"></i> In - Transit {% endblock page-title-var %}
+
+{% block application-active %}
+
+<section id="tabs" class="project-tab">
+    <div class="container" style="max-width:100%">
+        <div class="row">
+            <div class="col-md-12">
+                <nav>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-notshared" role="tab" aria-controls="nav-home" aria-selected="true">LR Details Not Shared</a>
+                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-shared" role="tab" aria-controls="nav-profile" aria-selected="false">LR Details Shared</a>
+                        
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-notshared" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <form method="post" action="" >
+                    {% csrf_token %}
+                        <div class="alert alert-warning" role="alert">
+                            <p style="text-align:center">Select The Products and Enter LR Number to Save LR Details</p>
+                        </div>
+                        <div class="form-inline">
+                        <input class="form-control ml-auto m-3" type="text" placeholder="Enter LR Number" name="lr_number" required>
+                        <input type="submit" name="lr-submit" value="Save LR details" class="btn btn-outline-primary mr-auto">
+                        </div>
+                        <table class="table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>SO#</th>
+                                    <th>Buyer</th>
+                                    <th>Zoho Location</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Selling Price</th>
+                                    <th>Total Amount</th>
+                                    <th>Transporter</th>
+                                    <th>Planned At</th>
+                                    <th>Dispatched At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for sopp in salesorderproductplans_dispatched %}
+                            {% if sopp.tracking_number == '' or sopp.tracking_number == None %}
+                                <tr><th><input type="checkbox" name="lr_sopp_id" class="form-check-input" value="{{ sopp.id }}"></th>
+                                    <td>{{ sopp.salesorderproduct.salesorder.salesorder_number }}</td>
+                                    <td>{{ sopp.salesorderproduct.salesorder.buyer.contact_name }}</td>
+                                    <td style="{% if sopp.salesorderproduct.salesorder.zoho_location == 'okhla' %} color:red{% elif sopp.salesorderproduct.salesorder.zoho_location == 'baddi' %}color:blue{% endif %};font-weight:bold;text-transform: uppercase;">{{ sopp.salesorderproduct.salesorder.zoho_location }}</td>
+                                    <td>{{ sopp.salesorderproduct.product.name }}</td>
+                                    <td>{{ sopp.planned_quantity }}</td>
+                                    <td>{{ sopp.salesorderproduct.so_selling_price }}</td>
+                                    <td>{{ sopp.total_amount }}</td>
+                                    <td>{{ sopp.transporter.name }}</td>
+                                    <td>{{ sopp.created_at }}</td>
+                                    <td>{{ sopp.shipped_date_time }}</td>
+                                </tr>
+                            {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                    </div>
+                    <div class="tab-pane fade" id="nav-shared" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <div class="accordion" id="accordionExample">
+                            {% for key,values in sopps_lr_shared.items %}
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-outline-info" type="button" data-toggle="collapse" data-target="#lr-{{ key }}" aria-expanded="true"                          aria-controls="collapseOne">
+                                            {{ values.0.salesorderproduct.salesorder.buyer.contact_name }} || LR Number :{{ key }}
+                                        </button>
+                                        
+                                        <a href="#" class="btn btn-outline-success float-right m-1" data-toggle="modal" data-target="#lrdelivered-{{ key }}">
+                                            <i class="fas fa-check-square"> </i> Mark as Delivered
+                                        </a>
+                                        <div class="modal fade" id="lrdelivered-{{ key }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                            <i class="fas fa-check-square"> </i> 
+                                                            Confirm that the following items are delivered to {{ values.0.salesorderproduct.salesorder.buyer.contact_name }}
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body" style="font-size:small">
+                                                    <table class="table" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>SO#</th>
+                                                                <th>Zoho Location</th>
+                                                                <th>Product</th>
+                                                                <th>Quantity</th>
+                                                                <th>Selling Price</th>
+                                                                <th>Total Amount</th>
+                                                                <th>Transporter</th>
+                                                                <th>Planned At</th>
+                                                                <th>Dispatched At</th>
+                                                            </tr>
+                                                        </thead>
+                                                    <tbody>
+                                                        {% for sopp in values %}
+                                                           
+                                                        <tr>
+                                                    <td>{{ sopp.salesorderproduct.salesorder.salesorder_number }}</td>
+                                                    <td style="{% if sopp.salesorderproduct.salesorder.zoho_location == 'okhla' %} color:red{% elif sopp.salesorderproduct.salesorder.zoho_location == 'baddi' %}color:blue{% endif %};font-weight:bold;text-transform: uppercase;">{{ sopp.salesorderproduct.salesorder.zoho_location }}</td>
+                                                    <td>{{ sopp.salesorderproduct.product.name }}</td>
+                                                    <td>{{ sopp.planned_quantity }}</td>
+                                                    <td>{{ sopp.salesorderproduct.so_selling_price }}</td>
+                                                    <td>{{ sopp.total_amount }}</td>
+                                                    <td>{{ sopp.transporter.name }}</td>
+                                                    <td>{{ sopp.created_at }}</td>
+                                                    <td>{{ sopp.shipped_date_time }}</td>
+                                                </tr>
+                                            
+                                            {% endfor %}    
+                                            </tbody>
+                                        </table>
+                                                    </div>
+                                                    <form method="post" action="">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" value="{{ key }}" name="lr_number">
+                                                    <div class="modal-footer" style="display:block">
+                                                        <button type="submit" name="delivered" class="btn btn-success btn-block"><i class="fas fa-check-square" ></i> Delivered</button>
+                                                    </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="#" class="btn btn-outline-warning float-right m-1" data-toggle="modal" data-target="#lrupdate-{{ key }}">
+                                            <i class="fas fa-level-up-alt"> </i> Update Status
+                                        </a>
+                                        <div class="modal fade" id="lrupdate-{{ key }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                            <i class="fas fa-level-up-alt"> </i> 
+                                                        Update Status Of The Shippment to {{ values.0.salesorderproduct.salesorder.buyer.contact_name }}
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body" style="font-size:small">
+                                                    <table class="table" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>SO#</th>
+                                                                <th>Zoho Location</th>
+
+                                                                <th>Product</th>
+                                                                <th>Quantity</th>
+                                                                <th>Selling Price</th>
+                                                                <th>Total Amount</th>
+                                                                <th>Transporter</th>
+                                                                <th>Planned At</th>
+                                                                <th>Dispatched At</th>
+                                                            </tr>
+                                                        </thead>
+                                                    <tbody>
+                                                        {% for sopp in values %}
+                                                           
+                                                        <tr>
+                                                    <td>{{ sopp.salesorderproduct.salesorder.salesorder_number }}</td>
+                                                    <td style="{% if sopp.salesorderproduct.salesorder.zoho_location == 'okhla' %} color:red{% elif sopp.salesorderproduct.salesorder.zoho_location == 'baddi' %}color:blue{% endif %};font-weight:bold;text-transform: uppercase;">{{ sopp.salesorderproduct.salesorder.zoho_location }}</td>
+                                                    <td>{{ sopp.salesorderproduct.product.name }}</td>
+                                                    <td>{{ sopp.planned_quantity }}</td>
+                                                    <td>{{ sopp.salesorderproduct.so_selling_price }}</td>
+                                                    <td>{{ sopp.total_amount }}</td>
+                                                    <td>{{ sopp.transporter.name }}</td>
+                                                    <td>{{ sopp.created_at }}</td>
+                                                    <td>{{ sopp.shipped_date_time }}</td>
+                                                </tr>
+                                            
+                                            {% endfor %}    
+                                            </tbody>
+                                        </table>
+                                        <div class="alert alert-warning">
+                                        <form method="post" action="">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{ key }}" name="lr_number" >
+                                        <p style="text-align:center;color:black">Current Status: <input class="form-control w-50" style="display:inline" placeholder="Current Status" type="text" name="tracking_status" required></p>
+                                        <p style="text-align:center;color:black">E.T.A.: <input class="form-control w-50" style="display:inline" type="datetime-local" name="eta" required></p>
+                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer" style="display:block">
+                                                        
+                                                        <button type="submit" name="status-updated" class="btn btn-warning btn-block"><i class="fas fa-level-up-alt"></i>Update Status</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </h2>
+                                    <div class="alert alert-success" role="alert" >
+                                       <p class="m-0" style="text-align:center;color:black;">Current Status: {{ values.0.tracking_status }}</p>
+                                       <p class="m-0" style="text-align:center;color:black;">E.T.A.(Estimated Time of Arrival): {{ values.0.eta }}</p>
+                                       <p class="m-0" style="text-align:center;color:black;">Last Updated at: {{ values.0.last_updated }}</p>
+
+                                    </div>
+                                
+                                <div id="lr-{{ key }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                       <table class="table" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>SO#</th>
+                                                    <th>Buyer</th>
+                                                    <th>Product</th>
+                                                    <th>Quantity</th>
+                                                    <th>Selling Price</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Transporter</th>
+                                                    <th>Planned At</th>
+                                                    <th>Dispatched At</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for sopp in values %}
+                                            {% if sopp.tracking_number != '' and sopp.tracking_number != None %}
+                                                <tr>
+                                                    <td>{{ sopp.salesorderproduct.salesorder.salesorder_number }}</td>
+                                                    <td>{{ sopp.salesorderproduct.salesorder.buyer.contact_name }}</td>
+                                                    <td>{{ sopp.salesorderproduct.product.name }}</td>
+                                                    <td>{{ sopp.planned_quantity }}</td>
+                                                    <td>{{ sopp.salesorderproduct.so_selling_price }}</td>
+                                                    <td>{{ sopp.total_amount }}</td>
+                                                    <td>{{ sopp.transporter.name }}</td>
+                                                    <td>{{ sopp.created_at }}</td>
+                                                    <td>{{ sopp.shipped_date_time }}</td>
+                                                </tr>
+                                            {% endif %}
+                                            {% endfor %}    
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</section>
+
+{% endblock application-active %}

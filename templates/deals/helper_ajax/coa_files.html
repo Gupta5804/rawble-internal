@@ -1,0 +1,18 @@
+<table id="gallery" class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Links</th>
+      <th>Uploaded At</th>
+      <th>Uploaded By</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for coa_file in coa_files %}
+      <tr>
+        <td><a class="btn btn-outline-primary btn-block" onclick="window.open('{{ coa_file.file.url }}','name','width=1000,height=700')" href="#">{{ coa_file.file.name }}</a></td>
+        <td>{{ coa_file.uploaded_at|date }}</td>
+        <td>{{ coa_file.uploaded_by }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

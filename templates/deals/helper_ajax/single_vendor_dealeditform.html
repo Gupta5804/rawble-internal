@@ -1,0 +1,144 @@
+<form method="post" action="{% url 'vendor_deal_edit' %}">
+{% csrf_token %}
+<div class="row">
+            <input type="hidden" value="{{ deal.id }}" name="deal_id">
+            <div class="col-4 form-group ">
+                <label for="date" class="col-form-label">Date</label>
+                <span class="asterixField">*</span>
+                <input type="text" class="form-control form-control-sm" name="date" id="date" value="{{ deal.date }}" disabled>
+                <small id="date" class="form-text text-muted"> Date On Which Deal is Received</small>
+
+            </div>
+            <div class="col-4 form-group">
+                <label for="vendor" class="col-form-label">Vendor</label>
+                <select class="form-control form-control-sm" id="vendor" name = 'vendor' disabled>
+                    {% for vendor in vendors %}
+                    <option value="{{ vendor.pk }}" {% if deal.vendor.pk == vendor.pk %}selected{% endif %}>{{ vendor.contact_name}}</option>
+                    {% endfor %}
+                </select>
+                <small id="vendor" class="form-text text-muted"> Select Vendor</small>
+            </div>
+
+            <div class="col-4 form-group">
+                <label for="delivery_terms" class="col-form-label">Delivery Terms</label>
+                <select class="form-control form-control-sm" id="delivery_terms" name='delivery_terms' disabled>
+                    <option value="Door Deliver"{% if deal.delivery_terms == "Door Deliver" %}selected{% endif %}>Door Deliver</option>
+                    <option value="Ex-Godown"{% if deal.delivery_terms == "Ex-Godown" %}selected{% endif %}>Ex-Godown</option>
+                    <option value="FOR"{% if deal.delivery_terms == "FOR" %}selected{% endif %}>FOR</option>
+                    <option value="Local Transport"{% if deal.delivery_terms == "Local Transport" %}selected{% endif %}>Local Transport</option>
+                </select>
+                <small id="delivery_terms" class="form-text text-muted"> Select Delivery Terms</small>
+            </div>
+
+
+        </div>
+        
+        <table class="table table-hover table-responsive" style="max-height:200px" id="selectedProductsTable">
+  <thead>
+    <tr>
+      <th scope="col">Group</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Label Name</th>
+      <th scope="col">Make</th>
+      <th scope="col">Specs</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Unit</th>
+      <th scope="col">Price</th>
+      <th scope="col">Lead Time</th>
+      <th scope="col">Expiry Date</th>
+    
+    </tr>
+  </thead>
+  <tbody>
+        {% for dealproduct in deal.dealvendorproduct_set.all %}
+        <tr>
+            <td> {{ dealproduct.product_group  }}</td>
+
+            <td class="">  
+                <input name="product" type="hidden" value={{ dealproduct.product.pk }}>
+                <select  class="form-control" disabled>
+                    {% for group in product_groups %}
+                    <optgroup label="{{ group.name }}">
+                        {% for product in group.product_set.all %}
+                        <option value="{{ product.pk }}" data-group="{{ group.name }}" data-groupid="{{ group.id }}" data-unit="{{ product.unit }}" data-make="{{ product.make }}" {% if dealproduct.product.pk == product.pk %}selected{% endif %}>{{ product.name }}</option>
+                        {% endfor %}
+                    </optgroup>
+                    {% endfor %}  
+                    <optgroup label="Ungrouped Products">
+                    {% for product in products %}
+                        {% if product.group %}
+                        {% else %}
+                        <option value="{{ product.pk }}" data-group="{{ product.group }}" data-groupid="{{ product.group.id }}" data-unit="{{ product.unit }}"{% if dealproduct.product.pk == product.pk %}selected{% endif %}>{{ product.name }}</option>
+                        {% endif %}
+                    {% endfor %} 
+            
+                </select>
+            </td>
+            <td class=""> 
+            
+                <input class="form-control" name="label_name" value="{{ dealproduct.label_name }}" type="text">
+            </td>
+            <td> {{ dealproduct.make }}
+                
+            </td>
+            <td class=""> 
+                <input name="spec" type="text" class="form-control" value="{{ dealproduct.specs }}"> 
+            </td>
+            <td class=""> 
+                <input type="number" step="0.01" class="form-control" value="{{ dealproduct.quantity }}" name="quantity">
+            </td>
+            <td> {{ dealproduct.unit }}
+                
+            </td>
+            <td class=""> 
+                <input type="number" step="0.01" class="form-control" name="price" value="{{ dealproduct.vendor_price }}" required> 
+            </td>
+            <td class=""> 
+                <input type="number" class="form-control" value="{{ dealproduct.lead_time }}" name="lead_time" >
+            </td>
+            <td> 
+                <input type="date" class="form-control" value="{{ dealproduct.price_valid_till|date:"Y-m-d" }}"
+                
+            </td>
+        
+        </tr>
+        {% endfor %}    
+  </tbody>
+</table>
+<div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit"  class="btn btn-outline-dark"><i class="fas fa-save"></i> Save Vendor Deal#{{ deal.id }}</button>
+      </div>
+</form>
+
+<script>
+$(document).ready(function() {
+    $('.js-example-basic-single').select2({
+        placeholder: 'Select Products',
+        width:'resolve',
+        minimumResultsForSearch: 1000,
+        
+
+
+    });
+    $('#mySelect2').on('select2:select', function (e) {
+        
+    var data = e.params.data;
+    var group = $(e.params.data.element).data('group');
+    var group_id = $(e.params.data.element).data('groupid');
+    var make = $(e.params.data.element).data('make');
+    var unit = $(e.params.data.element).data('unit');
+    
+    $('#selectedProductsTable tbody').prepend('<tr id ="'+data.id+'"><td><input name="product_group" type="hidden" value="'+group_id+'">'+group+'</td><td>'+data.text+'</td><td> <input name="label_name" placeholder="Label Name" type="text" class="form-control form-control-sm"></td><td>'+make+'<input name="make" class="form-control form-control-sm" value="'+make+'" type="hidden"></td><td> <input name="spec" placeholder="Specifications" type="text" class="form-control form-control-sm"></td><td><input name="quantity" step="0.01" type="number" class="form-control form-control-sm" ></td><td>'+unit+'<input class="form-control form-control-sm" name="unit" type="hidden" value="'+unit+'"></tdtd></td><td><input name="price" type="number" step="0.01" value="0" class="form-control form-control-sm" required></td><td><input name="lead_time" type="number" class="form-control form-control-sm"></td><td><input name="price_valid_till" type="date" class="form-control form-control-sm"></td></tr>');
+    console.log(String(make));
+    console.log(String(unit));
+    });
+    $('#mySelect2').on('select2:unselect', function (e) {
+        var data = e.params.data;
+        //$('#selectedProductsTable tbody').prepend('<tr><td>'+data.id+'</td><td>'+data.text+'</td></tr>');
+        $('#selectedProductsTable tbody #'+data.id).remove();
+        console.log(data);
+    });
+    
+});
+</script>

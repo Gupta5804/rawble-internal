@@ -1,0 +1,46 @@
+<canvas id="canvas-ajax-{{ item_id }}" width="1000" height="700" style="margin:auto;display:block;"> as</canvas>
+<script type="text/javascript">
+            $(document).ready(function() {
+                var options = {
+  type: 'line',
+  data: {
+    
+    datasets: [
+	    {
+	      label: 'Sales',
+	      data: [{% for invoice in data_invoices %}{ x:"{{ invoice.x }}",y:"{{ invoice.y }}" },{% endfor %}],
+      	borderWidth: 3,
+          borderColor : 'green',
+          fill: false,
+    	},	
+			{
+				label: 'Purchase',
+				data: [{% for bill in data_bills %}{ x:"{{ bill.x }}",y:"{{ bill.y }}" },{% endfor %}],
+				borderWidth: 3,
+                borderColor : 'red',
+                fill:false,
+			},	
+			{
+				label: 'Recent Vendor Deal',
+				data: [{% for deal in data_deals %}{ x:"{{ deal.x }}",y:"{{ deal.y }}" },{% endfor %}],
+				borderWidth: 3,
+                borderColor : 'yellow',
+                fill:false,
+			}
+		]
+  },
+  options: {
+  	scales: {
+        xAxes: [{
+        type: 'time',
+        distribution:'linear'
+      }]
+    	
+    }
+  }
+}
+    var ctx = document.getElementById('canvas-ajax-{{ item_id }}').getContext('2d');
+new Chart(ctx, options);
+
+    });
+        </script>

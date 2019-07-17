@@ -1,0 +1,105 @@
+{% csrf_token %}
+<table class="table table-bordered table-sm">
+    <tr>
+        <td class="table-secondary">Sales Order</td>
+        <td>
+            <a href="#" class="btn btn-outline-primary btn-sm" onclick="window.open('https://books.zoho.com/app#/salesorders/{{ salesorder.salesorder_id }}','product_history','width=600,height=400')">{{ salesorder.salesorder_number }}</a>
+            <input type="hidden" value="{{ salesorder.salesorder_id }}" name="salesorder_id">
+        </td>
+        <td class="table-secondary">Buyer</td>
+        <td>{{ salesorder.buyer.contact_name }}</td>
+    </tr>
+    <tr>
+        <td class="table-secondary">Date </td>
+        <td>{{ salesorder.date }}</td>
+        <td class="table-secondary">Buyer Payment Terms</td>
+        <td>{{ salesorder.buyer.payment_terms }}</td>
+    </tr>
+</table>
+
+<div class="alert alert-warning" role="alert">
+    <p style="display:block;font-weight:bolder;color:black;text-align:center;">Select Outward Date and Time and Click Save</p>
+</div>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Make</th>
+            <th scope="col">Pack Size</th>
+            <th scope="col">Selling Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Quantity Dispatched</th>
+            <th scope="col">Quantity To Dispatch</th>
+            <th scope="col">Transporter</th>
+            <th scope="col">Freight</th>
+            
+            <th scope="col">Outward Date and Time</th>
+            
+
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in salesorder_api.line_items %}
+        <tr>
+            <th>{{ item.product.name }}<input name="product_id" value="{{ item.product.item_id }}" type="hidden"></th>
+            <th>{{ item.product.make }}</th>
+            <th>{{ item.pack_size }}<input type="hidden" value="{{ item.pack_size }}" name="pack_size"></th>
+            <th>{{ item.rate }}<input type="hidden" value="{{ item.rate }}" name="selling_price"></th>
+            <th>{{ item.quantity }} ( {{ item.product.unit }}) <input type="hidden" value="{{ item.quantity }}" name="quantity"></th>
+            <th>
+                {% if item.sop_saved %}
+                    {{ item.sop.quantity_dispatched }} ({{ item.product.unit }}) 
+                    
+                {% else %}
+                    0.0 ({{ item.product.unit }})
+                {% endif %}
+            </th>
+
+            <th>
+                {% if item.sop_saved %}
+                    <input class="form-control" type="number" step="0.01" max="{{ item.sop.quantity_to_plan_max }}" name="quantity_to_dispatch" {% if item.sop.quantity_to_plan_max == 0 %}disabled{% endif %}>
+                    {% if item.sop.quantity_to_plan_max == 0 %}
+                        <input value="" type="hidden" name="quantity_to_dispatch">
+                    {% endif %}
+                {% else %}
+                    <input class="form-control" type="number"  step="0.01" max="{{ item.quantity }}" name="quantity_to_dispatch" >
+                {% endif %}
+            </th>
+            <th>
+                <select class="form-control"  name="transporter_id" {% if item.sop_saved %} {% if item.sop.quantity_to_plan_max == 0 %}disabled{% endif %} {% endif %}>
+                 <option value=""></option>
+                 {% for transporter in transporters %}
+                 <option value="{{ transporter.id }}">{{ transporter.name }}</option>
+                 {% endfor %}
+                </select>
+                {% if item.sop_saved %} {% if item.sop.quantity_to_plan_max == 0 %}
+                <input value="" type="hidden" name="transporter_id"> 
+                {% endif %} {% endif %}
+                
+            </th>
+            <th>
+                <input class="form-control" type="number" step="0.01" value="{{ item.freight }}" name="freight" {% if item.sop_saved %} {% if item.sop.quantity_to_plan_max == 0 %}disabled{% endif %} {% endif %}>
+                {% if item.sop_saved %} 
+                    {% if item.sop.quantity_to_plan_max == 0 %}
+                <input class="form-control"  step="0.01" value="{{ item.freight }}" name="freight" type="hidden">
+                {% endif %} {% endif %}
+            </th>
+            
+            <th>
+            
+                <input type='datetime-local'  class="form-control" name="outward_date_time" {% if item.sop_saved %} {% if item.sop.quantity_to_plan_max == 0 %}disabled{% endif %} {% endif %}>
+                {% if item.sop_saved %} 
+                    {% if item.sop.quantity_to_plan_max == 0 %}
+                <input   class="form-control" name="outward_date_time" value='' type="hidden">
+                    {% endif %} {% endif %}
+                    <div class="alert alert-warning" role="alert"> {{ item.outward_date_time }}
+                </div>
+            </div>
+           
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    <hr>
+    
+    

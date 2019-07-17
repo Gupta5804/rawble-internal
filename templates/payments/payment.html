@@ -1,0 +1,231 @@
+{% extends 'home.html' %}
+{% block page-title-var %}All Payments{% endblock page-title-var %}
+
+{% block application-active %}
+<div class="container" style="margin-bottom:5%;">
+  <div class="row">
+    <div class="col-sm">
+      <a href="{% url 'advance_payment_create' %}" class="btn btn-outline-primary btn-lg btn-block">Add New Advance Payment</a>
+    </div>
+    <div class="col-sm">
+      <a href="{% url 'refresh_unpaid_bills' %}" class="btn btn-outline-primary btn-lg btn-block">Refresh Overdue Unpaid Bills From Zoho</a>
+      </div>
+
+  </div>
+</div>
+<div class="container" style="margin-bottom:5%">
+  <div class="row">
+    <div class="col-sm" style="text-align:center;">
+        <span style="height: 44px;
+    width: 44px;
+    background-color: #c3e6cb;
+    margin-top: 0px;
+    padding-top: 0px;
+    border-radius: 50%;"></span>
+    <span style="position: absolute;
+    top: 12px;
+    padding-left: 12px;">Unpaid Bills From Zoho </span>
+    </div>
+    <div class="col-sm" style="text-align:center;">
+      <span style="height: 44px;
+  width: 44px;
+  background-color:#f5c6cb;
+  margin-top: 0px;
+  padding-top: 0px;
+  border-radius: 50%;"></span>
+  <span style="position: absolute;
+    top: 12px;
+    padding-left: 12px;">Advance Payments </span>
+    </div>
+  </div>
+</div>
+{% if payments %}
+<table class="table table-hover" style="max-width:113%;width:113%">
+  <thead>
+    <tr>
+      <th scope="col">Check Sent</th>
+      <th scope="col">Vendor</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Payment Terms</th>
+      <th scope="col">Due Days</th>
+
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for payment in payments %}
+    <tr class="{% if payment.payment_type == 'unpaid_bill'%} table-success {% else %} table-danger {% endif %}">
+      <td style="color: #007bff;
+    text-align: center;
+    font-size: 25px;">
+        <a href="{% url 'payment_toggle_check_sent_status' pk=payment.id %}" title="Toggle Status" ><i class="{% if payment.check_sent_status %}fas fa-check-square{% else %}fas fa-minus-square{% endif %}"></i></a>
+      </td>
+      <th scope="row">{{ payment.vendor }}</th>
+      <td>{{ payment.amount }}</td>
+      <td>{{ payment.payment_terms }}</td>
+      <td class="{% if payment.bill_status == 'overdue' %}bg-danger{% endif %}">{{ payment.due_days }}</td>
+
+      <td><a href="#" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal{{ payment.id }}">View</a> </td>
+      <!-- Modal -->
+      <div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="exampleModalLabel">
+                {% if payment.payment_type == 'advance' %} Advance Payment To {{ payment.vendor }}
+                {% elif payment.payment_type == 'unpaid_bill' %} Unpaid Bill from {{ payment.vendor }}
+                {% endif %}
+              </h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                {% if payment.payment_type == 'unpaid_bill' %}
+                <div class="row">
+                  <div class="col-6">
+                    <h5> Bill Number: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6>{{ payment.bill_number }} </h6>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5> Status: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6>{{ payment.bill_status }}</h6>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5> Link To Bill: </h5>
+                  </div>
+                  <div class="col-6">
+                    <a href="#" onClick="window.open('{{ payment.bill_url }}', 'name','width=600,height=400')" class="btn btn-outline-danger btn-sm" style="padding-top:0;padding-bottom:0;"> View </a>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5> Bill Total Amount: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6>{{ payment.bill_total }} </h6>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5> Due Date: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ payment.due_date }} </h6>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5> Due Days: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ payment.due_days }} <h6>
+                  </div>
+
+                </div>
+                {% endif %}
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Time Created: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {% if payment.payment_type == 'unpaid_bill' %} {{ payment.bill_time_created }} {% else %} {{ payment.time_created }} {% endif %}</h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Amount: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ payment.amount }}</h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Payment Terms: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ payment.payment_terms }}</h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Date: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ payment.date }}</h6>
+                  </div>
+                </div>
+                {% if payment.payment_type == 'advance' %}
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Reason: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ payment.reason }}</h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Comment: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ payment.comment }}</h6>
+                  </div>
+                </div>
+                {% endif %}
+                <div class="row">
+                  <div class="col-6">
+                    <h5>Delivery Terms: </h5>
+                  </div>
+                  <div class="col-6">
+                    <h6> {{ payment.delivery_terms }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+          </div>
+        </div>
+</div>
+      <td>
+        <a href="{% url 'payment_movetop' pk=payment.id %}" class="btn btn-outline-primary btn-sm" title="Move To Top"><i class="fa fa-angle-double-up"></i></a>
+        <a href="{% url 'payment_moveup' pk=payment.id %}" class="btn btn-outline-primary btn-sm" title="Move Up"><i class="fa fa-arrow-up"></i></a>
+        <a href="{% url 'payment_movedown' pk=payment.id %}" class="btn btn-outline-primary btn-sm" title="Move Down"><i class="fa fa-arrow-down"></i></a>
+        <a href="{% url 'payment_movebottom' pk=payment.id %}" class="btn btn-outline-primary btn-sm" title="Move To Bottom"><i class="fa fa-angle-double-down"></i></a>
+      </td>
+      <td>
+        {% if payment.payment_type == 'advance' %}
+        <a href="{% url 'payment_delete' pk=payment.id %}" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i><a>
+          {% endif %}
+      </td>
+      
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+<h3 style="text-align:center">No Payments To display</h3>
+
+{% endif %}
+{% endblock application-active %}

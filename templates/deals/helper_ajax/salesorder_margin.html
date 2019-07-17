@@ -1,0 +1,72 @@
+<table class="table table-bordered table-sm">
+                            <tr>
+                              <td class="table-secondary">SalesOrder Number</td>
+                              <td>
+                                <a href="#" class="btn btn-outline-primary btn-sm" onclick="window.open('https://books.zoho.com/app#/salesorders/{{ salesorder.salesorder_id }}','product_history','width=600,height=400')">{{ salesorder.salesorder_number }}</a>
+                              </td>
+                              <td class="table-secondary">Buyer</td>
+                              <td>{{ salesorder.buyer.contact_name }}</td>
+                              
+                            </tr>
+                            <tr>
+                              <td class="table-secondary">Date Received</td>
+                              <td>{{ salesorder.date }}</td>
+                              <td class="table-secondary">Buyer Payment Terms</td>
+                              <td>{{ salesorder.buyer.payment_terms }}</td>
+                              
+                            </tr>
+                          </table>
+                          <hr>
+                          
+                          <div class="alert alert-warning" role="alert">
+                            <p style="display:block;font-weight:bolder;color:black;text-align:center;">Overall Margin Percentage: {{ overall_margin }}</p>
+                        </div>
+                          <table class="table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Make</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Pack Size</th>
+                                <th scope="col">Purchase Price</th>
+                                <th scope="col">Vendor Freight</th>
+                                <th scope="col">Customer Freight</th>
+                                <th scope="col">Base Selling Price</th>
+                                <th scope="col">Final Selling Price</th>
+                                <th scope="col">Margin Percentage</th>
+
+                              </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in salesorder.salesorderproduct_set.all %}
+                              <tr class="{% if item.vendorproductvariation %} table-success {% else %} table-danger {% endif %}">
+                                <th scope="row">{{ item.product.name }}</th>
+                                <td>{{ item.product.make }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.pack_size }}</td>
+                                {% if item.vendorproductvariation %}
+                                  <td>{{ item.vendorproductvariation.dealvendorproduct.vendor_price }}</td>
+                                  <td>{{ item.vendorproductvariation.vendorproduct.vendor.freight_per_kg }}</td>
+                                  <td>{{ salesorder.buyer.freight_per_kg }}</td>
+                                  <td>{{ item.selling_price }}</td>
+                                  <td>
+                                    {% for item_api in salesorder_api.line_items %}
+                                    
+                                    {% if item_api.item_id == item.product.item_id_str %}
+                                        {{ item_api.rate }}
+                                    {% endif %}
+                                    {% endfor %}
+                                  </td>
+                                    <td>
+                                    {% for item_api in salesorder_api.line_items %}
+                                    {% if item_api.item_id == item.product.item_id_str %}
+                                        {{ item_api.margin }}
+                                    {% endif %}
+                                    {% endfor %}
+                                    </td>
+                                {% endif %}
+                              </tr>
+                            {% endfor %}
+                              
+                            </tbody>
+                          </table>

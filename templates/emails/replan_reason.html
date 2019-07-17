@@ -1,0 +1,47 @@
+<p>Dear Team,</p>
+<p>Item Below is rescheduled to dispatch on {{ sopp.planned_date_time }}</p>
+<p>It was scheduled to dispatch previously on {{ previously_planned_date_time }} but was not dispatched because :<span style="font-weight:bold;color:red;">{{ sopp.reason }}</span></p>
+<p></p>
+<table style="height: 38px;" border="2" width="597">
+<tbody>
+<tr>
+<td style="width: 60px;">SO #</td>
+<td style="width: 60px;">Buyer</td>
+<td style="width: 60px;">Product</td>
+
+<td style="width: 60px;">Selling Price</td>
+<td style="width: 60px;">Total Quantity Ordered</td>
+<td style="width: 60px;">Quantity Dispatched Till Now</td>
+<td style="width: 60px;">Quantity to Dispatch</td>
+<td style="width: 60px;">Transporter Detail</td>
+<td style="width: 60px;">Freight</td>
+
+</tr>
+
+<tr>
+<td style="width: 60px;">
+    <a href="{{ sopp.salesorderproduct.salesorder.salesorder_url }}">{{ sopp.salesorderproduct.salesorder.salesorder_number }}</a>
+</td>
+<td style="width: 60px;">
+    <a href="http://rawble-admin.herokuapp.com{% url 'buyer_profile' contact_id=sopp.salesorderproduct.salesorder.buyer.contact_id %}">
+        {{ sopp.salesorderproduct.salesorder.buyer.contact_name }}
+    </a>
+</td>
+<td style="width: 60px;"><a href="http://rawble-admin.herokuapp.com{% url 'products_listing' %}?name__icontains={{ sopp.salesorderproduct.product.name }}"> {{ sopp.salesorderproduct.product.name }} </a></td>
+
+<td style="width: 60px;">{{ sopp.salesorderproduct.so_selling_price }}</td>
+<td style="width: 60px;">{{ sopp.salesorderproduct.quantity }}</td>
+<td style="width: 60px;">{{ sopp.salesorderproduct.quantity_dispatched }}</td>
+<td style="width: 60px;">{{ sopp.planned_quantity }}</td>
+<td style="width: 60px;font-size:smaller;">
+    <span style="font-weight:bold">Transporter Name</span>: {{ sopp.transporter.name }} <br> <hr>
+    <span style="font-weight:bold">Transporter Address</span>: {{ sopp.transporter.address }} <br> <hr>
+    <span style="font-weight:bold">Website</span>: <a href="{{ sopp.transporter.website_url }}">{{ sopp.transporter.name }}</a><br> <hr>
+    <span style="font-weight:bold">Contact Numbers</span>: {{ sopp.transporter.phone_number }}
+</td>
+<td style="width: 60px;">{{ sopp.freight }}</td>
+</tr>
+
+</tbody>
+</table>
+

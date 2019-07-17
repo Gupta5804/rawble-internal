@@ -1,0 +1,134 @@
+{% extends 'home.html' %}
+{% load  humanize %}
+{% block page-title-var %} <i class="fas fa-clipboard"></i> Outward Report {% endblock page-title-var %}
+
+{% block application-active %}
+<!--
+Uncategorized Pending: {{ uncategorized_pending_amount }} <br>
+Hiya Pending: {{ hiya_pending_amount }} <br>
+Not Hiya Pending: {{ not_hiya_pending_amount }} <br>
+Total Pending : {{ total_pending }} <br>
+Total-So: {{ total_salesorders }}<br>
+Pending-unplanned-So: {{ unplanned_so_remaining }}<br>
+
+Hiya: 
+{% for sop in hiya_sop %}
+{{ sop.product.name }} - {{ sop.salesorder.salesorder_number }} - {{ sop.quantity }} - {{ sop.quantity_dispatched }} <br>
+{% endfor %}
+<hr>
+NOT HIYA :
+{% for sop in not_hiya_sop %}
+{{ sop.product.name }} - {{ sop.salesorder.salesorder_number }} - {{ sop.quantity }} - {{ sop.quantity_dispatched }} <br>
+{% endfor %}-->
+
+<div class="alert alert-dark" role="alert">
+<form method="get" style="display:grid;text-align:center">
+    {{ filter.form.as_p }}
+    <button type="submit" class="btn btn-primary"> FILTER</button>
+  </form>
+  </div>
+  <div class="alert alert-light" role="alert">
+  <div class="row">
+  <table class="table table-bordered col-6">
+    <tr class="table-dark" style="text-align:center">
+        <td colspan="4">Dispatched</td>
+    </tr>
+    <tr>
+    <td class="table-secondary">Hiya(OKHLA)</td>
+    <td>{{ hiya_dispatched_amount_okhla|intcomma }}</td>
+    <td class="table-secondary">Hiya(BADDI)</td>
+    <td>{{ hiya_dispatched_amount_baddi|intcomma }}</td>
+    </tr>
+    <tr>
+    <td class="table-secondary">Not Hiya(OKHLA)</td>
+    <td>{{ not_hiya_dispatched_amount_okhla|intcomma }}</td>
+    <td class="table-secondary">Not Hiya(BADDI)</td>
+    <td>{{ not_hiya_dispatched_amount_baddi|intcomma }}</td>
+    </tr>
+    <tr>
+    <td class="table-secondary">Total(OKHLA) </td>
+    <td>{{ total_dispatched_amount_okhla|intcomma }}</td>
+    <td class="table-secondary">Total(BADDI) </td>
+    <td>{{ total_dispatched_amount_baddi|intcomma }}</td>
+    </tr>
+    <tr>
+    <td class="table-dark" colspan="2">Total</td>
+    <td class="table-dark" colspan="2">{{ total_dispatched_amount|intcomma }}</td>
+    </tr>
+
+    
+  </table>
+  <table class="table table-bordered col-6">
+    <tr class="table-dark" style="text-align:center">
+        <td colspan="2">Pending</td>
+    </tr>
+    <tr>
+    <td class="table-secondary">Hiya</td>
+    <td>{{ hiya_pending_amount|intcomma }}</td>
+    </tr>
+    <tr>
+    <td class="table-secondary">Not Hiya </td>
+    <td>{{ not_hiya_pending_amount|intcomma }}</td>
+    </tr>
+    <tr>
+    <td class="table-secondary">Uncategorized </td>
+    <td>{{ uncategorized_pending_amount|intcomma }}</td>
+    </tr>
+    <tr>
+    <td class="table-secondary">Total </td>
+    <td>{{ total_pending_amount|intcomma }}</td>
+    </tr>
+    
+  </table>
+  </div>
+  </div>
+  <table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">SO #</th>
+      <th scope="col">Buyer</th>
+      <th scope="col">Zoho Location</th>
+      <th scope="col">Product</th>
+      <th scope="col">Make</th>
+      <th scope="col">Ordered Quantity</th>
+      <th scope="col">Quantity Dispatched Till Now</th>
+
+      <th scope="col">Dispatch Quantity</th>
+      <th scope="col"> Selling Price </th>
+      <th scope="col">Amount</th>
+
+      <th scope="col">Status</th>
+      <th scope="col" >Planned At </th>
+      
+
+      <th scope="col">Dispatched Date</th>
+      <th scope="col">Delivered Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for sopp in filter.qs %}
+    
+  
+    <tr class="{% if sopp.plan_status == 'planned'%} table-danger {% elif sopp.plan_status == 'in-transit' %} table-warning {% else %} table-success {% endif %}">
+      <th scope="row">{{ sopp.salesorderproduct.salesorder.salesorder_number }}</th>
+      <th scope="row">{{ sopp.salesorderproduct.salesorder.buyer.contact_name }}</th>
+      <td style="{% if sopp.salesorderproduct.salesorder.zoho_location == 'okhla' %} color:red{% elif sopp.salesorderproduct.salesorder.zoho_location == 'baddi' %}color:blue{% endif %};font-weight:bold;text-transform: uppercase;">{{ sopp.salesorderproduct.salesorder.zoho_location }}</td>
+      <td>{{ sopp.salesorderproduct.product.name }}</td>
+      <td>{{ sopp.salesorderproduct.product.make }}</td>
+      <td>{{ sopp.salesorderproduct.quantity }}</td>
+      <td>{{ sopp.salesorderproduct.quantity_dispatched }}</td>
+      <td>{{ sopp.planned_quantity }}</td>
+      <td>{{ sopp.salesorderproduct.so_selling_price|intcomma }}</td>
+      <td>{{ sopp.total_amount|intcomma }}</td>
+      <td>{{ sopp.plan_status }}</td>
+      <td>{{ sopp.created_at }}</td>
+      <td>{{ sopp.shipped_date_time }}</td>
+      <td>{{ sopp.delivered_date_time }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+  <ul>
+  
+  </ul>
+{% endblock application-active %} 

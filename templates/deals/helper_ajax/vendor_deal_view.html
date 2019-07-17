@@ -1,0 +1,63 @@
+<div class="row">
+            <div class="col-4 form-group ">
+                <label for="date" class="col-form-label">Date</label>
+                <span class="asterixField">*</span>
+                <input type="text" class="form-control form-control-sm" name="date" id="date" value="{{ vendor_deal.date }}" disabled>
+                <small id="date" class="form-text text-muted"> Date On Which Deal is Received</small>
+
+            </div>
+            <div class="col-4 form-group">
+                <label for="vendor" class="col-form-label">Vendor</label>
+                <input class="form-control form-control-sm" value="{{ vendor_deal.vendor }}" id="vendor" name = 'vendor' disabled>
+                    
+                <small id="vendor" class="form-text text-muted"> Select Vendor</small>
+            </div>
+
+            <div class="col-4 form-group">
+                <label for="delivery_terms" class="col-form-label">Delivery Terms</label>
+                <input class="form-control form-control-sm" value="{{ vendor_deal.delivery_terms }}" id="delivery_terms" name='delivery_terms' disabled>
+                    
+                <small id="delivery_terms" class="form-text text-muted"> Select Delivery Terms</small>
+            </div>
+
+
+            
+        </div>
+        
+        <table class="table table-hover" id="selectedProductsTable">
+  <thead>
+    <tr>
+      <th scope="col">Group</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Label Name</th>
+      <th scope="col">Make</th>
+      <th scope="col">Specs</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Unit</th>
+      <th scope="col">Price</th>
+      <th scope="col">Lead Time</th>
+      <th scope="col">Expiry Date</th>
+    
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in vendor_deal.dealvendorproduct_set.all %}
+        <tr>
+            <td> {{ product.product.group }} </td>
+            <td> {{ product.product.name }} </td>
+            <td> {{ product.label_name }} </td>
+            <td> {{ product.make }} </td>
+            <td> {{ product.specs }} </td>
+            <td> {{ product.quantity }} </td>
+            <td> {{ product.unit }} </td>
+            <td> {{ product.vendor_price }} </td>
+            <td> {{ product.lead_time }} </td>
+            <td> {{ product.price_valid_till }} </td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div>
