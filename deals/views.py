@@ -50,10 +50,12 @@ def salesreport_mail_admin(request):
     except:
         pass
     for salesperson,stats in salespersons.items():
+        stats['profit_percentage'] = 0
         try:
             stats['profit_percentage'] = (stats['total_profit']/stats['total_sales'])*100
         except:
-            stats['profit_percentage'] = 0
+            pass
+            
 
     subject = "Chemicals Profit Report of "+ str(datetime.datetime.now().strftime('%B'))+","+str(datetime.datetime.now().strftime('%Y')) + " Till Date"
     to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com',"madhur@rawble.com","ishleen.kaur@rawble.com","ajay@rawble.com"]
