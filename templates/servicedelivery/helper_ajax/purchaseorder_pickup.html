@@ -40,7 +40,7 @@
     <tbody>
 
     {% for item in purchaseorder_api.line_items %}
-        {% if item.pop.received_status == False %}
+        
         <tr>
             <th>{{ item.product.name }}<input name="product_id" value="{{ item.product.item_id }}" type="hidden"></th>
             <th>{{ item.product.make }}</th>
@@ -67,7 +67,7 @@
             <th><input class="form-control" type="number" step="0.01" name="freight"></th>
             
         </tr>
-        {% endif %}
+        
     {% endfor %}
     </tbody>
     </table>
