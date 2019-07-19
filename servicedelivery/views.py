@@ -42,12 +42,12 @@ def salesorder_outward(request):
         for item_custom_field in item['item_custom_fields']:
             if item_custom_field['label'] == 'Pack Size':
                 item['pack_size'] = item_custom_field['value']
-        if( salesorder.salesorderproduct_set.count() > 0):
+        try:
             sop = salesorder.salesorderproduct_set.get(product__item_id = item['item_id'])
             item['sop'] = sop
             item['sop_saved'] = True
             
-        else:
+        except:
             item['sop_saved'] = False
     transporters = Transporter.objects.all()
     rendered = render_to_string('servicedelivery/helper_ajax/salesorder_outward.html', context = {'salesorder':salesorder,'salesorder_api':salesorder_api, 'transporters':transporters},request=request)
@@ -70,19 +70,14 @@ def purchaseorder_pickup(request):
             if item_custom_field['label'] == 'Pack Size':
                 item['pack_size'] = item_custom_field['value']
         
-        if(purchaseorder.purchaseorderproduct_set.count() > 0):
+        try:
             pop = purchaseorder.purchaseorderproduct_set.get(product__item_id = item['item_id'])
             item['pop'] = pop
             item['pop_saved'] = True
-            item['pickup_date_time'] = pop.pickup_date_time
-            item['transporter_detail'] = pop.transporter_detail
-            item['freight']=pop.freight
-        else:
+            
+        except:
             item['pop_saved'] = False
-            item['pop'] = {'received_status': False }
-            item['pickup_date_time'] = ''
-            item['transporter_detail'] = ''
-            item['freight'] = ''
+            
     rendered = render_to_string('servicedelivery/helper_ajax/purchaseorder_pickup.html', context = {'purchaseorder':purchaseorder,'purchaseorder_api':purchaseorder_api},request=request)
     
     return JsonResponse({'po_snippet': rendered})
