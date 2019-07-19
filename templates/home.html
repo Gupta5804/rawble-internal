@@ -81,12 +81,9 @@
                 Service <br>    Delivery
             </a>
             
-            <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "outward_servicedelivery" or %}collapse show {% endif %}' id="servicedelivery">
+            <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "outward_servicedelivery" %}collapse show {% endif %}' id="servicedelivery">
                  
-                <hr>
-                <li class='{% if request.resolver_match.url_name == "inward_servicedelivery"  %}sub-menu active{% endif %}'> 
-                    <a href="{% url 'inward_servicedelivery' %}" > Inward</a>
-                </li>
+                
                 <hr>
                 <li class='{% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "inward_servicedelivery_expired" or request.resolver_match.url_name == "inward_servicedelivery_expired"  %}sub-menu active{% endif %}'>
                     
