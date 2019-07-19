@@ -18,6 +18,14 @@ from servicedelivery.models import Transporter , SalesOrderProductPlan
 from servicedelivery.filters import SOPPFilter
 from django.db.models import Q
 # Create your views here.
+def inward_servicedelivery_stock(request):
+    return render(request,'servicedelivery/inward_stock.html')
+def inward_servicedelivery_intransit(request):
+    return render(request,'servicedelivery/inward_intransit.html')
+def inward_servicedelivery_report(request):
+    return render(request,'servicedelivery/inward_report.html')
+def inward_servicedelivery_expired(request):
+    return render(request,'servicedelivery/inward_expired.html')
 def salesorder_outward(request):
     salesorder_id = request.GET.get('slug',None)
     salesorder = ZohoSalesOrder.objects.get(salesorder_id = salesorder_id)
@@ -79,10 +87,10 @@ def purchaseorder_pickup(request):
     
     return JsonResponse({'po_snippet': rendered})
 
-def inward_service_delivery(request):
+def inward_servicedelivery_new(request):
     if request.method == "GET":
         purchase_orders = ZohoPurchaseOrder.objects.all().order_by("-purchaseorder_number")
-        return render(request,'servicedelivery/inward.html',{'purchaseorders':purchase_orders})
+        return render(request,'servicedelivery/inward_new.html',{'purchaseorders':purchase_orders})
     if request.method == "POST":
         auth_token = 'd56b2f2501f266739e12b86b706d0078'
         organization_id = '667580392'

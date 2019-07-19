@@ -81,15 +81,72 @@
                 Service <br>    Delivery
             </a>
             
-            <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "inward_servicedelivery"  or request.resolver_match.url_name == "outward_servicedelivery" %}collapse show {% endif %}' id="servicedelivery">
-                
+            <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "outward_servicedelivery" or %}collapse show {% endif %}' id="servicedelivery">
+                 
                 <hr>
                 <li class='{% if request.resolver_match.url_name == "inward_servicedelivery"  %}sub-menu active{% endif %}'> 
-                    <a href="{% url 'inward_servicedelivery' %}" ><i class="fas fa-sign-in-alt"></i> Inward</a>
+                    <a href="{% url 'inward_servicedelivery' %}" > Inward</a>
                 </li>
                 <hr>
+                <li class='{% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "inward_servicedelivery_expired" or request.resolver_match.url_name == "inward_servicedelivery_expired"  %}sub-menu active{% endif %}'>
+                    
+                    <a href="#inward-servicedelivery" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-sign-in-alt"></i>
+                            Inward
+                    </a>
+                    <hr>
+                    <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "inward_servicedelivery_expired" or request.resolver_match.url_name == "inward_servicedelivery_report" or request.resolver_match.url_name == "inward_servicedelivery_expired" or  %}collapse show {% endif %}' id="inward-servicedelivery">
+                
+                        
+                        <li class='{% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "inward_servicedelivery_expired" or request.resolver_match.url_name == "inward_servicedelivery_report"  %}sub-menu active{% endif %}'> 
+                            <a href="#inward-servicedelivery-plan" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                <i class="fas fa-calendar-alt"></i> 
+                                Plan Inward
+                            </a>
+                            <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "inward_servicedelivery_expired" or request.resolver_match.url_name == "inward_servicedelivery_report" or request.resolver_match.url_name == "inward_servicedelivery_stock" %}collapse show{% endif %}' id="inward-servicedelivery-plan">
+                                <li class='{% if request.resolver_match.url_name == "inward_servicedelivery_new" %}sub-menu active{% endif %}'>
+                                    <a href="{% url 'inward_servicedelivery_new' %}">
+                                        <i class="fas fa-calendar-plus"></i> 
+                                        New Plan
+                                    </a>
+                                </li>
+                                <hr>
+                                <li class='{% if request.resolver_match.url_name == "inward_servicedelivery_expired" %} sub-menu active{% endif %}'>
+                                    <a href="{% url 'inward_servicedelivery_expired' %}">
+                                        <i class="fas fa-calendar-times"></i> 
+                                        Expired Plans
+                                    </a>
+                                </li>
+                                <hr>
+                                <li class='{% if request.resolver_match.url_name == "inward_servicedelivery_report" %}  sub-menu active{% endif %}'>
+                                    <a href="{% url 'inward_servicedelivery_report' %}">
+                                        <i class="fas fa-clipboard"></i> 
+                                        Report
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <hr>
             
-                <li class='{% if request.resolver_match.url_name == "outward_servicedelivery"  %}sub-menu active{% endif %}'>
+                        
+                        <li class='{% if request.resolver_match.url_name == "inward_servicedelivery_intransit"  %}sub-menu active{% endif %}'>
+                            <a href="{% url 'inward_servicedelivery_intransit' %}">
+                                <i class="fas fa-shipping-fast"></i> 
+                                In Transit
+                            </a>
+                        </li>
+                        <hr>
+                        <li class='{% if request.resolver_match.url_name == "inward_servicedelivery_stock"  %}sub-menu active{% endif %}'>
+                            <a href="{% url 'inward_servicedelivery_stock' %}">
+                                <i class="fas fa-store-alt"></i> 
+                                Stock
+                            </a>
+                        </li>
+                        
+                
+                    </ul>
+                </li>
+                <li class='{% if request.resolver_match.url_name == "outward_servicedelivery" or request.resolver_match.url_name == "outward_servicedelivery_shipping" or request.resolver_match.url_name == "outward_servicedelivery_report"  %}sub-menu active{% endif %}'>
                     
                     <a href="#servicedelivery-outward" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-sign-out-alt"></i>

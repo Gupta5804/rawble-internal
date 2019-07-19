@@ -129,7 +129,7 @@ def salesperson_stats(request):
     if request.method == "GET":
         salesperson = request.GET.get('salesperson')
         start_of_month = datetime.date.today().replace(day=1)
-        eps = EstimateProduct.objects.filter(estimate__salesperson = salesperson,estimate__date__gte=start_of_month)
+        eps = EstimateProduct.objects.filter(estimate__salesperson = salesperson, estimate__date__gte = start_of_month)
         sops = SalesOrderProduct.objects.filter(salesorder__salesperson = salesperson,salesorder__date__gte=start_of_month)
         total_sop_count = 0
         total_profit = 0
