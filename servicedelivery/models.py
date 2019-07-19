@@ -1,8 +1,8 @@
 from django.db import models
-from deals.models import SalesOrderProduct
+from deals.models import SalesOrderProduct,PurchaseOrderProduct
 from products.models import CoaFile
 
-# Create your models here.
+# Create your models here. 
 class Transporter(models.Model):
     name = models.CharField(max_length=400,blank=True,null=True)
     address = models.CharField(max_length=400,blank=True,null=True)
@@ -11,6 +11,36 @@ class Transporter(models.Model):
     website_url = models.CharField(max_length=400,blank=True,null=True)
     def __str__(self):
         return self.name
+
+class PurchaseOrderProductPlan(models.Model):
+    purchaseorderproduct = models.ForeignKey(PurchaseOrderProduct,on_delete=models.CASCADE)
+    planned_dispatch_date_time = models.DateTimeField(null=True,blank=True)
+    planned_receive_date_time = models.DateTimeField(null=True,blank=True)
+    dispatched_date_time = models.DateTimeField(null=True,blank=True)
+    received_date_time = models.DateTimeField(null=True,blank=True)
+    last_updated = models.DateTimeField(auto_now=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    planned_quantity = models.FloatField()
+    freight = models.FloatField()
+    transporter = models.ForeignKey(Transporter,on_delete=models.SET_NULL,null=True,blank=True)
+    dispatch_delay_reason = models.CharField(max_length = 500 , null=True, blank=True)
+    receive_delay_reason = models.CharField(max_length = 500 , null=True, blank=True)
+    def __str__(self):
+        return (self.purchaseorderproduct.purchaseorder.purchaseorder_number + "-" + self.purchaseorderproduct.product.name + "-"+str(self.planned_quantity))
+    @property
+    def total_amount(self):
+        return (self.purchaseorderproduct.purchase_price * self.planned_quantity)
+    @property
+    def plan_status(self):
+        if(self.received_date_time):
+            return "received"
+        elif(self.dispatched_date_time):
+            return "in-transit"
+        elif(self.planned_dispatch_date_time):
+            return "planned"
+        else:
+            return "unplanned"
+    
 class SalesOrderProductPlan(models.Model):
     salesorderproduct = models.ForeignKey(SalesOrderProduct,on_delete=models.CASCADE)
     planned_date_time = models.DateTimeField(null=True,blank=True)

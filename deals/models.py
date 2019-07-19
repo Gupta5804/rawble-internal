@@ -421,14 +421,37 @@ class PurchaseOrderProduct(models.Model):
     product = models.ForeignKey(Product,on_delete = models.CASCADE)
     purchase_price = models.DecimalField(max_digits=10, decimal_places=5)
     quantity = models.DecimalField(max_digits=10, decimal_places=5)
-    quantity_received = models.DecimalField(max_digits=10, decimal_places=5,default=0.0)
-    quantity_to_receive = models.DecimalField(max_digits=10, decimal_places=5,default=0.0)
+ 
     pack_size = models.DecimalField(max_digits=10, decimal_places=5)
-    pickup_date_time = models.DateTimeField(null=True,blank=True,default=None)
-    transporter_detail = models.CharField(max_length=300,null=True,blank=True,default='')
-    freight = models.FloatField(blank=True,null=True,default=0.0)
     
+    
+    
+    def __str__(self):
+        return (self.purchaseorder.purchaseorder_number + " product: " + self.product.name)
+    
+    @property 
+    def quantity_to_plan_max(self):
+        quantity_planned = 0
+        for popp in self.purchaseorderproductplan_set.all():
+            quantity_planned = quantity_planned + popp.planned_quantity
+        return (self.quantity - quantity_planned)
+    @property
+    def planned_status(self):
+        sum_quantity = 0
+        for popp in self.purchaseorderproductplan_set.all():
+            sum_quantity = sum_quantity + popp.planned_quantity
+        if sum_quantity >= self.quantity:
+            return True
+        else:
+            return False
+    @property
+    def quantity_received(self):
+        quantity_received = 0
+        for popp in self.purchaseorderproductplan_set.all():
+            if(popp.plan_status == "received"):
 
+                quantity_received = quantity_received + popp.planned_quantity
+        return quantity_received
     @property 
     def received_status(self):
         if self.quantity_received >= self.quantity:
