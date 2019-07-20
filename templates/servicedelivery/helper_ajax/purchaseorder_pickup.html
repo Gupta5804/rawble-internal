@@ -18,11 +18,38 @@
 </table>
 
 <div class="alert alert-warning" role="alert">
-    <p style="display:block;font-weight:bolder;color:black;text-align:center;">Select Pickup Dates and click Save</p>
+    <table class="table table-sm">
+    <tbody>
+    <tr>
+        <th>Dispatch(From Vendor's End) Date and Time</th>
+        <th><input type="datetime-local" class="form-control" name="planned_dispatch_date_time"></th>
+    </tr>
+    <tr>
+        <th>Select Transporter</th>
+        <th>
+            <select class="form-control" name="transporter_id">
+                <option value="">----</option>
+                {% for transporter in transporters %}
+                <option value="{{ transporter.id }}">{{ transporter.name }}</option>
+                {% endfor %}
+            </select>
+        </th>
+    </tr>
+    <tr>
+        <th>Estimate Time Of Arrival(E.T.A.)</th>
+        <th><input type="datetime-local" class="form-control" name="planned_receive_date_time"></th>
+    </tr>
+</tbody>
+
+</table>
+
+
+
 </div>
 <table class="table">
     <thead class="thead-dark">
         <tr>
+            <th scope="col"></th>
             <th scope="col">Product</th>
             <th scope="col">Make</th>
             <th scope="col">Pack Size</th>
@@ -42,6 +69,11 @@
     {% for item in purchaseorder_api.line_items %}
         
         <tr>
+            <th>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="" value="{{ item.product.item_id }}">
+                </div>
+            </th>
             <th>{{ item.product.name }}<input name="product_id" value="{{ item.product.item_id }}" type="hidden"></th>
             <th>{{ item.product.make }}</th>
             <th>{{ item.pack_size }}<input type="hidden" value="{{ item.pack_size }}" name="pack_size"></th>

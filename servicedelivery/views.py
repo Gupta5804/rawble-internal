@@ -77,8 +77,8 @@ def purchaseorder_pickup(request):
             
         except:
             item['pop_saved'] = False
-            
-    rendered = render_to_string('servicedelivery/helper_ajax/purchaseorder_pickup.html', context = {'purchaseorder':purchaseorder,'purchaseorder_api':purchaseorder_api},request=request)
+    transporters = Transporter.objects.all().order_by("name")  
+    rendered = render_to_string('servicedelivery/helper_ajax/purchaseorder_pickup.html', context = {'purchaseorder':purchaseorder,'purchaseorder_api':purchaseorder_api,'transporters':transporters},request=request)
     
     return JsonResponse({'po_snippet': rendered})
 
