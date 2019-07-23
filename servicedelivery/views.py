@@ -193,7 +193,7 @@ def inward_servicedelivery_new(request):
                         except:
                             transporter = None
                         popp = PurchaseOrderProductPlan(
-                            purchaseorderproduct = purchaseorder.purchaseorderproduct_set.objects.get(product__item_id=product_id),
+                            purchaseorderproduct = purchaseorder.purchaseorderproduct_set.get(product__item_id=product_id),
                             planned_dispatch_date_time = planned_dispatch_date_time,
                             planned_receive_date_time = planned_receive_date_time,
                             freight = freight_for_each,
