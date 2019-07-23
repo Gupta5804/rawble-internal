@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 from datetime import timedelta, date
 from django.core.mail import EmailMessage,EmailMultiAlternatives
 from django.utils.html import strip_tags
-from servicedelivery.models import Transporter , SalesOrderProductPlan
+from servicedelivery.models import Transporter , SalesOrderProductPlan,PurchaseOrderProductPlan
 from servicedelivery.filters import SOPPFilter
 from django.db.models import Q
 # Create your views here.
@@ -152,31 +152,21 @@ def inward_servicedelivery_new(request):
             purchaseorder_id = request.POST.get("purchaseorder_id")
             product_ids = request.POST.getlist("product_id")
             quantitys = request.POST.getlist("quantity")
-            quantity_to_receives = request.POST.getlist("quantity_to_receive")
+            planned_quantitys = request.POST.getlist("planned_quantity")
             pack_sizes = request.POST.getlist("pack_size")
-            pickup_date_times = request.POST.getlist("pickup_date_time")
+            planned_dispatch_date_time = request.POST.get("planned_dispatch_date_time")
+            planned_receive_date_time = request.POST.get("planned_receive_date_time")
             purchase_prices = request.POST.getlist("purchase_price")
-            transporter_details = request.POST.getlist("transporter_detail")
-            freights = request.POST.getlist("freight")
-           
+            transporter_id = request.POST.getlist("transporter_id")
+            freight = request.POST.get("freight")
+            selected_product_item_ids = request.POST.getlist("selected_product_item_id")
             purchaseorder = ZohoPurchaseOrder.objects.get(purchaseorder_id=purchaseorder_id)
             
-            
+            freight_for_each = float(freight)/len(selected_product_item_ids)
             if ( purchaseorder.purchaseorderproduct_set.count() == 0 ):
-                pops=[]
+                
                 for i,product_id in enumerate(product_ids):
-                    if(pickup_date_times[i] == ''):
-                        pickup_date_time = None
-                    else:
-                        pickup_date_time = pickup_date_times[i]
-                    if(freights[i] == ''):
-                        freight = 0.0
-                    else:
-                        freight = freights[i]
-                    if(quantity_to_receives[i] == ''):
-                        quantity_to_receive = 0.0
-                    else:
-                        quantity_to_receive = quantity_to_receives[i]
+                    
                     purchaseorder = ZohoPurchaseOrder.objects.get(purchaseorder_id=purchaseorder_id)
                     product = Product.objects.get(item_id = product_ids[i])
                     
@@ -186,36 +176,23 @@ def inward_servicedelivery_new(request):
                         product=product,
                         purchase_price=purchase_prices[i],
                         quantity=quantitys[i],
-                        pickup_date_time=pickup_date_time,
                         pack_size=pack_sizes[i],
-                        freight=freight,
-                        transporter_detail=transporter_details[i],
-                        quantity_to_receive=quantity_to_receive
                         )
                     
                     pop.save()
                     pops.append(pop)
-            else:
+            
+            for selected_product_item_id in selected_product_item_ids:
                 for i,product_id in enumerate(product_ids):
-                    if(pickup_date_times[i] == ''):
-                        pickup_date_time = None
-                    else:
-                        pickup_date_time = pickup_date_times[i]
-                    if(freights[i] == ''):
-                        freight = 0.0
-                    else:
-                        freight = freights[i]
-                    if(quantity_to_receives[i] == ''):
-                        quantity_to_receive = 0.0
-                    else:
-                        quantity_to_receive = quantity_to_receives[i]
-                    pop = purchaseorder.purchaseorderproduct_set.get(product__item_id = product_id)
-                    pop.freight = freight
-                    pop.transporter_detail = transporter_details[i]
-                    pop.pickup_date_time = pickup_date_time
-                    pop.quantity_to_receive = quantity_to_receive
-                    pop.save()   
-                #PurchaseOrderProduct.objects.bulk_create(pops)
+                    if product_id == selected_product_item_id:
+                        popp = PurchaseOrderProductPlan(
+                            planned_dispatch_date_time = planned_dispatch_date_time,
+                            planned_receive_date_time = planned_receive_date_time,
+                            freight = freight_for_each,
+                            
+
+                        )
+
         return redirect("inward_servicedelivery")
                 
 def todayspickup(request):
