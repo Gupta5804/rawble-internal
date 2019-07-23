@@ -203,7 +203,7 @@ def inward_servicedelivery_new(request):
                         )
                         popp.save()
 
-        return redirect("inward_servicedelivery")
+        return redirect("inward_servicedelivery_new")
                 
 def todayspickup(request):
     today = date.today()
