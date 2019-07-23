@@ -89,7 +89,16 @@ class ZohoPurchaseOrder(models.Model):
     
     def __str__(self):
         return self.purchaseorder_number
-
+    @property
+    def planned_status(self):
+        if(self.purchaseorderproduct_set.count() > 0):
+            status = True
+            for pop in self.purchaseorderproduct_set.all():
+                if(pop.planned_status == False):
+                    status = False
+        else : 
+            status = False
+        return status 
     @property
     def received_status(self):
         
@@ -429,7 +438,12 @@ class PurchaseOrderProduct(models.Model):
     
     def __str__(self):
         return (self.purchaseorder.purchaseorder_number + " product: " + self.product.name)
-    
+    @property
+    def planned_status(self):
+        if(self.quantity_to_plan_max == 0):
+            return True
+        else:
+            return False
     @property 
     def quantity_to_plan_max(self):
         quantity_planned = 0

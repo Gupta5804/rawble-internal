@@ -52,7 +52,7 @@
         </thead>
         <tbody>
         {% for purchaseorder in purchaseorders %}
-        {% if purchaseorder.status != 'billed' and purchaseorder.status != 'cancelled' and purchaseorder.vendor.contact_name != 'HIYA INDIA BIOTECH PVT LTD' and purchaseorder.received_status == False %}
+        {% if purchaseorder.status != 'billed' and purchaseorder.status != 'cancelled' and purchaseorder.vendor.contact_name != 'HIYA INDIA BIOTECH PVT LTD' and purchaseorder.planned_status == False %}
             <tr>
                 <td>{{ purchaseorder.date }}</td>
                 <td><a href="{{ purchaseorder.purchaseorder_url }}" class="btn btn-outline-info btn-block">{{ purchaseorder.purchaseorder_number }}</a></td>
@@ -125,7 +125,7 @@
         </thead>
         <tbody>
         {% for purchaseorder in purchaseorders %}
-        {% if purchaseorder.status != 'billed' and purchaseorder.status != 'cancelled' and purchaseorder.vendor.contact_name == 'HIYA INDIA BIOTECH PVT LTD' and purchaseorder.received_status == False %}
+        {% if purchaseorder.status != 'billed' and purchaseorder.status != 'cancelled' and purchaseorder.vendor.contact_name == 'HIYA INDIA BIOTECH PVT LTD' and purchaseorder.planned_status == False %}
             <tr>
                 <td>{{ purchaseorder.date }}</td>
                 <td><a href="{{ purchaseorder.purchaseorder_url }}" class="btn btn-outline-info btn-block">{{ purchaseorder.purchaseorder_number }}</a></td>
