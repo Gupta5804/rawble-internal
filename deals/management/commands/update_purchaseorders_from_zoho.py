@@ -54,7 +54,7 @@ class Command(BaseCommand):
                 if(delivery_date == ""):
                     delivery_date = None
                 try:
-                    salesorder_number = salesorder['reference_number'].split("/")[0].strip()
+                    salesorder_number = purchaseorder['reference_number'].split("/")[0].strip()
                     salesorder = ZohoSalesOrder.objects.get(salesorder_number = salesorder_number)
                 except:
                     salesorder = None
