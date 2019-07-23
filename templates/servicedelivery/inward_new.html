@@ -147,25 +147,25 @@
                 <td>{{ purchaseorder.total }}</td>
                 <td>
                     <a class="btn btn-outline-warning select-pickup btn-block" data-id="{{ purchaseorder.purchaseorder_id }}" data-toggle="modal" data-target="#po-pickup-{{ purchaseorder.purchaseorder_id }}">
-                        <i class="fas fa-hand-pointer"></i>  Select PickUp Date
+                        <i class="fas fa-calendar-plus"></i>  Plan Inward 
                     </a>
                     <div class="modal fade" id="po-pickup-{{ purchaseorder.purchaseorder_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
-                            <div class="modal-content">
+                        <div class="modal-dialog modal-lg" style="max-width:95%;text-align:center;" role="document">
+                            <div class="modal-content" >
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Select PickUp Dates of PO# - <span style="color:red;">{{ purchaseorder.purchaseorder_number }}</span> of {{ purchaseorder.vendor.contact_name }}</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Plan Inward of PO# - <span style="color:red;">{{ purchaseorder.purchaseorder_number }}</span> of {{ purchaseorder.vendor.contact_name }}</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <form action="" method="post">
-
+                                
                                 <div class="modal-body">
                                     ...
                                 </div>
                                 <input type="submit" value="Save Dates" class="btn btn-outline-success btn-block" name="po-pickup" >
                                 </form>
-
+                                
                             </div>
                         </div>
                     </div>
