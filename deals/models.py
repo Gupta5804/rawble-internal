@@ -419,12 +419,12 @@ class PurchaseOrderProduct(models.Model):
     
     purchaseorder = models.ForeignKey(ZohoPurchaseOrder,on_delete=models.CASCADE)
     product = models.ForeignKey(Product,on_delete = models.CASCADE)
-    purchase_price = models.DecimalField(max_digits=10, decimal_places=5)
-    quantity = models.DecimalField(max_digits=10, decimal_places=5)
+    purchase_price = models.FloatField()
+    quantity = models.FloatField()
  
-    pack_size = models.DecimalField(max_digits=10, decimal_places=5)
+    pack_size = models.FloatField()
     tax_percentage = models.FloatField(default=0)
-    
+
     
     
     def __str__(self):
