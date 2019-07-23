@@ -771,7 +771,7 @@ def report_service_delivery(request):
 
 def refresh_purchase_orders(request):
     call_command('update_purchaseorders_from_zoho')
-    return redirect('inward_servicedelivery')
+    return redirect('inward_servicedelivery_new')
 
 def refresh_sales_order(request):
     call_command('update_salesorders_from_zoho')
