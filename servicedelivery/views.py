@@ -198,7 +198,7 @@ def inward_servicedelivery_new(request):
                             planned_receive_date_time = planned_receive_date_time,
                             freight = freight_for_each,
                             planned_quantity = planned_quantitys[i],
-                            transporter = None
+                            transporter = transporter
 
                         )
                         popp.save()
