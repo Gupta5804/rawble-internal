@@ -160,6 +160,7 @@ def inward_servicedelivery_new(request):
             transporter_id = request.POST.getlist("transporter_id")
             freight = request.POST.get("freight")
             selected_product_item_ids = request.POST.getlist("selected_product_item_id")
+            tax_percentages = request.POST.getlist("tax_percentage")
             purchaseorder = ZohoPurchaseOrder.objects.get(purchaseorder_id=purchaseorder_id)
             
             freight_for_each = float(freight)/len(selected_product_item_ids)
@@ -177,6 +178,8 @@ def inward_servicedelivery_new(request):
                         purchase_price=purchase_prices[i],
                         quantity=quantitys[i],
                         pack_size=pack_sizes[i],
+                        tax_percentage = tax_percentages[i],
+
                         )
                     
                     pop.save()
@@ -185,13 +188,19 @@ def inward_servicedelivery_new(request):
             for selected_product_item_id in selected_product_item_ids:
                 for i,product_id in enumerate(product_ids):
                     if product_id == selected_product_item_id:
+                        try:
+                            transporter = Transporter.objects.get(id=transporter_id)
+                        except:
+                            transporter = None
                         popp = PurchaseOrderProductPlan(
                             planned_dispatch_date_time = planned_dispatch_date_time,
                             planned_receive_date_time = planned_receive_date_time,
                             freight = freight_for_each,
-                            
+                            planned_quantity = planned_quantitys[i],
+                            transporter = None
 
                         )
+                        popp.save()
 
         return redirect("inward_servicedelivery")
                 

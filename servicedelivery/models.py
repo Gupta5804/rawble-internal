@@ -19,7 +19,7 @@ class PurchaseOrderProductPlan(models.Model):
     dispatched_date_time = models.DateTimeField(null=True,blank=True)
     received_date_time = models.DateTimeField(null=True,blank=True)
     last_updated = models.DateTimeField(auto_now=True)
-    create_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     planned_quantity = models.FloatField()
     freight = models.FloatField()
     transporter = models.ForeignKey(Transporter,on_delete=models.SET_NULL,null=True,blank=True)
@@ -27,8 +27,15 @@ class PurchaseOrderProductPlan(models.Model):
     receive_delay_reason = models.CharField(max_length = 500 , null=True, blank=True)
     def __str__(self):
         return (self.purchaseorderproduct.purchaseorder.purchaseorder_number + "-" + self.purchaseorderproduct.product.name + "-"+str(self.planned_quantity))
+    
     @property
-    def total_amount(self):
+    def total_amount_with_tax(self):
+        return (self.total_amount_without_tax + self.tax_amount )
+    @property
+    def tax_amount(self):
+        return (self.total_amount_without_tax * self.purchaseorderproduct.tax_percentage * 0.01)
+    @property
+    def total_amount_without_tax(self):
         return (self.purchaseorderproduct.purchase_price * self.planned_quantity)
     @property
     def plan_status(self):

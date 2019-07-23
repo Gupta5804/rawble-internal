@@ -81,7 +81,7 @@
             <th>{{ item.product.name }}<input name="product_id" value="{{ item.product.item_id }}" type="hidden"></th>
             <th>{{ item.product.make }}</th>
             <th>{{ item.pack_size }}<input type="hidden" value="{{ item.pack_size }}" name="pack_size"></th>
-            <th>{{ item.rate }}<input type="hidden" value="{{ item.rate }}" name="purchase_price"></th>
+            <th>{{ item.rate }}<input type="hidden" value="{{ item.rate }}" name="purchase_price"><input type="hidden" value="{{ item.tax_percentage }}" name="tax_percentage"></th>
             <th>{{ item.quantity }} ({{ item.product.unit }}) <input type="hidden" value="{{ item.quantity }}" name="quantity"></th>
             <th>
                 {% if item.pop_saved %}

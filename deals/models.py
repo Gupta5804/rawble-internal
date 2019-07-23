@@ -423,6 +423,7 @@ class PurchaseOrderProduct(models.Model):
     quantity = models.DecimalField(max_digits=10, decimal_places=5)
  
     pack_size = models.DecimalField(max_digits=10, decimal_places=5)
+    tax_percentage = models.FloatField(default=0)
     
     
     
