@@ -54,23 +54,24 @@ class Command(BaseCommand):
                 if(delivery_date == ""):
                     delivery_date = None
                 try:
-                    #estimate_number = salesorder['reference_number'].split("/")[0].strip()
-                    salesorder = ZohoSalesOrder.objects.get(salesorder_number = reference_number)
+                    salesorder_number = salesorder['reference_number'].split("/")[0].strip()
+                    salesorder = ZohoSalesOrder.objects.get(salesorder_number = salesorder_number)
                 except:
                     salesorder = None
-                try:
-                    z1 = ZohoPurchaseOrder.objects.get(purchaseorder_id = purchaseorder_id)
+                z1 = ZohoPurchaseOrder.objects.filter(purchaseorder_id = purchaseorder_id)
+                if(z1):
+                    
                     print('PO Exists !, Updating fields')
                     
-                    z1.status = status
+                    z1.update(status = status)
                     
                     
-                    z1.billed_status = billed_status
-                    z1.status = status
-                    z1.salesorder = salesorder
-                    z1.total = total
-                    z1.save()
-                except:
+                    z1.update(billed_status = billed_status)
+                    
+                    z1.update(salesorder = salesorder)
+                    z1.update(total = total)
+                    
+                else:
                     print('PO doesnt exist ! Adding to DB')
                     z1 = ZohoPurchaseOrder(
                         vendor = vendor,
