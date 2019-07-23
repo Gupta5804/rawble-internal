@@ -2,9 +2,23 @@
 {% block page-title-var %}<i class="fas fa-calendar-plus"></i> Inward - New Plan{% endblock page-title-var %}
 
 {% block application-active %}
+    <div class="container" style="max-width: 100%;">
+        <div class="row">
+            <div class="alert alert-primary col-4" role="alert">
+                <h4 class="alert-heading">Dispatch From Vendor's End Today</h4>
+            </div>
+            <div class="alert alert-primary col-4" role="alert">
+            <h5 class="alert-heading"><a href="{% url 'refresh_purchase_orders' %}" class="btn btn-outline-info form-group btn-block">Update Purchase orders from Zoho</a></h5>
+
+            </div>
+            <div class="alert alert-primary col-4" role="alert">
+                <h4 class="alert-heading">Receiving Today</h4>
+            </div>
+        </div>
+    </div>
     <div class="btn-toolbar" style="align-self: center" >
 
-        <a href="{% url 'refresh_purchase_orders' %}" class="btn btn-outline-info form-group">Update Purchase orders from Zoho</a>
+        
         <a href="{% url 'send_mail_pickup' %}" class="btn btn-outline-info form-group" style="position: absolute;left: 0;margin-left: 2%;">Send mail for Today's pickup</a>
         <a href="#" id="todayspickup" style="position: absolute; right: 0; margin-right: 2%" data-toggle="modal" data-target="#todayspickupmodal" class="btn btn-outline-info form-group">Todays Pickup</a>
         <!-- Modal -->
