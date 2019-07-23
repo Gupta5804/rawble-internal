@@ -183,7 +183,7 @@ def inward_servicedelivery_new(request):
                         )
                     
                     pop.save()
-                    pops.append(pop)
+                    
             
             for selected_product_item_id in selected_product_item_ids:
                 for i,product_id in enumerate(product_ids):
