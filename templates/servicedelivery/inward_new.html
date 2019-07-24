@@ -326,7 +326,7 @@
 
         $('#dispatchtoday').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/spinner/index.ajax-spinner-preloader.gif' />");
          $.ajax({
-            url: '../../../../../ajax/todays_pickup',
+            url: '../../../../../ajax/',
             type: "get",
             success: function(data) {
               $('#dispatchtoday').find('.modal-body').html(data.po_snippet);
@@ -341,7 +341,7 @@
 
         $('#dispatchtodaysummary').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/spinner/index.ajax-spinner-preloader.gif' />");
          $.ajax({
-            url: '../../../../../ajax/todays_pickup',
+            url: '../../../../../ajax/',
             type: "get",
             success: function(data) {
               $('#dispatchtodaysummary').find('.modal-body').html(data.po_snippet);
@@ -356,7 +356,7 @@
 
         $('#receivingtoday').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/spinner/index.ajax-spinner-preloader.gif' />");
          $.ajax({
-            url: '../../../../../ajax/todays_pickup',
+            url: '../../../../../ajax/',
             type: "get",
             success: function(data) {
               $('#receivingtoday').find('.modal-body').html(data.po_snippet);
@@ -371,7 +371,7 @@
 
         $('#receivingtodaysummary').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/spinner/index.ajax-spinner-preloader.gif' />");
          $.ajax({
-            url: '../../../../../ajax/todays_pickup',
+            url: '../../../../../ajax/',
             type: "get",
             success: function(data) {
               $('#receivingtodaysummary').find('.modal-body').html(data.po_snippet);
