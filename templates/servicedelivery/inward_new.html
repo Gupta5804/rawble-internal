@@ -322,7 +322,7 @@
     </script>
 
     <script>
-    $('#dispatchtoday').on("click",function () {
+    $(document).on("click",'#dispatchtoday',function () {
 
         $('#dispatchtoday').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/cloudy/index.cloudy-sky-preloader.gif' />");
          $.ajax({
@@ -338,7 +338,7 @@
           })
 
     })
-    $('#dispatchtodaysummary').on("click",function () {
+    $(document).on("click",'#dispatchtodaysummary',function () {
 
         $('#dispatchtodaysummary').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/cloudy/index.cloudy-sky-preloader.gif' />");
          $.ajax({
@@ -354,7 +354,7 @@
           })
 
     })
-    $('#receivingtoday').on("click",function () {
+    $(document).on("click",'#receivingtoday',function () {
 
         $('#receivingtoday').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/cloudy/index.cloudy-sky-preloader.gif' />");
          $.ajax({
@@ -370,7 +370,7 @@
           })
 
     })
-    $('#receivingtodaysummary').on("click",function () {
+    $(document).on("click",'#receivingtodaysummary',function () {
 
         $('#receivingtodaysummary').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/cloudy/index.cloudy-sky-preloader.gif' />");
          $.ajax({
