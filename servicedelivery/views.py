@@ -53,6 +53,27 @@ def salesorder_outward(request):
     rendered = render_to_string('servicedelivery/helper_ajax/salesorder_outward.html', context = {'salesorder':salesorder,'salesorder_api':salesorder_api, 'transporters':transporters},request=request)
     
     return JsonResponse({'so_snippet': rendered})
+def inward_dispatchtoday(request):
+    
+
+    rendered = render_to_string('servicedelivery/helper_ajax/inward_dispatchtoday.html', context = {},request=request)
+    return JsonResponse({'snippet':rendered})
+def inward_dispatchtoday_summary(request):
+    
+
+    rendered = render_to_string('servicedelivery/helper_ajax/inward_dispatchtoday_summary.html', context = {},request=request)
+    return JsonResponse({'snippet':rendered})
+def inward_receivingtoday(request):
+    
+
+    rendered = render_to_string('servicedelivery/helper_ajax/inward_receivingtoday.html', context = {},request=request)
+    return JsonResponse({'snippet':rendered})
+def inward_receivingtoday_summary(request):
+
+
+    rendered = render_to_string('servicedelivery/helper_ajax/inward_receivingtoday_summary.html', context = {},request=request)
+    return JsonResponse({'snippet':rendered})
+
 def purchaseorder_pickup(request):
     
     purchaseorder_id = request.GET.get('slug',None)

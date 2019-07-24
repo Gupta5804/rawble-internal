@@ -142,6 +142,13 @@ urlpatterns = [
     path('ajax/salesorder_outward/',servicedelivery_views.salesorder_outward,name="salesorder_outward"),
     path('ajax/todays_pickup/',servicedelivery_views.todayspickup,name='todayspickup'),
     path('ajax/todays_dispatch',servicedelivery_views.todaysdispatch,name='todaysdispatch'),
+    path('ajax/servicedelivery/inward/dispatchtoday',servicedelivery_views.inward_dispatchtoday,name='inward_dispatchtoday'),
+    path('ajax/servicedelivery/inward/dispatchtodaysummary',servicedelivery_views.inward_dispatchtoday_summary,name='inward_dispatchtoday_summary'),
+    path('ajax/servicedelivery/inward/receivingtoday',servicedelivery_views.inward_receivingtoday,name='inward_receivingtoday'),
+    path('ajax/servicedelivery/inward/receivingtodaysummary',servicedelivery_views.inward_receivingtoday_summary,name='inward_receivingtoday_summary'),
+    
+    
+    
     path('ajax/salesperson_stats',deal_views.salesperson_stats,name='salesperson_stats'),
     path('ajax/overall_stats',deal_views.overall_stats,name='overall_stats'),
      
