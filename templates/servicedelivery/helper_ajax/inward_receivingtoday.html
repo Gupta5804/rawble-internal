@@ -1,0 +1,35 @@
+<div class="alert alert-warning" role="alert">
+<p style="text-align:center;">Select the Items Dispatched From Vendor's End and Submit</p>
+
+</div>
+
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">PO #</th>
+      <th scope="col">Vendor</th>
+      <th scope="col">Product</th>
+      <th scope="col">Quantity Ordered</th>
+      <th scope="col">Quantity Planned</th>
+      <th scope="col">Transporter</th>
+      <th scope="col">Purchase Price</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+  {% for popp in popps_unreceived %}
+    <tr>
+      <th scope="row"></th>
+      <td>{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</td>
+      <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
+      <td>{{ popp.purchaseorderproduct.product.name }}</td>
+      <td>{{ popp.purchaseorderproduct.quantity }}</td>
+      <td>{{ popp.planned_quantity }}</td>
+      <td>{{ popp.transporter.name }}</td>
+      <td>{{ popp.purchaseorderproduct.purchase_price }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
