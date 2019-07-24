@@ -4,15 +4,60 @@
 {% block application-active %}
     <div class="container" style="max-width: 100%;">
         <div class="row">
-            <div class="alert alert-primary col-4" role="alert">
+            <div class="alert alert-primary col-4 border border-light" role="alert">
                 <h4 class="alert-heading text-center"><i class="fas fa-sign-out-alt"></i> Dispatch From Vendor's End Today</h4>
                 <hr>
                 <div class="btn-group btn-block" role="group">
-                    <a class="btn btn-outline-success col-6" href=""><i class="fas fa-clipboard-check"></i> Mark as Dispatched</a>
-                    <a class="btn btn-outline-danger col-6" href=""><i class="fas fa-envelope"></i> Send Today's Summary Mail</a>
+                    <a class="btn btn-outline-success col-6" href="#" data-toggle="modal" data-target="#dispatchtoday"><i class="fas fa-clipboard-check"></i> Mark as Dispatched</a>
+                    <div class="modal fade" id="dispatchtoday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fas fa-sign-out-alt"></i> 
+                                    Todays Planned Dispatches From Vendors
+                                </h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <form method="post" action="">
+                            <div class="modal-body">
+
+                            </div>
+                            <input type="submit" value="Dispatched" class="btn btn-outline-success btn-block"     name="received-pickup">
+                            </form>
+                          </div>
+                        </div>
+                    </div>
+
+
+                    <a class="btn btn-outline-danger col-6" href="#" data-toggle="modal" data-target="#dispatchtodaysummary"><i class="fas fa-envelope"></i> Send Today's Summary Mail</a>
+                    <div class="modal fade" id="dispatchtodaysummary" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fas fa-clipboard"></i> 
+                                    Today's Dispatch Summary
+                                </h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <form method="post" action="">
+                            <div class="modal-body">
+
+                            </div>
+                            <input type="submit" value="Received" class="btn btn-outline-success btn-block"     name="received-pickup">
+                            </form>
+                          </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="alert alert-primary col-4" role="alert">
+
+            <div class="alert alert-primary col-4 border border-light" role="alert">
                 <h5 class="alert-heading">
                     <a href="{% url 'refresh_purchase_orders' %}" class="btn btn-outline-dark form-group btn-block">
                         <i class="fas fa-sync-alt"></i>   
@@ -21,12 +66,56 @@
                 </h5>
 
             </div>
-            <div class="alert alert-primary col-4" role="alert">
+
+            <div class="alert alert-primary col-4 border border-light" role="alert">
                 <h4 class="alert-heading text-center"><i class="fas fa-sign-in-alt"></i> Receiving Today</h4>
                 <hr>
                 <div class="btn-group btn-block" role="group">
-                    <a class="btn btn-outline-success col-6" href=""><i class="fas fa-clipboard-check"></i> Mark as Received</a>
-                    <a class="btn btn-outline-danger col-6" href=""><i class="fas fa-envelope"></i> Send Today's Summary Mail</a>
+                    <a class="btn btn-outline-success col-6" href="#" data-toggle="modal" data-target="#receivingtoday"><i class="fas fa-clipboard-check"></i> Mark as Received</a>
+                    <div class="modal fade" id="receivingtoday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    Receiving Today 
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="post" action="">
+                            <div class="modal-body">
+
+                            </div>
+                            <input type="submit" value="Received" class="btn btn-outline-success btn-block"     name="received-pickup">
+                            </form>
+                          </div>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-outline-danger col-6" href="" data-toggle="modal" data-target="#receivingtodaysummary"><i class="fas fa-envelope"></i> Send Today's Summary Mail</a>
+                    <div class="modal fade" id="receivingtodaysummary" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fas fa-clipboard"></i>
+                                    Today's Receiving Summary
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <form method="post" action="">
+                            <div class="modal-body">
+
+                            </div>
+                            <input type="submit" value="Send Mail" class="btn btn-outline-success btn-block"     name="received-pickup">
+                            </form>
+                          </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
