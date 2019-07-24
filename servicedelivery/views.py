@@ -120,6 +120,14 @@ def inward_servicedelivery_new(request):
         auth_token = 'd56b2f2501f266739e12b86b706d0078'
         organization_id = '667580392'
         parameters={'authtoken':auth_token,'organization_id':organization_id}
+        if "dispatched-today" in request.POST:
+            selected_popp_ids = request.POST.getlist("selected-popp")
+            for selected_popp_id in selected_popp_ids:
+
+                popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
+                popp.dispatched_date_time = datetime.datetime.now()
+                popp.save()
+                
         if "received-pickup" in request.POST:
             pop_ids = request.POST.getlist("pop_id")
             transporter_details = request.POST.getlist("transporter_detail")
