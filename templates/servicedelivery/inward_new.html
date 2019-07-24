@@ -329,6 +329,7 @@
             url: '../../../../../ajax/servicedelivery/inward/dispatchtoday',
             type: "get",
             success: function(data) {
+              $('#dispatchtoday').modal('show');
               $('#dispatchtoday').find('.modal-body').html(data.snippet);
             },
             error: function(err) {
@@ -344,6 +345,7 @@
             url: '../../../../../ajax/servicedelivery/inward/dispatchtodaysummary',
             type: "get",
             success: function(data) {
+              $('#dispatchtodaysummary').modal('show');
               $('#dispatchtodaysummary').find('.modal-body').html(data.snippet);
             },
             error: function(err) {
@@ -359,6 +361,7 @@
             url: '../../../../../ajax/servicedelivery/inward/receivingtoday',
             type: "get",
             success: function(data) {
+              $('#receivingtoday').modal('show');
               $('#receivingtoday').find('.modal-body').html(data.snippet);
             },
             error: function(err) {
@@ -374,6 +377,7 @@
             url: '../../../../../ajax/servicedelivery/inward/receivingtodaysummary',
             type: "get",
             success: function(data) {
+              $('#receivingtodaysummary').modal('show');
               $('#receivingtodaysummary').find('.modal-body').html(data.snippet);
             },
             error: function(err) {
