@@ -4,7 +4,7 @@
 </div>
 
 
-<table class="table">
+<table class="table table-bordered">
   <thead class="thead-light">
     <tr>
       <th scope="col"></th>
@@ -21,7 +21,7 @@
   <tbody>
   {% for popp in popps_unreceived %}
     <tr>
-      <th scope="row"></th>
+      <th scope="row"><input type="checkbox" class="form-control" name="selected-popp" value="{{ popp.id }}"></th>
       <td>{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</td>
       <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
       <td>{{ popp.purchaseorderproduct.product.name }}</td>

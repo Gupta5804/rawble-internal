@@ -127,7 +127,15 @@ def inward_servicedelivery_new(request):
                 popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
                 popp.dispatched_date_time = datetime.datetime.now()
                 popp.save()
-                
+                ## EMAIL CODE
+        if "received-today" in request.POST:
+            selected_popp_ids = request.POST.getlist("selected-popp")
+            for selected_popp_id in selected_popp_ids:
+
+                popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
+                popp.received_date_time = datetime.datetime.now()
+                popp.save()
+                ## EMAIL CODE
         if "received-pickup" in request.POST:
             pop_ids = request.POST.getlist("pop_id")
             transporter_details = request.POST.getlist("transporter_detail")
