@@ -101,6 +101,7 @@
                                 Plan Inward
                             </a>
                             <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "inward_servicedelivery_expired" or request.resolver_match.url_name == "inward_servicedelivery_report" or request.resolver_match.url_name == "inward_servicedelivery_stock" %}collapse show{% endif %}' id="inward-servicedelivery-plan">
+                                <hr>
                                 <li class='{% if request.resolver_match.url_name == "inward_servicedelivery_new" %}sub-menu active{% endif %}'>
                                     <a href="{% url 'inward_servicedelivery_new' %}">
                                         <i class="fas fa-calendar-plus"></i> 
