@@ -1,6 +1,6 @@
 <p>Dear Team,</p>
 <p>&nbsp;</p>
-<p>Following Item(s) are Dispatched from vendor's end :</p>
+<p>Following Item(s) are Received :</p>
 <table style="height: 112px;" border="1" width="572" cellpadding="1">
 <tbody>
 <tr>
@@ -12,7 +12,7 @@
 <th style="width: 77px;">Quantity Received Till Now</th>
 <th style="width: 72px;">Order For SO#&nbsp;</th>
 <th style="width: 72px;">Dispatched At</th>
-<th style="width: 72px;">E.T.A.</th>
+<th style="width: 72px;">Received At</th>
 <th style="width: 72px;">Freight</th>
 </tr>
 {% for popp in popp_email %}
@@ -30,7 +30,7 @@
 No SalesOrder 
 {% endif %}</td>
 <td style="width: 72px;">{{ popp.dispatched_date_time }}</td>
-<td style="width: 72px;">{{ popp.planned_receive_date_time }}</td>
+<td style="width: 72px;">{{ popp.received_date_time }}</td>
 <td style="width: 72px;">{{ popp.freight }}</td>
 </tr>
 {% endfor %}

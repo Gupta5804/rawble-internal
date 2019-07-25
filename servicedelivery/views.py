@@ -162,12 +162,44 @@ def inward_servicedelivery_new(request):
                 msg.send()
         if "received-today" in request.POST:
             selected_popp_ids = request.POST.getlist("selected-popp")
+            popp_email = []
             for selected_popp_id in selected_popp_ids:
 
                 popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
                 popp.received_date_time = datetime.datetime.now()
                 popp.save()
+                popp_email.append(popp)
                 ## EMAIL CODE
+            if(popp_email):
+                subject = "Items Received Today"
+                to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+                from_email = 'admin@rawble.com'
+                users = User.objects.all()
+                users_sales = User.objects.filter(groups__name="Sales Team")
+                total_quantity = 0
+                total_amount_without_tax = 0
+                total_amount_with_tax = 0
+                for popp in popp_email:
+                    total_quantity = total_quantity + popp.planned_quantity
+                    total_amount_without_tax = total_amount_without_tax + popp.total_amount_without_tax
+                    total_amount_with_tax = total_amount_with_tax + popp.total_amount_with_tax
+                ctx = {
+                    "popp_email":popp_email,
+                    #"users_sales":users_sales,
+                    "total_quantity":total_quantity,
+                    "total_amount_without_tax":total_amount_without_tax,
+                    "total_amount_with_tax":total_amount_with_tax,
+                }
+                #for user in users:
+                #    to.append(str(user.email))
+        
+
+                message = render_to_string('emails/inward/received_today.html', ctx)
+                text_content = strip_tags(message)
+                #EmailMessage(subject, message, to=to, from_email=from_email).send()
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+                msg.attach_alternative(message, "text/html")
+                msg.send()
         if "received-pickup" in request.POST:
             pop_ids = request.POST.getlist("pop_id")
             transporter_details = request.POST.getlist("transporter_detail")
