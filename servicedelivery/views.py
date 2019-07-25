@@ -31,8 +31,8 @@ def inward_servicedelivery_expired(request):
         for popp in popps:
             if(popp.plan_status == 'planned'):
                 popps_expired.append(popp)
-        transporters = Transporters.objects.all().order_by("name")
-        return render(request,'servicedelivery/inward_expired.html',{'popps_expired':popps_expired,'transporters':transporters})
+        
+        return render(request,'servicedelivery/inward_expired.html',{'popps_expired':popps_expired})
     if request.method == "POST":
         if "replan" in request.POST:
             selected_popp_ids = request.POST.getlist('selected_popp_id')
