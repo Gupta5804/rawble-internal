@@ -64,9 +64,10 @@ def inward_dispatchtoday(request):
     rendered = render_to_string('servicedelivery/helper_ajax/inward_dispatchtoday.html', context = {'popps_undispatched':popps_undispatched},request=request)
     return JsonResponse({'snippet':rendered})
 def inward_dispatchtoday_summary(request):
+    popps = PurchaseOrderProductPlan.objects.filter(planned_dispatch_date_time__date= date.today())
     
 
-    rendered = render_to_string('servicedelivery/helper_ajax/inward_dispatchtoday_summary.html', context = {},request=request)
+    rendered = render_to_string('servicedelivery/helper_ajax/inward_dispatchtoday_summary.html', context = {'popps':popps},request=request)
     return JsonResponse({'snippet':rendered})
 def inward_receivingtoday(request):
     popps = PurchaseOrderProductPlan.objects.filter(planned_receive_date_time__date = date.today())
@@ -78,9 +79,9 @@ def inward_receivingtoday(request):
     rendered = render_to_string('servicedelivery/helper_ajax/inward_receivingtoday.html', context = {'popps_unreceived':popps_unreceived},request=request)
     return JsonResponse({'snippet':rendered})
 def inward_receivingtoday_summary(request):
+    popps = PurchaseOrderProductPlan.objects.filter(planned_receive_date_time__date = date.today())
 
-
-    rendered = render_to_string('servicedelivery/helper_ajax/inward_receivingtoday_summary.html', context = {},request=request)
+    rendered = render_to_string('servicedelivery/helper_ajax/inward_receivingtoday_summary.html', context = {'popps':popps},request=request)
     return JsonResponse({'snippet':rendered})
 
 def purchaseorder_pickup(request):
