@@ -13,6 +13,7 @@
 <th style="width: 72px;">Order For SO#&nbsp;</th>
 <th style="width: 72px;">Dispatched At</th>
 <th style="width: 72px;">E.T.A.</th>
+<th style="width: 72px;">Freight</th>
 </tr>
 {% for popp in popp_email %}
 <tr>
@@ -30,6 +31,7 @@ No SalesOrder
 {% endif %}</td>
 <td style="width: 72px;">{{ popp.dispatched_date_time|date:"c" }}</td>
 <td style="width: 72px;">{{ popp.planned_receive_date_time|date:"c" }}</td>
+<td style="width: 72px;">{{ popp.freight }}</td>
 </tr>
 {% endfor %}
 </tbody>
