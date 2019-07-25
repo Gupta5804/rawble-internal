@@ -121,6 +121,70 @@ def inward_servicedelivery_new(request):
         auth_token = 'd56b2f2501f266739e12b86b706d0078'
         organization_id = '667580392'
         parameters={'authtoken':auth_token,'organization_id':organization_id}
+        if "mail-receive-today" in request.POST:
+            popps = PurchaseOrderProductPlan.objects.filter(planned_receive_date_time__date = date.today())
+            if(popps):
+                subject = "Items Planned to receive today"
+                to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+                from_email = 'admin@rawble.com'
+                users = User.objects.all()
+                users_sales = User.objects.filter(groups__name="Sales Team")
+                total_quantity = 0
+                total_amount_without_tax = 0
+                total_amount_with_tax = 0
+                for popp in popps:
+                    total_quantity = total_quantity + popp.planned_quantity
+                    total_amount_without_tax = total_amount_without_tax + popp.total_amount_without_tax
+                    total_amount_with_tax = total_amount_with_tax + popp.total_amount_with_tax
+                ctx = {
+                    "popps":popps,
+                    #"users_sales":users_sales,
+                    "total_quantity":total_quantity,
+                    "total_amount_without_tax":total_amount_without_tax,
+                    "total_amount_with_tax":total_amount_with_tax,
+                }
+                #for user in users:
+                #    to.append(str(user.email))
+        
+
+                message = render_to_string('emails/inward/receive_today_summary.html', ctx)
+                text_content = strip_tags(message)
+                #EmailMessage(subject, message, to=to, from_email=from_email).send()
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+                msg.attach_alternative(message, "text/html")
+                msg.send()
+        if "mail-dispatch-today" in request.POST:
+            popps = PurchaseOrderProductPlan.objects.filter(planned_dispatch_date_time__date = date.today())
+            if(popps):
+                subject = "Items Planned to Dispatch today From Vendor's End"
+                to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+                from_email = 'admin@rawble.com'
+                users = User.objects.all()
+                users_sales = User.objects.filter(groups__name="Sales Team")
+                total_quantity = 0
+                total_amount_without_tax = 0
+                total_amount_with_tax = 0
+                for popp in popps:
+                    total_quantity = total_quantity + popp.planned_quantity
+                    total_amount_without_tax = total_amount_without_tax + popp.total_amount_without_tax
+                    total_amount_with_tax = total_amount_with_tax + popp.total_amount_with_tax
+                ctx = {
+                    "popps":popps,
+                    #"users_sales":users_sales,
+                    "total_quantity":total_quantity,
+                    "total_amount_without_tax":total_amount_without_tax,
+                    "total_amount_with_tax":total_amount_with_tax,
+                }
+                #for user in users:
+                #    to.append(str(user.email))
+        
+
+                message = render_to_string('emails/inward/dispatch_today_summary.html', ctx)
+                text_content = strip_tags(message)
+                #EmailMessage(subject, message, to=to, from_email=from_email).send()
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+                msg.attach_alternative(message, "text/html")
+                msg.send()    
         if "dispatched-today" in request.POST:
             selected_popp_ids = request.POST.getlist("selected-popp")
             popp_email = []
