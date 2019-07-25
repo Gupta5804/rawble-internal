@@ -1,5 +1,6 @@
 {% extends 'home.html' %}
 {% block page-title-var %}<i class="fas fa-exclamation-triangle"></i> Inward - Expired Plans [Not Yet Dispatched by Vendor] {% endblock page-title-var %}
+{% block application-active %}
 <table class="table">
   <thead class="thead-light">
     <tr>
@@ -34,5 +35,5 @@
     {% endfor %}
   </tbody>
 </table>
-{% block application-active %}
+
 {% endblock application-active %}
