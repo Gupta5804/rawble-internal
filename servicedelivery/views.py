@@ -70,8 +70,8 @@ def inward_servicedelivery_expired(request):
                     "total_amount_without_tax":total_amount_without_tax,
                     "total_amount_with_tax":total_amount_with_tax,
                 }
-                #for user in users:
-                #    to.append(str(user.email))
+                for user in users:
+                    to.append(str(user.email))
         
 
                 message = render_to_string('emails/inward/dispatch_delay_reason.html', ctx)
@@ -108,8 +108,8 @@ def inward_servicedelivery_expired(request):
                     "total_amount_without_tax":total_amount_without_tax,
                     "total_amount_with_tax":total_amount_with_tax,
                 }
-                #for user in users:
-                #    to.append(str(user.email))
+                for user in users:
+                    to.append(str(user.email))
         
 
                 message = render_to_string('emails/inward/dispatched_today.html', ctx)
@@ -236,8 +236,8 @@ def inward_servicedelivery_new(request):
                     "total_amount_without_tax":total_amount_without_tax,
                     "total_amount_with_tax":total_amount_with_tax,
                 }
-                #for user in users:
-                #    to.append(str(user.email))
+                for user in users:
+                    to.append(str(user.email))
         
 
                 message = render_to_string('emails/inward/receive_today_summary.html', ctx)
@@ -268,8 +268,8 @@ def inward_servicedelivery_new(request):
                     "total_amount_without_tax":total_amount_without_tax,
                     "total_amount_with_tax":total_amount_with_tax,
                 }
-                #for user in users:
-                #    to.append(str(user.email))
+                for user in users:
+                    to.append(str(user.email))
         
 
                 message = render_to_string('emails/inward/dispatch_today_summary.html', ctx)
@@ -308,8 +308,8 @@ def inward_servicedelivery_new(request):
                     "total_amount_without_tax":total_amount_without_tax,
                     "total_amount_with_tax":total_amount_with_tax,
                 }
-                #for user in users:
-                #    to.append(str(user.email))
+                for user in users:
+                    to.append(str(user.email))
         
 
                 message = render_to_string('emails/inward/dispatched_today.html', ctx)
@@ -348,8 +348,8 @@ def inward_servicedelivery_new(request):
                     "total_amount_without_tax":total_amount_without_tax,
                     "total_amount_with_tax":total_amount_with_tax,
                 }
-                #for user in users:
-                #    to.append(str(user.email))
+                for user in users:
+                    to.append(str(user.email))
         
 
                 message = render_to_string('emails/inward/received_today.html', ctx)
