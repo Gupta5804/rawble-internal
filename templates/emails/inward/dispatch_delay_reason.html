@@ -1,0 +1,45 @@
+<p>Dear Team,</p>
+<p>&nbsp;</p>
+<p>Following Item(s) are Rescheduled To Dispatch Today From Vendor's End </p>
+<p>New Dispatch Date And Time : {{ planned_dispatch_date_time }}</p>
+<p>New ETA : {{ planned_receive_date_time }}</p>
+<p>Reason For Delay : {{ dispatch_delay_reason }}</p>
+<table style="height: 112px;" border="1" width="572" cellpadding="1">
+<tbody>
+<tr>
+<th style="width: 65px;">PO#</th>
+<th style="width: 74px;">Product</th>
+<th style="width: 74px;">Vendor</th>
+<th style="width: 88px;">Quantity Dispatched</th>
+<th style="width: 76px;">Total Quantity Ordered</th>
+<th style="width: 77px;">Quantity Received Till Now</th>
+<th style="width: 72px;">Order For SO#&nbsp;</th>
+<th style="width: 72px;">Status</th>
+
+<th style="width: 72px;">Freight</th>
+</tr>
+{% for popp in popps %}
+<tr>
+<td style="width: 65px;">{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</td>
+<td style="width: 74px;">{{ popp.purchaseorderproduct.product.name }}</td>
+<td style="width: 74px;">{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
+<td style="width: 88px;">{{ popp.planned_quantity }}</td>
+<td style="width: 76px;">{{ popp.purchaseorderproduct.quantity }}</td>
+<td style="width: 77px;">{{ popp.quantity_received }}</td>
+<td style="width: 72px;">
+{% if popp.purchaseorderproduct.purchaseorder.salesorder %}
+{{ popp.purchaseorderproduct.purchaseorder.salesorder.salesorder_number }}
+{% else %}
+No SalesOrder 
+{% endif %}</td>
+<td style="width: 72px;">{{ popp.plan_status }}</td>
+
+<td style="width: 72px;">{{ popp.freight }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p style="text-align: center;"><span style="text-decoration: underline;"><strong>Total Amount(Without Tax):</strong></span> {{ total_amount_without_tax }}</p>
+<p style="text-align: center;"><strong>Total Amount(With Tax):</strong> {{ total_amount_with_tax }}</p>
+<p style="text-align: center;"><span style="text-decoration: underline;"><strong>Total Quantity:</strong></span>{{ total_quantity }}</p>
