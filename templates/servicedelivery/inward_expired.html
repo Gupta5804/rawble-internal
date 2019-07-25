@@ -1,6 +1,12 @@
 {% extends 'home.html' %}
 {% block page-title-var %}<i class="fas fa-exclamation-triangle"></i> Inward - Expired Plans [Not Yet Dispatched by Vendor] {% endblock page-title-var %}
 {% block application-active %}
+<form method="post" action="">
+<div class="row">
+<div class="alert alert-primary border border-light col-6">
+<input type="submit" value="Mark As Dispatched"  name="mark-as-dispatched" class="btn btn-outline-success btn-block">
+</div>
+
 <table class="table">
   <thead class="thead-light">
     <tr>
@@ -26,7 +32,7 @@
       <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
       <td>{{ popp.planned_quantity }}</td>
       <td>{{ popp.purchaseorderproduct.quantity }}</td>
-      <td>{{ popp.quantity_received }}</td>
+      <td>{{ popp.purchaseorderproduct.quantity_received }}</td>
       <td>{{ popp.planned_dispatch_date_time }}</td>
       <td>{{ popp.purchaseorderproduct.purchase_price }}</td>
       <td>{{ popp.total_amount_without_tax }}</td>
@@ -35,5 +41,5 @@
     {% endfor %}
   </tbody>
 </table>
-
+</form>
 {% endblock application-active %}
