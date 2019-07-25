@@ -4,10 +4,8 @@
 <form method="post" action="" style="max-width:100%;" class="container">
 {% csrf_token %}
 <div class="row">
-<div class="alert alert-primary border border-light col-6">
-<input type="submit" value="Mark As Dispatched"  name="mark-as-dispatched" class="btn btn-outline-success btn-block" formnovalidate>
-</div>
-<div class="alert alert-primary border border-light col-6">
+
+<div class="alert alert-light border border-dark col-12">
 <table class="table table-sm">
     <tbody>
     <tr>
@@ -21,13 +19,14 @@
     </tr>
     <tr>
         <th>Reason For Delay in Dispatch</th>
-        <th><input type="datetime-local" class="form-control" name="dispatch_delay_reason" required></th>
+        <th><input type="text" class="form-control" name="dispatch_delay_reason" required></th>
     </tr>
     
 </tbody>
 
 </table>
 <input type="submit" value="Replan"  name="replan" class="btn btn-outline-warning btn-block">
+<input type="submit" value="Mark As Dispatched"  name="mark-as-dispatched" class="btn btn-outline-success btn-block" formnovalidate>
 </div>
 
 <table class="table">
