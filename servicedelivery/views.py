@@ -121,7 +121,7 @@ def inward_servicedelivery_new(request):
         auth_token = 'd56b2f2501f266739e12b86b706d0078'
         organization_id = '667580392'
         parameters={'authtoken':auth_token,'organization_id':organization_id}
-        if "mail-receive-today" in request.POST:
+        if "mail-receive-summary" in request.POST:
             popps = PurchaseOrderProductPlan.objects.filter(planned_receive_date_time__date = date.today())
             if(popps):
                 subject = "Items Planned to receive today"
@@ -153,7 +153,7 @@ def inward_servicedelivery_new(request):
                 msg = EmailMultiAlternatives(subject, text_content, from_email, to)
                 msg.attach_alternative(message, "text/html")
                 msg.send()
-        if "mail-dispatch-today" in request.POST:
+        if "mail-dispatch-summary" in request.POST:
             popps = PurchaseOrderProductPlan.objects.filter(planned_dispatch_date_time__date = date.today())
             if(popps):
                 subject = "Items Planned to Dispatch today From Vendor's End"
