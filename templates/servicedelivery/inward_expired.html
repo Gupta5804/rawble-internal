@@ -1,5 +1,38 @@
 {% extends 'home.html' %}
 {% block page-title-var %}<i class="fas fa-exclamation-triangle"></i> Inward - Expired Plans [Not Yet Dispatched by Vendor] {% endblock page-title-var %}
-
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">PO#</th>
+      <th scope="col">Product</th>
+      <th scope="col">Vendor</th>
+      <th scope="col">Quantity Planned</th>
+      <th scope="col">Quantity Ordered</th>
+      <th scope="col">Quantity Received Till Now</th>
+      <th scope="col">Planned To Dispatch At</th>
+      <th scope="col">Purchase Price</th>
+      <th scope="col">Total Amount Without Tax</th>
+      <th scope="col">Total Amount With Tax</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for popp in popps_expired %}
+    <tr>
+      <th scope="row"></th>
+      <td>{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</td>
+      <td>{{ popp.purchaseorderproduct.product.name }}</td>
+      <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
+      <td>{{ popp.planned_quantity }}</td>
+      <td>{{ popp.purchaseorderproduct.quantity }}</td>
+      <td>{{ popp.quantity_received }}</td>
+      <td>{{ popp.planned_dispatch_date_time }}</td>
+      <td>{{ popp.purchaseorderproduct.purchase_price }}</td>
+      <td>{{ popp.total_amount_without_tax }}</td>
+      <td>{{ popp.total_amount_with_tax }}</td>
+    </tr>
+    
+  </tbody>
+</table>
 {% block application-active %}
 {% endblock application-active %}

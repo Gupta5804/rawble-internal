@@ -25,7 +25,12 @@ def inward_servicedelivery_intransit(request):
 def inward_servicedelivery_report(request):
     return render(request,'servicedelivery/inward_report.html')
 def inward_servicedelivery_expired(request):
-    return render(request,'servicedelivery/inward_expired.html')
+    popps = PurchaseOrderProductPlan.objects.filter(planned_dispatch_date_time__date__lt = date.today())
+    popps_expired = []
+    for popp in popps:
+        if(popp.plan_status == 'planned'):
+            popps_expired.append(popp)
+    return render(request,'servicedelivery/inward_expired.html',{'popps_expired':popps_expired})
 def salesorder_outward(request):
     salesorder_id = request.GET.get('slug',None)
     salesorder = ZohoSalesOrder.objects.get(salesorder_id = salesorder_id)
