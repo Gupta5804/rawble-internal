@@ -1,0 +1,35 @@
+<div class="alert alert-warning">
+<p style="text-align:center;">Following Items Were Planned To Receive today</p>
+<p style="text-align:center;">Please Confirm the plan And Send Mail</p>
+</div>
+
+{% csrf_token %}
+<table class="table table-bordered">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Status</th>
+      <th scope="col">PO #</th>
+      <th scope="col">Vendor</th>
+      <th scope="col">Product</th>
+      <th scope="col">Quantity Ordered</th>
+      <th scope="col">Quantity Planned</th>
+      <th scope="col">Transporter</th>
+      <th scope="col">Purchase Price</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+  {% for popp in popps %}
+    <tr>
+      <th scope="row" class="{% if popp.plan_status == 'planned' %} table-danger {% elif popp.plan_status == 'in-transit' %} table-warning {% else %} table-success {% endif %}">{% if popp.plan_status == 'planned' %} Not Yet Dispatched {% elif popp.plan_status == 'in-transit' %} In Transit [Not Yet Received] {% else %} Received {% endif %}</th>
+      <td>{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</td>
+      <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
+      <td>{{ popp.purchaseorderproduct.product.name }}</td>
+      <td>{{ popp.purchaseorderproduct.quantity }}</td>
+      <td>{{ popp.planned_quantity }}</td>
+      <td>{{ popp.transporter.name }}</td>
+      <td>{{ popp.purchaseorderproduct.purchase_price }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
