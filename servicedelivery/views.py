@@ -65,6 +65,7 @@ def inward_servicedelivery_expired(request):
                     #"users_sales":users_sales,
                     'planned_dispatch_date_time':planned_dispatch_date_time,
                     'planned_receive_date_time':planned_receive_date_time,
+                    'dispatch_delay_reason':dispatch_delay_reason,
                     "total_quantity":total_quantity,
                     "total_amount_without_tax":total_amount_without_tax,
                     "total_amount_with_tax":total_amount_with_tax,
