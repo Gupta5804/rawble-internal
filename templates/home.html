@@ -241,26 +241,7 @@
             <hr>
             <ul class='collapse list-unstyled {% if request.resolver_match.url_name == "payment" %}collapse show {% endif %}' id="payment">
                 <li class='{% if request.resolver_match.url_name == "payment"  %}sub-menu active{% endif %}'>
-                    <a href="#payables" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-sign-out-alt"></i> 
-                        Payables
-                    </a>
-                    <hr>
-                    <ul class='collapse list-unstyled' id="payables">
-                        <li class='{% if request.resolver_math.url_name == "payments_payable_pending" %}'>
-                            <a href="{% url 'payments_payable_pending' %}"><i class="fas fa-calendar"></i> Schedule Payment</a>
-                        </li>
-                        <li class='{% if request.resolver_math.url_name == "payments_payable_chequeapproval" %}'>
-                            <a href="{% url 'payments_payable_chequeapproval' %}"><i class="fas fa-check"></i> Cheque Approval</a>
-                        </li>
-                        <li class='{% if request.resolver_math.url_name == "payments_payable_nextpayment" %}'>
-                            <a href="{% url 'payments_payable_nextpayment' %}"><i class="fas fa-file-invoice-dollar"></i> Next Payment</a>
-                        </li>
-
-                    </ul>
-                </li>
-                <li class='{% if request.resolver_match.url_name == "payment"  %}sub-menu active{% endif %}'>
-                    <a href="" >Receivables</a>
+                    <a href="" >All Payments</a>
                 </li>
             </ul>
         </li>
@@ -450,6 +431,5 @@
   <h2><a type="button" class="btn btn-info btn-lg" href="{% url 'login' %}">LOGIN</a> <h2>
 </div>
 {% endif %}
-
 {% endblock content %}
 
