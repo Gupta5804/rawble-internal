@@ -247,14 +247,14 @@
                     </a>
                     <hr>
                     <ul class='collapse list-unstyled' id="payables">
-                        <li class='{% if request.resolver_math.url_name == "" %}'>
-                            <a href=""><i class="fas fa-calendar"></i> Schedule Payment</a>
+                        <li class='{% if request.resolver_math.url_name == "payments_payable_pending" %}'>
+                            <a href="payments_payable_pending"><i class="fas fa-calendar"></i> Schedule Payment</a>
                         </li>
-                        <li class='{% if request.resolver_math.url_name == "" %}'>
-                            <a href=""><i class="fas fa-check"></i> Cheque Approval</a>
+                        <li class='{% if request.resolver_math.url_name == "payments_payable_chequeapproval" %}'>
+                            <a href="payments_payable_chequeapproval"><i class="fas fa-check"></i> Cheque Approval</a>
                         </li>
-                        <li class='{% if request.resolver_math.url_name == "" %}'>
-                            <a href=""><i class="fas fa-file-invoice-dollar"></i> Next Payment</a>
+                        <li class='{% if request.resolver_math.url_name == "payments_payable_nextpayment" %}'>
+                            <a href="payments_payable_nextpayment"><i class="fas fa-file-invoice-dollar"></i> Next Payment</a>
                         </li>
 
                     </ul>
