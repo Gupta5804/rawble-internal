@@ -239,19 +239,22 @@
                 Payments
             </a>
             <hr>
-            <ul class='collapse list-unstyled {% if request.resolver_match.url_name == "payment" %}collapse show {% endif %}' id="payment">
+            <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "payment" %}collapse show {% endif %}' id="payment">
                 <li class='{% if request.resolver_match.url_name == "payment"  %}sub-menu active{% endif %}'>
                     <a href="#payables" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-sign-out-alt"></i>
                         Payables
                     </a>
-                    <ul class='collapse list-unstyled {% if request.resolver_match.url_name == "payments_payable_pending"  or request.resolver_match.url_name == "payments_payable_chequeapproval" or request.resolver_match.url_name == "payments_payable_nextpayment" %}collapse show {% endif %}' id="payables">
+                    <hr>
+                    <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "payments_payable_pending"  or request.resolver_match.url_name == "payments_payable_chequeapproval" or request.resolver_match.url_name == "payments_payable_nextpayment" %}collapse show {% endif %}' id="payables">
                         <li class = '{% if request.resolver_match.url_name == "payments_payable_pending" %}sub-menu active{% endif %}'>
                             <a href="{% url 'payments_payable_pending'%}">Schedule Payment</a>
                         </li>
+                        <hr>
                         <li class = '{% if request.resolver_match.url_name == "payments_payable_chequeapproval" %}sub-menu active{% endif %}'>
                             <a href="{% url 'payments_payable_chequeapproval'%}">Cheque Approval</a>
                         </li>
+                        <hr>
                         <li class = '{% if request.resolver_match.url_name == "payments_payable_nextpayment" %}sub-menu active{% endif %}'>
                             <a href="{% url 'payments_payable_nextpayment'%}">Next Payment</a>
                         </li>
