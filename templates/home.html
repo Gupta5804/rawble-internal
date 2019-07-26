@@ -241,7 +241,26 @@
             <hr>
             <ul class='collapse list-unstyled {% if request.resolver_match.url_name == "payment" %}collapse show {% endif %}' id="payment">
                 <li class='{% if request.resolver_match.url_name == "payment"  %}sub-menu active{% endif %}'>
-                    <a href="" >All Payments</a>
+                    <a href="#payables" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-sign-out-alt"></i> 
+                        Payables
+                    </a>
+                    <hr>
+                    <ul class='collapse list-unstyled' id="payables">
+                        <li class='{% if request.resolver_math.url_name == "" %}'>
+                            <a href=""><i class="fas fa-calendar"></i> Schedule Payment</a>
+                        </li>
+                        <li class='{% if request.resolver_math.url_name == "" %}'>
+                            <a href=""><i class="fas fa-check"></i> Cheque Approval</a>
+                        </li>
+                        <li class='{% if request.resolver_math.url_name == "" %}'>
+                            <a href=""><i class="fas fa-file-invoice-dollar"></i> Next Payment</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class='{% if request.resolver_match.url_name == "payment"  %}sub-menu active{% endif %}'>
+                    <a href="" >Receivables</a>
                 </li>
             </ul>
         </li>
