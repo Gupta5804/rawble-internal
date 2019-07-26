@@ -1,5 +1,63 @@
 {% extends 'home.html' %}
-{% block page-title-var %}<i class="fas fa-shipping-fast" ></i> Inward - In-Transit [ Dispatched But Not Received ] {% endblock page-title-var %}
-
+{% block page-title-var %}<i class="fas fa-exclamation-triangle"></i> Inward - Expired Plans [Not Yet Dispatched by Vendor] {% endblock page-title-var %}
 {% block application-active %}
+<form method="post" action="" style="max-width:100%;" class="container">
+{% csrf_token %}
+<div class="row">
+
+<div class="alert alert-light border border-dark col-12">
+<table class="table table-sm">
+    <tbody>
+   
+    <tr>
+        <th>Estimate Time Of Arrival(E.T.A.)</th>
+        <th><input type="datetime-local" class="form-control" name="planned_receive_date_time" required></th>
+    </tr>
+    <tr>
+        <th>Reason For Delay in Receiving</th>
+        <th><input type="text" class="form-control" name="dispatch_delay_reason" required></th>
+    </tr>
+    
+</tbody>
+
+</table>
+<input type="submit" value="Replan"  name="replan" class="btn btn-outline-warning btn-block">
+<input type="submit" value="Mark As Received"  name="mark-as-received" class="btn btn-outline-success btn-block" formnovalidate>
+</div>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">PO#</th>
+      <th scope="col">Product</th>
+      <th scope="col">Vendor</th>
+      <th scope="col">Quantity Planned</th>
+      <th scope="col">Quantity Ordered</th>
+      <th scope="col">Quantity Received Till Now</th>
+      <th scope="col">Planned To Dispatch At</th>
+      <th scope="col">Purchase Price</th>
+      <th scope="col">Total Amount Without Tax</th>
+      <th scope="col">Total Amount With Tax</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for popp in popps_intransit %}
+    <tr>
+      <th scope="row"><input type="checkbox" class="form-group" name="selected_popp_id" value="{{ popp.id }}"></th>
+      <td>{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</td>
+      <td>{{ popp.purchaseorderproduct.product.name }}</td>
+      <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
+      <td>{{ popp.planned_quantity }}</td>
+      <td>{{ popp.purchaseorderproduct.quantity }}</td>
+      <td>{{ popp.purchaseorderproduct.quantity_received }}</td>
+      <td>{{ popp.planned_dispatch_date_time }}</td>
+      <td>{{ popp.purchaseorderproduct.purchase_price }}</td>
+      <td>{{ popp.total_amount_without_tax }}</td>
+      <td>{{ popp.total_amount_with_tax }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</form>
 {% endblock application-active %}

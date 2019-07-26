@@ -21,7 +21,102 @@ from django.db.models import Q
 def inward_servicedelivery_stock(request):
     return render(request,'servicedelivery/inward_stock.html')
 def inward_servicedelivery_intransit(request):
-    return render(request,'servicedelivery/inward_intransit.html')
+    if request.method == "GET":
+        popps = PurchaseOrderProductPlan.objects.filter(planned_receive_date_time__date__lt = date.today())
+        popps_intransit = []
+        for popp in popps:
+            if(popp.plan_status == 'in-transit'):
+                popps_intransit.append(popp)
+        
+        
+        return render(request,'servicedelivery/inward_intransit.html',{'popps_intransit':popps_intransit})
+    if request.method == "POST":
+        if "replan" in request.POST:
+            selected_popp_ids = request.POST.getlist('selected_popp_id')
+            
+            planned_receive_date_time = request.POST.get('planned_receive_date_time')
+            receive_delay_reason = request.POST.get('receive_delay_reason')
+            popp_email = []
+            for selected_popp_id in selected_popp_ids:
+                popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
+               
+                popp.planned_receive_date_time = planned_receive_date_time
+                popp.receive_delay_reason = receive_delay_reason
+                popp.save()
+                popp_email.append(popp)
+            if(popp_email):
+                subject = "Items Rescheduled to Receive"
+                to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+                from_email = 'admin@rawble.com'
+                users = User.objects.all()
+                users_sales = User.objects.filter(groups__name="Sales Team")
+                total_quantity = 0
+                total_amount_without_tax = 0
+                total_amount_with_tax = 0
+                for popp in popp_email:
+                    total_quantity = total_quantity + popp.planned_quantity
+                    total_amount_without_tax = total_amount_without_tax + popp.total_amount_without_tax
+                    total_amount_with_tax = total_amount_with_tax + popp.total_amount_with_tax
+                ctx = {
+                    "popp_email":popp_email,
+                    #"users_sales":users_sales,
+                    
+                    'planned_receive_date_time':planned_receive_date_time,
+                    'dispatch_delay_reason':dispatch_delay_reason,
+                    "total_quantity":total_quantity,
+                    "total_amount_without_tax":total_amount_without_tax,
+                    "total_amount_with_tax":total_amount_with_tax,
+                }
+                for user in users:
+                    to.append(str(user.email))
+        
+
+                message = render_to_string('emails/inward/receive_delay_reason.html', ctx)
+                text_content = strip_tags(message)
+                #EmailMessage(subject, message, to=to, from_email=from_email).send()
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+                msg.attach_alternative(message, "text/html")
+                msg.send()
+        if "mark-as-received" in request.POST:
+            selected_popp_ids = request.POST.getlist('selected_popp_id')
+            popp_email = []
+            for selected_popp_id in selected_popp_ids:
+                popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
+                popp.dispatched_date_time = popp.planned_dispatch_date_time
+                popp.save()
+                popp_email.append(popp)
+            if(popp_email):
+                subject = "Items Received Today"
+                to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+                from_email = 'admin@rawble.com'
+                users = User.objects.all()
+                users_sales = User.objects.filter(groups__name="Sales Team")
+                total_quantity = 0
+                total_amount_without_tax = 0
+                total_amount_with_tax = 0
+                for popp in popp_email:
+                    total_quantity = total_quantity + popp.planned_quantity
+                    total_amount_without_tax = total_amount_without_tax + popp.total_amount_without_tax
+                    total_amount_with_tax = total_amount_with_tax + popp.total_amount_with_tax
+                ctx = {
+                    "popp_email":popp_email,
+                    #"users_sales":users_sales,
+                    "total_quantity":total_quantity,
+                    "total_amount_without_tax":total_amount_without_tax,
+                    "total_amount_with_tax":total_amount_with_tax,
+                }
+                for user in users:
+                    to.append(str(user.email))
+        
+
+                message = render_to_string('emails/inward/received_today.html', ctx)
+                text_content = strip_tags(message)
+                #EmailMessage(subject, message, to=to, from_email=from_email).send()
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+                msg.attach_alternative(message, "text/html")
+                msg.send()
+        
+        return redirect('inward_servicedelivery_intransit')
 def inward_servicedelivery_report(request):
     return render(request,'servicedelivery/inward_report.html')
 def inward_servicedelivery_expired(request):
