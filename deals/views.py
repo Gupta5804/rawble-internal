@@ -71,8 +71,8 @@ def salesreport_mail_admin(request):
         }
     for user in users_sales:
         cc_email.append(str(user.email))
-    for user in users_purchase:
-        cc_email.append(str(user.email))
+    #for user in users_purchase:
+    #    cc_email.append(str(user.email))
 
     message = render_to_string('emails/salesreport_mail_admin.html', ctx)
     text_content = strip_tags(message)
