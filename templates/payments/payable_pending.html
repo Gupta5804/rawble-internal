@@ -3,10 +3,10 @@
 
 {% block application-active %}
 
-<select>
+<select class="form-control">
 <option></option>
 {% for vendor in vendors %}
-<option
+<option value="{{ vendor.contact_id }}">{{ vendor.contact_name }}</option>
 {% endfor %}
 </select>
 
