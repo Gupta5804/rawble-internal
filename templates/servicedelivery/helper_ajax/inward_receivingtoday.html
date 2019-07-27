@@ -21,7 +21,7 @@
   <tbody>
   {% for popp in popps_unreceived %}
     <tr>
-      <th scope="row"><input type="checkbox" class="form-control" name="selected-popp" value="{{ popp.id }}"></th>
+      <th scope="row"><input type="checkbox" class="form-group" name="selected-popp" value="{{ popp.id }}"></th>
       <td>{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</td>
       <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
       <td>{{ popp.purchaseorderproduct.product.name }}</td>
