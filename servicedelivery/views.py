@@ -525,7 +525,8 @@ def inward_servicedelivery_new(request):
             selected_product_item_ids = request.POST.getlist("selected_product_item_id")
             tax_percentages = request.POST.getlist("tax_percentage")
             purchaseorder = ZohoPurchaseOrder.objects.get(purchaseorder_id=purchaseorder_id)
-            
+            if freight == '':
+                freight=0
             freight_for_each = float(freight)/len(selected_product_item_ids)
             if ( purchaseorder.purchaseorderproduct_set.count() == 0 ):
                 
