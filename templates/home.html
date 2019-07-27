@@ -239,8 +239,8 @@
                 Payments
             </a>
             <hr>
-            <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "payment" %}collapse show {% endif %}' id="payment">
-                <li class='{% if request.resolver_match.url_name == "payment"  %}sub-menu active{% endif %}'>
+            <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "payments_payable_pending"  or request.resolver_match.url_name == "payments_payable_chequeapproval" or request.resolver_match.url_name == "payments_payable_nextpayment" %}collapse show {% endif %}' id="payment">
+                <li class='{% if request.resolver_match.url_name == "payments_payable_pending"  or request.resolver_match.url_name == "payments_payable_chequeapproval" or request.resolver_match.url_name == "payments_payable_nextpayment" %}sub-menu active{% endif %}'>
                     <a href="#payables" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-sign-out-alt"></i>
                         Payables
