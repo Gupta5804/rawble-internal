@@ -4,6 +4,7 @@ from django.views.generic import DeleteView,CreateView
 from django.urls import reverse_lazy
 from django.core.management import call_command
 from servicedelivery.models import PurchaseOrderProductPlan
+from contacts.models import ContactVendor
 # Create your views here.
 def payments_payable_nextpayment(request):
     return render(request,'payments/payable_nextpayment.html')
@@ -13,7 +14,11 @@ def payments_payable_pending(request):
     
     vendor_ids = PurchaseOrderProductPlan.objects.values_list("purchaseorderproduct__purchaseorder__vendor__contact_id",flat=True).distinct().order_by()
     print(vendor_ids)
-
+    vendors = []
+    for vendor_id in vendor_ids:
+        vendor= ContactVendor.objects.get(contact_id = vendor_id)
+        vendors.append(vendor)
+    print(vendors)
     return render(request,'payments/payable_pending.html')
 
 
