@@ -499,7 +499,7 @@ def zoho_salesorder(request,pk):
         for i,product_id in enumerate(product_ids):
             zoho_salesorder = ZohoSalesOrder.objects.get(salesorder_id = salesorder_id)
             try:
-                vendorproductvariation = VendorProductVariation.objects.get(pk=vendorproductvariation_ids[i])
+                vendorproductvariation = VendorProductVariation.objects.get(id=vendorproductvariation_ids[i])
             except:
                 vendorproductvariation = None
             sop_qs = SalesOrderProduct.objects.filter(salesorder = zoho_salesorder,product=Product.objects.get(pk=product_id))
@@ -508,6 +508,7 @@ def zoho_salesorder(request,pk):
                     sop_to_delete = sop_qs[1:]
                     sop_to_delete.delete()
                 sop = sop_qs[0]
+                sop.vendorproductvariation = vendorproductvariation
                 sop.so_selling_price = rates[i]
                 sop.quantity = quantitys[i]
                 sop.save()

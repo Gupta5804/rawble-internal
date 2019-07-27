@@ -19,7 +19,7 @@ def payments_payable_pending(request):
         vendor= ContactVendor.objects.get(contact_id = vendor_id)
         vendors.append(vendor)
     print(vendors)
-    return render(request,'payments/payable_pending.html')
+    return render(request,'payments/payable_pending.html',{'vendors':vendors})
 
 
 #def advancepayment_reorder(request):
