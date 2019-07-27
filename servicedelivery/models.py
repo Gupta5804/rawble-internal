@@ -1,7 +1,7 @@
 from django.db import models
 from deals.models import SalesOrderProduct,PurchaseOrderProduct
 from products.models import CoaFile
-
+from payments.models import PaymentPayable
 # Create your models here. 
 class Transporter(models.Model):
     name = models.CharField(max_length=400,blank=True,null=True)
@@ -25,6 +25,7 @@ class PurchaseOrderProductPlan(models.Model):
     transporter = models.ForeignKey(Transporter,on_delete=models.SET_NULL,null=True,blank=True)
     dispatch_delay_reason = models.CharField(max_length = 500 , null=True, blank=True)
     receive_delay_reason = models.CharField(max_length = 500 , null=True, blank=True)
+    paymentpayable = models.ForeignKey(PaymentPayable,on_delete=models.SET_NULL)
     def __str__(self):
         return (self.purchaseorderproduct.purchaseorder.purchaseorder_number + "-" + self.purchaseorderproduct.product.name + "-"+str(self.planned_quantity))
     
