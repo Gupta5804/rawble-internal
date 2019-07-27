@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect
 from django.views.generic import DeleteView,CreateView
 from django.urls import reverse_lazy
 from django.core.management import call_command
-from servicedelivery.model import PurchaseOrderProductPlan
+from servicedelivery.models import PurchaseOrderProductPlan
 # Create your views here.
 def payments_payable_nextpayment(request):
     return render(request,'payments/payable_nextpayment.html')
