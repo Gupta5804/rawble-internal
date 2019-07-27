@@ -399,5 +399,12 @@
           });
 
     });
+   
+function toggle(source) {
+  checkboxes = document.getElementsByName('selected-popp');
+  for(var checkbox in checkboxes)
+    checkbox.checked = source.checked;
+}
+
     </script>
 {% endblock application-active %}
