@@ -11,7 +11,7 @@ def payments_payable_chequeapproval(request):
     return render(request,'payments/payable_chequeapproval.html')
 def payments_payable_pending(request):
     
-    vendors = PurchaseOrderProductPlan.objects.values("purchaseorderproduct__purchaseorder__vendor__id").distinct()
+    vendors = PurchaseOrderProductPlan.objects.values("purchaseorderproduct__purchaseorder__vendor__contact_id").distinct()
     print(vendors)
     return render(request,'payments/payable_pending.html')
 
