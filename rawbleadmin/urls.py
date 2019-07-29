@@ -154,7 +154,7 @@ urlpatterns = [
      
     path('salesorder/approve/<int:salesorder_id>',deal_views.salesorder_approve,name="salesorder_approve"),
     path('deals/vendor/list/',deal_views.dealvendor_list,name='deal_vendor_list'),
-    
+    path('ajax/payments/payable_pending/get_purchaseorders',payments_views.payable_pending_get_purchaseorders,name="payable_pending_get_purchaseorders"),
     path('payments/payable/pending',payment_views.payments_payable_pending,name = 'payments_payable_pending'),
     path('payments/payable/chequeapproval',payment_views.payments_payable_chequeapproval,name = 'payments_payable_chequeapproval'),
     path('payments/payable/nextpayment',payment_views.payments_payable_nextpayment,name = 'payments_payable_nextpayment'),

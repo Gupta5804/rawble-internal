@@ -5,7 +5,16 @@ from django.urls import reverse_lazy
 from django.core.management import call_command
 from servicedelivery.models import PurchaseOrderProductPlan
 from contacts.models import ContactVendor
+from deals.models import ZohoPurchaseOrder
 # Create your views here.
+def payable_pending_get_purchaseorders(request):
+    vendor_id = request.GET.get('vendor_id')
+    vendor = ContactVendor.objects.get(contact_id = vendor_id)
+    pos = vendor.zohopurchaseorder_set.all()
+    rendered = render_to_string('payments/helper_ajax/get_purchaseorders.html', context = {'pos':pos},request=request)
+    
+    return JsonResponse({'nippet': rendered})
+
 def payments_payable_nextpayment(request):
     return render(request,'payments/payable_nextpayment.html')
 def payments_payable_chequeapproval(request):
