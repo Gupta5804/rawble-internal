@@ -577,7 +577,7 @@ def todayspickup(request):
 
 def todaysdispatch(request):
     today = date.today()
-    salesorderproductplans = SalesOrderProductPlan.objects.all().filter(planned_date_time__date=today).order_by("salesorderproduct__salesorder__salesorder_number")
+    salesorderproductplans = SalesOrderProductPlan.objects.filter(planned_date_time__date=today).order_by("salesorderproduct__salesorder__salesorder_number")
     transporters = Transporter.objects.all()
     rendered = render_to_string('servicedelivery/helper_ajax/todaysdispatch.html',context={"salesorderproductplans":salesorderproductplans,"transporters":transporters},request=request)
     return JsonResponse({'po_snippet':rendered})
