@@ -6,6 +6,8 @@ from django.core.management import call_command
 from servicedelivery.models import PurchaseOrderProductPlan
 from contacts.models import ContactVendor
 from deals.models import ZohoPurchaseOrder
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 # Create your views here.
 def payable_pending_get_purchaseorders(request):
     vendor_id = request.GET.get('vendor_id')
@@ -13,7 +15,7 @@ def payable_pending_get_purchaseorders(request):
     pos = vendor.zohopurchaseorder_set.all()
     rendered = render_to_string('payments/helper_ajax/get_purchaseorders.html', context = {'pos':pos},request=request)
     
-    return JsonResponse({'nippet': rendered})
+    return JsonResponse({'snippet': rendered})
 
 def payments_payable_nextpayment(request):
     return render(request,'payments/payable_nextpayment.html')

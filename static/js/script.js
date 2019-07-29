@@ -36,53 +36,7 @@ $(document).ready(function() {
 $(document).ready(function() {
    $('#purchasestable').DataTable();
 } );
-/*$(document).ready(function () {
-    var counter = 1;
 
-    $("#addrow").on("click", function () {
-        var newRow = $("<tr>");
-        var cols = "";
-
-        cols += '<td class=""><input type="text" name="label_name-'+counter+'" class="form-control form-control-sm" /></td>';
-
-        cols += '<td class=""><select class="form-control form-control-sm" name="product_group-'+counter+'">{% for product_group in product_groups %}<option value="{{ product_group.id }}"> {{ product_group.name }} </option>{% endfor %}</select></td>';
-
-        cols += '<td class=""><select class="form-control form-control-sm" name="make-'+counter+'"><option>aaaaaaaaaaaaaaaaaaabbbbbbbb</option></select></td>';
-        cols += '<td class=""><input type="text" name="specs-'+counter+'" class="form-control form-control-sm" /></td>';
-        cols +='<td class=""><input type="number" name="pack_size-'+counter+'"  class="form-control form-control-sm"/></td>';
-        cols +='<td class=""><select class="form-control form-control-sm" name="unit-'+counter+'"><option>aaaaaaaaaaaaaaaaaaabbbbbbbb</option></select></td>';
-        cols +='<td class=""><input type="number" name="quantity-'+counter+'"  class="form-control form-control-sm"/></td>';
-        cols +='<td class=""><input type="text" name="rate-'+counter+'"  class="form-control form-control-sm"/></td>';
-        cols += '<td><button type="button" class="close ibtnDel" aria-label="Close"><span aria-hidden="true">&times;</span></button></td>';
-        newRow.append(cols);
-        $("table.order-list").append(newRow);
-        counter++;
-    });
-
-
-
-    $("table.order-list").on("click", ".ibtnDel", function (event) {
-        $(this).closest("tr").remove();
-        counter -= 1
-    });
-
-
-});
-
-
-function calculateRow(row) {
-    var price = +row.find('input[name^="price"]').val();
-
-}
-
-function calculateGrandTotal() {
-    var grandTotal = 0;
-    $("table.order-list").find('input[name^="price"]').each(function () {
-        grandTotal += +$(this).val();
-    });
-    $("#grandtotal").text(grandTotal.toFixed(2));
-}
-   */
 
 $(document).ready(function () {
     $('tbody.dealbuyer tr')
@@ -141,18 +95,7 @@ $('#btnDelCheckRow').click(function() {
 });
 });
 
-//$(".js-example-tags").select2({
-//    tags: true,
- //   width:'resolve',
- //   placeholder:'Enter / Select Label Name'
- // });
 
-
-
-////// Ajax to get Add Vendor Variation in Estimate
-
-
-////// Ajax to get Update Vendor Variation Form in Estimate
 
 
  $(document).on("click",".sales_history",function(){ 
