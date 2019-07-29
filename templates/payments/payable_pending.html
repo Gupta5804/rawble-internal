@@ -3,11 +3,32 @@
 
 {% block application-active %}
 <div class="container" style="max-width:80%">
-<select class="form-control">
+<select class="form-control" onchange="return get_po(this);">
 <option></option>
 {% for vendor in vendors %}
 <option value="{{ vendor.contact_id }}">{{ vendor.contact_name }}</option>
 {% endfor %}
 </select>
 </div>
+<div id="purchaseorders" class="container" style="max-width:90%">
+
+</div>
 {% endblock application-active %}
+<script>
+function get_po(source){
+    var vendor_id = source.value;
+    $('div#purchaseorders').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/bars/index.progress-bar-facebook-loader.gif' />");
+    $.ajax({
+        url: '../../../../../ajax/payments/payable_pending/get_purchaseorders',
+        type: "get",
+        data: {'vendor_id':vendor_id},
+        success: function(data) {
+         
+          $('div#purchaseorders').html(data.snippet);
+        },
+        error: function(err) {
+          console.log('error', err);
+        }
+      })
+};
+</script>
