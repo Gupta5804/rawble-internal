@@ -12,7 +12,13 @@ from django.template.loader import render_to_string
 def payable_pending_get_purchaseorders(request):
     vendor_id = request.GET.get('vendor_id')
     vendor = ContactVendor.objects.get(contact_id = vendor_id)
-    pos = vendor.zohopurchaseorder_set.all()
+    pos_all = vendor.zohopurchaseorder_set.all()
+    pos = []
+    for po in pos_all:
+        if(po.status == "billed" or po.status == "cancelled" ):
+            pass
+        else:
+            pos.append(po)
     rendered = render_to_string('payments/helper_ajax/get_purchaseorders.html', context = {'pos':pos},request=request)
     
     return JsonResponse({'snippet': rendered})
