@@ -2,12 +2,12 @@
 {% block page-title-var %} Schedule Payment {% endblock page-title-var %}
 
 {% block application-active %}
-
+<div class="container" style="max-width:80%">
 <select class="form-control">
 <option></option>
 {% for vendor in vendors %}
 <option value="{{ vendor.contact_id }}">{{ vendor.contact_name }}</option>
 {% endfor %}
 </select>
-
+</div>
 {% endblock application-active %}
