@@ -125,11 +125,13 @@
                             
                             {% for pop in po.purchaseorderproduct_set.all %}
                                 <table class="table">
+                                {% if pop.product.item_id_str == item.product.item_id_str %}
                                 <tr>
                                     <th>Qty</th>
                                     <th>Status</th>
                                     <th>E.T.A.</th>
                                 </tr>
+                                {% endif %}
                                 {% if pop.product.item_id_str == item.product.item_id_str %}
                                     {% for popp in pop.purchaseorderproductplan_set.all %}
                                         <tr class="{% if popp.plan_status == 'planned' %}table-danger{% elif popp.plan_status == 'in-transit' %}table-warning{% else %}table-success{% endif %}">
