@@ -122,6 +122,7 @@
             <tr>
                 <th>Date</th>
                 <th>Buyer</th>
+                <th>Purchase Orders</th>
                 <th>Zoho Location</th>
                 <th>Sales order</th>
                 <th>Status</th>
@@ -138,6 +139,12 @@
                     <td>{{ salesorder.date }}</td>
                     <th>
                         {{ salesorder.buyer.contact_name }}
+                    </th>
+                    <th>
+                      {% for po in salesorder.zohopurchaseorder_set.all %}
+                      {{ po.purchaseorder_number }} - {% if po.planned_status %} Planned {% else %} Not Yet Planned{% endif %}
+                      <br>
+                      {% endfor %}
                     </th>
                     <td style="{% if salesorder.zoho_location == 'okhla' %} color:red{% elif salesorder.zoho_location == 'baddi' %}color:blue{% endif %};font-weight:bold;text-transform: uppercase;">{{ salesorder.zoho_location }}</td>
                     <td><a class="btn btn-outline-primary btn-block btn-sm" href="{{ salesorder.salesorder_url }}">{{ salesorder.salesorder_number }}</a></td>
