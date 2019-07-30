@@ -207,7 +207,7 @@ $(document).on("click",".select-outward",function(){
 
         $('#previousoutward').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/cloudy/index.cloudy-sky-preloader.gif' />");
         $.ajax({
-            url: '../../../../../ajax/servicedelivery/outward/previousoutward_summary',
+            url: '../../../../../ajax/servicedelivery/outward/previousoutward',
             type: "get",
             success: function(data) {
               
