@@ -81,14 +81,15 @@
         <tr>
             <th>
                 <div class="form-check">
-                    <input    >
-                </div>
+                    
+                
                 {% if item.sop_saved %}
                     <input class="form-check-input" type="checkbox" value="{{ item.product.item_id }}"  name="selected_product_item_id"  {% if item.sop.quantity_to_plan_max == 0 %}disabled{% endif %}>
                     
                 {% else %}
                     <input class="form-check-input" type="checkbox" value="{{ item.product.item_id }}"  name="selected_product_item_id">
                 {% endif %}
+                </div>
             </th>
             <th>{{ item.product.name }}<input name="product_id" value="{{ item.product.item_id }}" type="hidden"></th>
             <th>{{ item.product.make }}</th>
