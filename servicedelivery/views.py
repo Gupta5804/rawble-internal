@@ -275,7 +275,7 @@ def salesorder_outward(request):
     for i in range(30):
         if(day.weekday() in [0,2,4]):
             dispatchdates.append(day)
-        day = day + datetimedelta(days=1)
+        day = day + datetime.timedelta(days=1)
 
     rendered = render_to_string('servicedelivery/helper_ajax/salesorder_outward.html', context = {'salesorder':salesorder,'salesorder_api':salesorder_api, 'transporters':transporters ,'dispatchdates':dispatchdates},request=request)
     
