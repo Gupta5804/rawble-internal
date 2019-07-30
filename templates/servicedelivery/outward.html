@@ -5,7 +5,7 @@
 <div class="container" style="max-width:95%;">
   <div class="row">
     <div class="alert alert-primary border border-white col-4">
-      <h4 class="alert-heading text-center">Previous Dispatch</h4>
+      <h4 class="alert-heading text-center">Previous Dispatch<br> <span style="color:red">{{ previous_outward_date|date:"j-F-Y (l)" }} </span></h4>
       <hr>
 
     </div>
@@ -13,7 +13,7 @@
 
     </div>
     <div class="alert alert-primary border border-white col-4">
-      <h4 class="alert-heading text-center">Next Dispatch</h4>
+      <h4 class="alert-heading text-center">Next Dispatch<br> <span style="color:red">{{ next_outward_date|date:"j-F-Y (l)" }} </span></h4>
     <hr>
     </div>
   </div>
