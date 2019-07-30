@@ -16,10 +16,51 @@
         <td>{{ salesorder.buyer.payment_terms }}</td>
     </tr>
 </table>
-
 <div class="alert alert-warning" role="alert">
-    <p style="display:block;font-weight:bolder;color:black;text-align:center;">Select Outward Date and Time and Click Save</p>
+    <table class="table table-sm">
+    <tbody>
+    <tr>
+        <th>Select Dispatch Date</th>
+        <th>
+            <select class="form-group" name="planned_date">
+                {% for dispatchdate in dispatchdates %}
+                <option value="dispatchdate">{{ dispatchdate|date:"j-F-Y (l)" }}</option>
+                {% endfor %}
+            </select>
+        </th>
+    </tr>
+    <tr>
+        <th>Select Dispatch Time</th>
+        <th><input class="form-control" type="time" name="planned_time"></th>
+    </tr>
+    <tr>
+        <th>Select Transporter</th>
+        <th>
+            <select class="form-control" name="transporter_id">
+                <option value="">----</option>
+                {% for transporter in transporters %}
+                <option value="{{ transporter.id }}">{{ transporter.name }}</option>
+                {% endfor %}
+            </select>
+        </th>
+    </tr>
+    <tr>
+        <th>Estimate Time Of Arrival(E.T.A.)</th>
+        <th><input type="datetime-local" class="form-control" name="planned_receive_date_time" required></th>
+    </tr>
+    <tr>
+        <th>Freight</th>
+        <th><input class="form-control" type="number" name="freight" step="0.01"></th>
+    </tr>
+</tbody>
+
+</table>
+
+
+
 </div>
+
+
 <table class="table">
     <thead class="thead-dark">
         <tr>

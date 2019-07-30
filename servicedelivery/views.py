@@ -269,7 +269,15 @@ def salesorder_outward(request):
         except:
             item['sop_saved'] = False
     transporters = Transporter.objects.all()
-    rendered = render_to_string('servicedelivery/helper_ajax/salesorder_outward.html', context = {'salesorder':salesorder,'salesorder_api':salesorder_api, 'transporters':transporters ,},request=request)
+    dispatchdates = []
+    today = date.today()
+    day = today
+    for i in range(30):
+        if(day.weekday() in [0,2,4]):
+            dispatchdates.append(day)
+        day = day + datetimedelta(days=1)
+
+    rendered = render_to_string('servicedelivery/helper_ajax/salesorder_outward.html', context = {'salesorder':salesorder,'salesorder_api':salesorder_api, 'transporters':transporters ,'dispatchdates'},request=request)
     
     return JsonResponse({'so_snippet': rendered})
 def inward_dispatchtoday(request):
