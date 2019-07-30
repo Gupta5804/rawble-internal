@@ -7,22 +7,92 @@
     <div class="alert alert-primary border border-white col-4">
       <h4 class="alert-heading text-center">Previous Dispatch<br> <span style="color:red">{{ previous_outward_date|date:"j-F-Y (l)" }} </span></h4>
       <hr>
+      <div class="btn-group btn-block" role="group">
+        <a class="btn btn-outline-success col-6 dispatchtoday" href="#" data-toggle="modal" data-target="#dispatchtoday"><i class="fas fa-envelope"></i> Send Report Mail</a>
+          <div class="modal fade" id="dispatchtoday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                      <i class="fas fa-sign-out-alt"></i> 
+                      Previous Dispatch Report [ <span style="color:red">{{ previous_outward_date|date:"j-F-Y (l)" }} </span> ]
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form method="post" action="">
+                  <div class="modal-body">
 
+                  </div>
+                  <input type="submit" value="Send Mail" class="btn btn-outline-success btn-block container mb-3"  name="dispatched-today">
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
     <div class="alert alert-primary border border-white col-4">
-
+      <a href="{% url 'refresh_sales_orders' %}" class="btn btn-outline-dark btn-block"><i class="fas fa-sync-alt"></i> Update Sales orders from Zoho</a>
     </div>
     <div class="alert alert-primary border border-white col-4">
       <h4 class="alert-heading text-center">Next Dispatch<br> <span style="color:red">{{ next_outward_date|date:"j-F-Y (l)" }} </span></h4>
     <hr>
+    <div class="btn-group btn-block" role="group">
+                    <a class="btn btn-outline-success col-6 receivingtoday" href="#" data-toggle="modal" data-target="#receivingtoday"><i class="fas fa-clipboard-check"></i> Mark as Dispatched</a>
+                    <div class="modal fade" id="receivingtoday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    Mark as Dispatched for outward on [ <span style="color:red">{{ next_outward_date|date:"j-F-Y (l)" }} </span>] 
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="post" action="">
+                            <div class="modal-body">
+
+                            </div>
+                            <input type="submit" value="Dispatched" class="btn btn-outline-success btn-block container mb-3" name="received-today">
+                            </form>
+                          </div>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-outline-danger col-6 receivingtodaysummary" href="#" data-toggle="modal" data-target="#receivingtodaysummary"><i class="fas fa-envelope"></i> Send Summary Mail</a>
+                    <div class="modal fade" id="receivingtodaysummary" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fas fa-clipboard"></i>
+                                    Next Outward Summary [<span style="color:red">{{ next_outward_date|date:"j-F-Y (l)" }} </span>]
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <form method="post" action="">
+                            <div class="modal-body">
+
+                            </div>
+                            <input type="submit" value="Send Mail" class="btn btn-outline-success btn-block container mb-3" name="mail-receive-summary">
+                            </form>
+                          </div>
+                        </div>
+                    </div>
+                </div>
     </div>
   </div>
-</div>
+</div><!--
      <div class="btn-toolbar" style="align-self: center" >
-        <a href="{% url 'refresh_sales_orders' %}" class="btn btn-outline-info form-group">Update Sales orders from Zoho</a>
+        
         <a href="{% url 'send_mail_outward' %}" class="btn btn-outline-info form-group" style="position: absolute;left: 0;margin-left: 2%;">Send mail for Today's Dispatch</a>
         <a href="#" id="todaysdispatch" style="position: absolute; right: 0; margin-right: 2%" data-toggle="modal" data-target="#todaysdispatchmodal" class="btn btn-outline-info form-group">Todays Dispatch</a>
-     <!-- Modal -->
+      Modal 
                 <div class="modal fade" id="todaysdispatchmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog modal-lg" style="max-width:95%" role="document">
                     <div class="modal-content">
@@ -42,8 +112,8 @@
                     </div>
                   </div>
                 </div>
-     </div>
-    <hr>
+     </div>-->
+    
 
     
         
