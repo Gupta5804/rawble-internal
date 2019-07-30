@@ -1,0 +1,41 @@
+<div class="alert alert-warning">
+<p style="text-align:center;">Following Items Were Planned To dispatch on <span style="color:red">{{ previous_outward_date|date:"j-F-Y (l)" }} </span></p>
+
+<p style="text-align:center;">Total Amount Planned: {{ planned_total_amount }}</p>
+<p style="text-align:center;">Total Amount Dispatched: {{ dispatched_total_amount }}</p>
+<p style="text-align:center;">Dispatch/Planned Percentage: {{ dispatch_percentage }}</p>
+<p style="text-align:center;">Please Confirm the Summary And Send Mail</p>
+</div>
+
+{% csrf_token %}
+<table class="table table-bordered">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Status</th>
+      <th scope="col">SO #</th>
+      <th scope="col">Buyer</th>
+      <th scope="col">Product</th>
+      <th scope="col">Total Quantity (in SO)</th>
+      <th scope="col">Quantity Planned (to dispatch)</th>
+      <th scope="col">Transporter</th>
+      <th scope="col">Selling Price</th>
+      <th scope="col">Amount</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+  {% for sopp in sopps %}
+    <tr>
+      <th scope="row" class="{% if sopp.plan_status == 'planned' %} table-danger {% elif sopp.plan_status == 'in-transit' %} table-warning {% else %} table-success {% endif %}">{% if sopp.plan_status == 'planned' %} Not Yet Dispatched {% elif sopp.plan_status == 'in-transit' %} In Transit [Dispatched] {% else %} Delivered {% endif %}</th>
+      <td>{{ sopp.salesorderproduct.salesorder.salesorder_number }}</td>
+      <td>{{ sopp.salesorderproduct.salesorder.buyer.contact_name }}</td>
+      <td>{{ sopp.salesorderproduct.product.name }}</td>
+      <td>{{ sopp.salesorderproduct.quantity }}</td>
+      <td>{{ sopp.planned_quantity }}</td>
+      <td>{{ sopp.transporter.name }}</td>
+      <td>{{ sopp.salesorderproduct.so_selling_price }}</td>
+      <td>{{ sopp.total_amount }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

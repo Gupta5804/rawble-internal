@@ -8,8 +8,8 @@
       <h4 class="alert-heading text-center">Previous Dispatch<br> <span style="color:red">{{ previous_outward_date|date:"j-F-Y (l)" }} </span></h4>
       <hr>
       <div class="btn-group btn-block" role="group">
-        <a class="btn btn-outline-success col-6 dispatchtoday" href="#" data-toggle="modal" data-target="#dispatchtoday"><i class="fas fa-envelope"></i> Send Report Mail</a>
-          <div class="modal fade" id="dispatchtoday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <a class="btn btn-outline-success col-6 previousoutward" href="#" data-toggle="modal" data-target="#previousoutward"><i class="fas fa-envelope"></i> Send Report Mail</a>
+          <div class="modal fade" id="previousoutward" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -203,6 +203,22 @@ $(document).on("click",".select-outward",function(){
 });
 </script>
      <script>
+     $(document).on("click",".previousoutward",function () {
+
+        $('#previousoutward').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/cloudy/index.cloudy-sky-preloader.gif' />");
+        $.ajax({
+            url: '../../../../../ajax/servicedelivery/outward/previousoutward_summary',
+            type: "get",
+            success: function(data) {
+              
+              $('#previousoutward').find('.modal-body').html(data.snippet);
+            },
+            error: function(err) {
+              console.log('error', err);
+            }
+          });
+
+    });
     $('#todaysdispatch').on("click",function () {
 
         $('#todaysdispatchmodal').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");

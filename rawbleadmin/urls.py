@@ -146,7 +146,7 @@ urlpatterns = [
     path('ajax/servicedelivery/inward/dispatchtodaysummary',servicedelivery_views.inward_dispatchtoday_summary,name='inward_dispatchtoday_summary'),
     path('ajax/servicedelivery/inward/receivingtoday',servicedelivery_views.inward_receivingtoday,name='inward_receivingtoday'),
     path('ajax/servicedelivery/inward/receivingtodaysummary',servicedelivery_views.inward_receivingtoday_summary,name='inward_receivingtoday_summary'),
-    
+    path('ajax/servicedelivery/outward/previousoutward',servicedelivery_views.previousoutward,name="previousoutward"),
     
     
     path('ajax/salesperson_stats',deal_views.salesperson_stats,name='salesperson_stats'),
