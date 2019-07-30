@@ -68,6 +68,8 @@
             <th scope="col">Quantity</th>
             <th scope="col">Quantity Dispatched</th>
             <th scope="col">Quantity To Dispatch</th>
+            <th scope="col">Inward Status</th>
+
             
             
             
@@ -116,7 +118,23 @@
                 {% endif %}
             </th>
            
-            
+            <th>
+                {% if salesorder.zohopurchaseorder_set.all %}
+                    {% for po in zohopurchaseorder_set.all %}
+                        {% if po.planned_status %}
+                            {% for pop in po.purchaseorderproduct %}
+                                {% if pop.product.item_id == item.item_id %}
+                                    {% for popp in pop.purchaseorderproductplan_set.all %}
+                                        {{ popp.planned_quantity }}({{ pop.product.unit }}) - {{ popp.plan_status }}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                No Purchase Order Against this Sales Order
+                {% endif %}
+            </th>
             
            
         </tr>
