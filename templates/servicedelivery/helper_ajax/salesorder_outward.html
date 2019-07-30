@@ -121,7 +121,7 @@
             <th>
                 {% if salesorder.zohopurchaseorder_set.all %}
                     {% for po in zohopurchaseorder_set.all %}
-                        {% if po.planned_status %}
+                        {% if po.purchaseorderproduct_set.count > 0 %}
                             {{ po.purchaseorderproduct_set.count }}
                             {% for pop in po.purchaseorderproduct_set.all %}
                                 {{ pop.product.item_id_str }} - {{ item.product.item_id_str }}
