@@ -277,7 +277,7 @@ def salesorder_outward(request):
             dispatchdates.append(day)
         day = day + datetimedelta(days=1)
 
-    rendered = render_to_string('servicedelivery/helper_ajax/salesorder_outward.html', context = {'salesorder':salesorder,'salesorder_api':salesorder_api, 'transporters':transporters ,'dispatchdates'},request=request)
+    rendered = render_to_string('servicedelivery/helper_ajax/salesorder_outward.html', context = {'salesorder':salesorder,'salesorder_api':salesorder_api, 'transporters':transporters ,'dispatchdates':dispatchdates},request=request)
     
     return JsonResponse({'so_snippet': rendered})
 def inward_dispatchtoday(request):
