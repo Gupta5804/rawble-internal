@@ -122,7 +122,7 @@
                 {% if salesorder.zohopurchaseorder_set.all %}
                     {% for po in zohopurchaseorder_set.all %}
                         
-                            {{ po.purchaseorderproduct_set.count }}
+                            pop-count:{{ po.purchaseorderproduct_set.count }}
                             {% for pop in po.purchaseorderproduct_set.all %}
                                 {{ pop.product.item_id_str }} - {{ item.product.item_id_str }}
                                 {% if pop.product.item_id_str == item.product.item_id_str %}
