@@ -220,6 +220,7 @@ def salesorder_outward(request):
     auth_token = 'd56b2f2501f266739e12b86b706d0078'
     organization_ids = {'okhla':'667580392','baddi':'665963577'}
     
+    
     organization_id = organization_ids[salesorder.zoho_location]
     parameters={'authtoken':auth_token,'organization_id':organization_id}
     response = requests.get("https://books.zoho.com/api/v3/salesorders/" + salesorder_id,params = parameters)
@@ -238,7 +239,7 @@ def salesorder_outward(request):
         except:
             item['sop_saved'] = False
     transporters = Transporter.objects.all()
-    rendered = render_to_string('servicedelivery/helper_ajax/salesorder_outward.html', context = {'salesorder':salesorder,'salesorder_api':salesorder_api, 'transporters':transporters},request=request)
+    rendered = render_to_string('servicedelivery/helper_ajax/salesorder_outward.html', context = {'salesorder':salesorder,'salesorder_api':salesorder_api, 'transporters':transporters ,},request=request)
     
     return JsonResponse({'so_snippet': rendered})
 def inward_dispatchtoday(request):
@@ -864,8 +865,20 @@ def outward_service_delivery(request):
 
                 salesorders_unplanned.append(salesorder)
             
-        
-        return render(request, 'servicedelivery/outward.html', {'salesorders_unplanned': salesorders_unplanned})
+        today = date.today()
+        day = today
+        for i in range(10):
+            if(day.weekday() in [0,2,4]):
+                next_outward_date = day
+                break
+            day = day + datetime.timedelta(days=1)
+        day= today
+        for p in range(10):
+            day = day - datetime.timedelta(days=1)
+            if(day.weekday() in [0,2,4]):
+                previous_outward_date = day
+                break
+        return render(request, 'servicedelivery/outward.html', {'salesorders_unplanned': salesorders_unplanned,'next_outward_date':next_outward_date,'previous_outward_date':previous_outward_date})
     if request.method == "POST":
         
         if "sopp-save" in request.POST:
