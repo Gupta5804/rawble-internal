@@ -123,7 +123,7 @@
                     {% for po in zohopurchaseorder_set.all %}
                         {% if po.planned_status %}
                             {% for pop in po.purchaseorderproduct %}
-                                {% if pop.product.item_id == item.item_id %}
+                                {% if pop.product.item_id_str == item.item_id %}
                                     {% for popp in pop.purchaseorderproductplan_set.all %}
                                         {{ popp.planned_quantity }}({{ pop.product.unit }}) - {{ popp.plan_status }}
                                     {% endfor %}
