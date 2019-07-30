@@ -7,8 +7,8 @@
     <div class="alert alert-primary border border-white col-4">
       <h4 class="alert-heading text-center">Previous Dispatch<br> <span style="color:red">{{ previous_outward_date|date:"j-F-Y (l)" }} </span></h4>
       <hr>
-      <div class="btn-group btn-block" role="group">
-        <a class="btn btn-outline-success col-6 previousoutward" href="#" data-toggle="modal" data-target="#previousoutward"><i class="fas fa-envelope"></i> Send Report Mail</a>
+      
+        <a class="btn btn-outline-success btn-block previousoutward" href="#" data-toggle="modal" data-target="#previousoutward"><i class="fas fa-envelope"></i> Send Report Mail</a>
           <div class="modal fade" id="previousoutward" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
               <div class="modal-content">
@@ -30,7 +30,7 @@
               </div>
             </div>
           </div>
-        </div>
+       
     </div>
     <div class="alert alert-primary border border-white col-4">
       <a href="{% url 'refresh_sales_orders' %}" class="btn btn-outline-dark btn-block"><i class="fas fa-sync-alt"></i> Update Sales orders from Zoho</a>
