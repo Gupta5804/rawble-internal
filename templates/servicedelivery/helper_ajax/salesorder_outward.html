@@ -124,12 +124,23 @@
                         {% if po.purchaseorderproduct_set.count > 0 %}
                             
                             {% for pop in po.purchaseorderproduct_set.all %}
-                                
+                                <table class="table">
+                                <tr>
+                                    <th>Qty</th>
+                                    <th>Status</th>
+                                    <th>E.T.A.</th>
+                                </tr>
                                 {% if pop.product.item_id_str == item.product.item_id_str %}
                                     {% for popp in pop.purchaseorderproductplan_set.all %}
-                                        {{ popp.planned_quantity }}({{ pop.product.unit }}) - {{ popp.plan_status }}
+                                        <tr class="{% if popp.plan_status == 'planned' %}table-danger{% elif popp.plan_status == 'in-transit' %}table-warning{% else %}table-success{% endif %}">
+                                            <td>{{ popp.planned_quantity }}({{ pop.product.unit }})</td>
+                                            <td>{{ popp.plan_status }}</td>
+                                            <td>{{ popp.planned_receive_date_time }}</td>
+                                        </tr>
+                                        
                                     {% endfor %}
                                 {% endif %}
+                                <table>
                             {% endfor %}
                         {% endif %}
                     {% endfor %}
