@@ -77,6 +77,7 @@
     <tbody>
     {% for item in salesorder_api.line_items %}
         <tr>
+            <th></th>
             <th>{{ item.product.name }}<input name="product_id" value="{{ item.product.item_id }}" type="hidden"></th>
             <th>{{ item.product.make }}</th>
             <th>{{ item.pack_size }}<input type="hidden" value="{{ item.pack_size }}" name="pack_size"></th>
