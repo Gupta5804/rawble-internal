@@ -21,7 +21,7 @@
                                             <tr>
                                                 <th>Select Dispatch Date</th>
                                                 <th>
-                                                    <select class="form-control" name="planned_date">
+                                                    <select class="form-control" name="planned_date" required>
                                                         {% for dispatchdate in dispatchdates %}
                                                         <option value="{{ dispatchdate|date:'Y-m-d' }}">{{ dispatchdate|date:"j-F-Y (l)" }}</option>
                                                         {% endfor %}
@@ -29,12 +29,12 @@
                                                 </th>
 
                                                 <th>Select Dispatch Time</th>
-                                                <th><input class="form-control" type="time" name="planned_time"></th>
+                                                <th><input class="form-control" type="time" name="planned_time" required></th>
                                             </tr>
                                             <tr>
                                                 <th>Select Transporter</th>
                                                 <th>
-                                                    <select class="form-control" name="transporter_id">
+                                                    <select class="form-control" name="transporter_id" required>
                                                         <option value="">----</option>
                                                         {% for transporter in transporters %}
                                                         <option value="{{ transporter.id }}">{{ transporter.name }}</option>
@@ -43,7 +43,7 @@
                                                 </th>
 
                                                 <th>Reason(For Rescheduling)</th>
-                                                <th><input class="form-control" type="number" name="reason" step="0.01"></th>
+                                                <th><input class="form-control" type="text" name="reason" required></th>
                                             </tr>
                                         </tbody>
 

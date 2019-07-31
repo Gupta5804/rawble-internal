@@ -28,7 +28,7 @@
 <table class="table">
   <thead class="thead-light">
     <tr>
-      <th scope="col"></th>
+      <th scope="col"><input type="checkbox" onClick="toggle(this)" /></th>
       <th scope="col">PO#</th>
       <th scope="col">Product</th>
       <th scope="col">Vendor</th>
@@ -60,4 +60,12 @@
   </tbody>
 </table>
 </form>
+<script>
+  function toggle(source) {
+  checkboxes = document.getElementsByName('selected_popp_id');
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    checkboxes[i].checked = source.checked;
+  }
+}
+</script>
 {% endblock application-active %}

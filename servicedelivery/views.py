@@ -857,46 +857,97 @@ def outward_servicedelivery_shipping(request):
             day = day + datetime.timedelta(days=1)
         return render(request,'servicedelivery/outward_shipping.html',{'sopps_expired':sopps_expired,'sopps_from_today':sopps_from_today,'transporters':transporters,'dispatchdates':dispatchdates})
     if request.method == "POST":
+        if "replan" in request.POST:
+            selected_sopp_ids = request.POST.getlist('selected_sopp_id')
+            planned_date = request.POST.get('planned_date')
+            planned_time = request.POST.get('planned_time')
+            reason = request.POST.get('reason')
+            sopp_email = []
+            for selected_sopp_id in selected_sopp_ids:
+                sopp = SalesOrderProductPlan.objects.get(id = selected_sopp_id)
+                sopp.planned_date_time = planned_date + " " + planned_time
+                
+                sopp.reason = reason
+                sopp.save()
+                sopp_email.append(sopp)
+            if(sopp_email):
+                subject = "Items Rescheduled to Dispatch"
+                to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+                from_email = 'admin@rawble.com'
+                users = User.objects.all()
+                users_sales = User.objects.filter(groups__name="Sales Team")
+                total_quantity = 0
+                total_amount_without_tax = 0
+                total_amount_with_tax = 0
+                for sopp in sopp_email:
+                    total_quantity = total_quantity + sopp.planned_quantity
+                    total_amount = total_amount + sopp.total_amount
+                    
+                ctx = {
+                    "sopp_email":sopp_email,
+                    #"users_sales":users_sales,
+                    'planned_date':planned_date,
+                    'planned_time':planned_time,
+                    'reason':reason,
+                    "total_quantity":total_quantity,
+                    "total_amount":total_amount,
+                    
+                }
+                for user in users:
+                    to.append(str(user.email))
+        
+
+                message = render_to_string('emails/outward/delay_reason.html', ctx)
+                text_content = strip_tags(message)
+                #EmailMessage(subject, message, to=to, from_email=from_email).send()
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+                msg.attach_alternative(message, "text/html")
+                msg.send()
+        if "mark-as-dispatched" in request.POST:
+            selected_popp_ids = request.POST.getlist('selected_popp_id')
+            popp_email = []
+            for selected_popp_id in selected_popp_ids:
+                popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
+                popp.dispatched_date_time = popp.planned_dispatch_date_time
+                popp.save()
+                popp_email.append(popp)
+            if(popp_email):
+                subject = "Items Dispatched From Vendor's End Today"
+                to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+                from_email = 'admin@rawble.com'
+                users = User.objects.all()
+                users_sales = User.objects.filter(groups__name="Sales Team")
+                total_quantity = 0
+                total_amount_without_tax = 0
+                total_amount_with_tax = 0
+                for popp in popp_email:
+                    total_quantity = total_quantity + popp.planned_quantity
+                    total_amount_without_tax = total_amount_without_tax + popp.total_amount_without_tax
+                    total_amount_with_tax = total_amount_with_tax + popp.total_amount_with_tax
+                ctx = {
+                    "popp_email":popp_email,
+                    #"users_sales":users_sales,
+                    "total_quantity":total_quantity,
+                    "total_amount_without_tax":total_amount_without_tax,
+                    "total_amount_with_tax":total_amount_with_tax,
+                }
+                for user in users:
+                    to.append(str(user.email))
+        
+
+                message = render_to_string('emails/inward/dispatched_today.html', ctx)
+                text_content = strip_tags(message)
+                #EmailMessage(subject, message, to=to, from_email=from_email).send()
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+                msg.attach_alternative(message, "text/html")
+                msg.send()
         if "mark-as-dispatched" in request.POST:
             sopp_id = request.POST.get("sopp_id")
             sopp = SalesOrderProductPlan.objects.get(id = sopp_id)
             print(sopp)
             sopp.shipped_date_time = sopp.planned_date_time
             sopp.save()
-        if "replan"in request.POST:
-            sopp_id = request.POST.get("sopp_id")
-            transporter_id = request.POST.get("transporter_id")
-            reason = request.POST.get("reason")
-            planned_date_time = request.POST.get("planned_date_time")
-            sopp = SalesOrderProductPlan.objects.get(id = sopp_id)
-            transporter = Transporter.objects.get(id=transporter_id)
-            previously_planned_date_time = sopp.planned_date_time
-            sopp.transporter = transporter
-            sopp.reason = reason
-            sopp.planned_date_time = planned_date_time
-            sopp.save()
-            subject = "Reason For Delay in Dispatch"
-            to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
-            from_email = 'admin@rawble.com'
-            users = User.objects.all()
-            users_sales = User.objects.filter(groups__name="Sales Team")
-            ctx = {
-                "sopp":sopp,
-                "previously_planned_date_time":previously_planned_date_time,
-                "users_sales":users_sales,
-
-            }
-            for user in users:
-                to.append(str(user.email))
-
-
-            message = render_to_string('emails/replan_reason.html', ctx)
-            text_content = strip_tags(message)
-            #EmailMessage(subject, message, to=to, from_email=from_email).send()
-            msg = EmailMultiAlternatives(subject, text_content, from_email, to)
-            msg.attach_alternative(message, "text/html")
-                
-            msg.send()
+        
         return redirect("outward_servicedelivery_shipping")
 def outward_service_delivery(request):
     if request.method == "GET":
