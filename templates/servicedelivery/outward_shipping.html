@@ -55,7 +55,7 @@
                                 <table class="table" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th></th>
+                                                    <th><input type="checkbox" onClick="toggle(this)" /></th>
                                                     <th>SO#</th>
                                                     <th>Buyer</th>
                                                     <th>Zoho Location</th>
@@ -73,7 +73,7 @@
                                             <tbody>
                                             {% for sopp in sopps_expired %}
                                                 <tr>
-                                                    <td><input type="checkbox" name="selected_sopp_ids" value="{{ sopp.id }}"></td>
+                                                    <td><input type="checkbox" name="selected_sopp_id" value="{{ sopp.id }}"></td>
                                                     <td>{{ sopp.salesorderproduct.salesorder.salesorder_number }}</td>
                                                     <td>{{ sopp.salesorderproduct.salesorder.buyer.contact_name }}</td>
                                                     <td style="{% if sopp.salesorderproduct.salesorder.zoho_location == 'okhla' %} color:red{% elif sopp.salesorderproduct.salesorder.zoho_location == 'baddi' %}color:blue{% endif %};font-weight:bold;text-transform: uppercase;">{{ sopp.salesorderproduct.salesorder.zoho_location }}</td>
@@ -129,4 +129,12 @@
                 </div>
             </div>
         </section>
+        <script>
+            function toggle(source) {
+  checkboxes = document.getElementsByName('selected_sopp_id');
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    checkboxes[i].checked = source.checked;
+  }
+}
+        </script>
 {% endblock application-active %}
