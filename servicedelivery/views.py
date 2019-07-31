@@ -1041,7 +1041,7 @@ def outward_service_delivery(request):
             planned_time = request.POST.get("planned_time")
             selling_prices = request.POST.getlist("selling_price")
             selected_product_item_ids = request.POST.getlist("selected_product_item_id")
-            freight = request.POST.getlist("freight")
+            freight = request.POST.get("freight")
             transporter_id = request.POST.getlist("transporter_id")
             salesorder = ZohoSalesOrder.objects.get(salesorder_id = salesorder_id)
             if freight == '':
