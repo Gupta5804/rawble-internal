@@ -1036,12 +1036,17 @@ def outward_service_delivery(request):
             quantitys = request.POST.getlist("quantity")
             quantity_to_dispatchs = request.POST.getlist("quantity_to_dispatch")
             pack_sizes = request.POST.getlist("pack_size")
-            outward_date_times = request.POST.getlist("outward_date_time")
+            
+            planned_date = request.POST.get("planned_date")
+            planned_time = request.POST.get("planned_time")
             selling_prices = request.POST.getlist("selling_price")
-            transporter_details = request.POST.getlist("transporter_detail")
-            freights = request.POST.getlist("freight")
-            transporter_ids = request.POST.getlist("transporter_id")
+            selected_product_item_ids = request.POST.getlist("selected_product_item_id")
+            freight = request.POST.getlist("freight")
+            transporter_id = request.POST.getlist("transporter_id")
             salesorder = ZohoSalesOrder.objects.get(salesorder_id = salesorder_id)
+            if freight == '':
+                freight=0
+            freight_for_each = (freight / len(selected_product_item_ids))
             if ( salesorder.salesorderproduct_set.count() == 0 ):
                 sops=[]
                 for i,product_id in enumerate(product_ids):
@@ -1062,53 +1067,27 @@ def outward_service_delivery(request):
                             )
                     sop.save()
                     sops.append(sop)
-            for i,product_id in enumerate(product_ids):
-                if(outward_date_times[i] == ''):
-                    outward_date_time = None
-                else:
-                    outward_date_time = outward_date_times[i]
-                if(freights[i] == ''):
-                    freight = 0.0
-                else:
-                    freight = freights[i]
-                if(quantity_to_dispatchs[i] == ''):
-                    quantity_to_dispatch = 0.0
-                else:
-                    quantity_to_dispatch = quantity_to_dispatchs[i]
-                try:
-                    sop = salesorder.salesorderproduct_set.get(product__item_id = product_id)
-                    sop.so_selling_price = selling_prices[i]
+            for selected_product_item_id in selected_product_item_ids:
+                for i,product_id in enumerate(product_ids):
+                    if product_id == selected_product_item_id :
+                        try:
+                            transporter = Transporter.objects.get(id=transporter_id)
+                        except:
+                            transporter = None
+                        sopp = SalesOrderProductPlan(
+                            salesorderproduct = salesorder.salesorderproduct_set.get(product__item_id = product_id),
+                            planned_dispatch_date_time__date = planned_date,
+                            planned_receive_date_time__time = planned_time,
+                            freight = freight_for_each,
+                            planned_quantity = planned_quantitys[i],
+                            transporter = transporter
+
+                        )
+                        sopp.save()
+
+
+
                     
-                    sop.save()
-                except:
-                    pass
-            for i,product_id in enumerate(product_ids):
-                sops = salesorder.salesorderproduct_set.all()
-                if(outward_date_times[i] == ''):
-                    outward_date_time = None
-                else:
-                    outward_date_time = outward_date_times[i]
-                if(freights[i] == ''):
-                    freight = 0.0
-                else:
-                    freight = freights[i]
-                if(quantity_to_dispatchs[i] == ''):
-                    quantity_to_dispatch = 0.0
-                else:
-                    quantity_to_dispatch = quantity_to_dispatchs[i]
-                if(transporter_ids[i] == ''):
-                    transporter = None
-                else:
-                    transporter = Transporter.objects.get(id = transporter_ids[i])
-                if(outward_date_time != None):
-                    sopp = SalesOrderProductPlan(
-                        salesorderproduct = salesorder.salesorderproduct_set.get(product__item_id = product_id),
-                        planned_quantity = quantity_to_dispatch,
-                        planned_date_time = outward_date_time,
-                        transporter = transporter,
-                        freight = freight,
-                    )
-                    sopp.save()
 
         return redirect("outward_servicedelivery")
 
