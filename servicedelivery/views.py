@@ -1083,12 +1083,9 @@ def outward_service_delivery(request):
                             transporter = transporter
 
                         )
-                        sopp.planned_date_time__date = planned_date
+                        sopp.planned_date_time = planned_date
                         sopp.planned_date_time__time = planned_time
                         sopp.save()
-
-
-
                     
 
         return redirect("outward_servicedelivery")
