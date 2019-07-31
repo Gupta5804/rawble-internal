@@ -1082,9 +1082,9 @@ def outward_service_delivery(request):
                             planned_quantity = planned_quantitys[i],
                             transporter = transporter
 
-                        )
-                        sopp.planned_date_time = planned_date
-                        sopp.planned_date_time__time = planned_time
+                        ) 
+                        sopp.planned_date_time = planned_date + " " + planned_time
+                        #sopp.planned_date_time.time = planned_time
                         sopp.save()
                     
 
