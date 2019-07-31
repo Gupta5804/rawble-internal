@@ -24,7 +24,7 @@
         <th>
             <select class="form-control" name="planned_date">
                 {% for dispatchdate in dispatchdates %}
-                <option value="dispatchdate">{{ dispatchdate|date:"j-F-Y (l)" }}</option>
+                <option value="{{ dispatchdate }}">{{ dispatchdate|date:"j-F-Y (l)" }}</option>
                 {% endfor %}
             </select>
         </th>
