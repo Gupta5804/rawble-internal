@@ -268,7 +268,7 @@ def salesorder_outward(request):
             
         except:
             item['sop_saved'] = False
-    transporters = Transporter.objects.all()
+    transporters = Transporter.objects.all().order_by("name")
     dispatchdates = []
     today = date.today()
     day = today
@@ -847,8 +847,15 @@ def outward_servicedelivery_shipping(request):
                 else:
                     sopps_from_today.append(sopp)
 
-        transporters = Transporter.objects.all()
-        return render(request,'servicedelivery/outward_shipping.html',{'sopps_expired':sopps_expired,'sopps_from_today':sopps_from_today,'transporters':transporters})
+        transporters = Transporter.objects.all().order_by("name")
+        dispatchdates = []
+        today = date.today()
+        day = today
+        for i in range(30):
+            if(day.weekday() in [0,2,4]):
+                dispatchdates.append(day)
+            day = day + datetime.timedelta(days=1)
+        return render(request,'servicedelivery/outward_shipping.html',{'sopps_expired':sopps_expired,'sopps_from_today':sopps_from_today,'transporters':transporters,'dispatchdates':dispatchdates})
     if request.method == "POST":
         if "mark-as-dispatched" in request.POST:
             sopp_id = request.POST.get("sopp_id")
