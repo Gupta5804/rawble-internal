@@ -1076,13 +1076,15 @@ def outward_service_delivery(request):
                             transporter = None
                         sopp = SalesOrderProductPlan(
                             salesorderproduct = salesorder.salesorderproduct_set.get(product__item_id = product_id),
-                            planned_date_time__date = planned_date,
-                            planned_date_time__time = planned_time,
+                            #planned_date_time__date = planned_date,
+                            #planned_date_time__time = planned_time,
                             freight = freight_for_each,
                             planned_quantity = planned_quantitys[i],
                             transporter = transporter
 
                         )
+                        sopp.planned_date_time__date = planned_date
+                        sopp.planned_date_time__time = planned_time
                         sopp.save()
 
 
