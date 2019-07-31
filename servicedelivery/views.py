@@ -1034,7 +1034,7 @@ def outward_service_delivery(request):
             salesorder_id = request.POST.get("salesorder_id")
             product_ids = request.POST.getlist("product_id")
             quantitys = request.POST.getlist("quantity")
-            quantity_to_dispatchs = request.POST.getlist("quantity_to_dispatch")
+            planned_quantitys = request.POST.getlist("planned_quantity")
             pack_sizes = request.POST.getlist("pack_size")
             
             planned_date = request.POST.get("planned_date")
