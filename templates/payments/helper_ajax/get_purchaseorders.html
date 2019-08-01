@@ -9,7 +9,7 @@
 
         <div id="po-{{ po.purchaseorder_id }}" class="collapse" role="tabpanel" aria-labelledby="headingOne">
             <div class="card-body">
-                {% if po.purchaseorderproduct_set %}
+                {% if po.purchaseorderproduct_set.all %}
                 <table class="table table-bordered">
                     <thead class="thead-light">
                       <tr>
