@@ -75,7 +75,7 @@
                                             <tbody>
                                             {% for sopp in sopps_expired %}
                                                 <tr>
-                                                    <td><input type="checkbox" name="selected_sopp_id" value="{{ sopp.id }}"></td>
+                                                    <td><input type="checkbox" class="form-group" name="selected_sopp_id" value="{{ sopp.id }}"></td>
                                                     <td>{{ sopp.salesorderproduct.salesorder.salesorder_number }}</td>
                                                     <td>{{ sopp.salesorderproduct.salesorder.buyer.contact_name }}</td>
                                                     <td style="{% if sopp.salesorderproduct.salesorder.zoho_location == 'okhla' %} color:red{% elif sopp.salesorderproduct.salesorder.zoho_location == 'baddi' %}color:blue{% endif %};font-weight:bold;text-transform: uppercase;">{{ sopp.salesorderproduct.salesorder.zoho_location }}</td>
