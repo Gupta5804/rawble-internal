@@ -877,8 +877,8 @@ def outward_servicedelivery_shipping(request):
                 users = User.objects.all()
                 users_sales = User.objects.filter(groups__name="Sales Team")
                 total_quantity = 0
-                total_amount_without_tax = 0
-                total_amount_with_tax = 0
+                total_amount = 0
+                
                 for sopp in sopp_email:
                     total_quantity = total_quantity + sopp.planned_quantity
                     total_amount = total_amount + sopp.total_amount
@@ -1100,7 +1100,7 @@ def outward_service_delivery(request):
             selling_prices = request.POST.getlist("selling_price")
             selected_product_item_ids = request.POST.getlist("selected_product_item_id")
             freight = request.POST.get("freight")
-            transporter_id = request.POST.getlist("transporter_id")
+            transporter_ids = request.POST.getlist("transporter_id")
             salesorder = ZohoSalesOrder.objects.get(salesorder_id = salesorder_id)
             if freight == '':
                 freight=0
@@ -1129,7 +1129,7 @@ def outward_service_delivery(request):
                 for i,product_id in enumerate(product_ids):
                     if product_id == selected_product_item_id :
                         try:
-                            transporter = Transporter.objects.get(id=transporter_id)
+                            transporter = Transporter.objects.get(id=transporter_ids[i])
                         except:
                             transporter = None
                         sopp = SalesOrderProductPlan(
