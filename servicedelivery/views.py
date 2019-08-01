@@ -905,22 +905,19 @@ def outward_servicedelivery_shipping(request):
                 msg.send()
         if "mark-as-dispatched" in request.POST:
             selected_sopp_ids = request.POST.getlist('selected_sopp_id')
-            sopp_email = []
-            for selected_sopp_id in selected_sopp_ids:
-                sopp = SalesOrderProductPlan.objects.get(id = selected_sopp_id)
-                #sopp.shipped_date_time = sopp.planned_date_time
-                sopp.save()
-                sopp_email.append(sopp)
             
             buyer_sopps = {}
-            for sopp in sopp_email:
-                buyer = sopp.salesorderproduct.salesorder.buyer
+            for selected_sopp_id in selected_sopp_ids:
+                sopp = SalesOrderProductPlan.objects.get(id = selected_sopp_id)
+                sopp.shipped_date_time = sopp.planned_date_time
+                sopp.save()
                 
+                buyer = sopp.salesorderproduct.salesorder.buyer
                 try:
                     buyer_sopps[buyer.contact_name].append(sopp)
                 except:
                     buyer_sopps[buyer.contact_name] = [sopp]
-            print(buyer_sopps)
+            
             if (buyer_sopps):
                 for buyer,sopps in buyer_sopps.items():
 
@@ -928,7 +925,7 @@ def outward_servicedelivery_shipping(request):
                     to = []
                     from_email = 'admin@rawble.com'
                     users = User.objects.all()
-                    to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+                    #to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
             
                     users = User.objects.all()
                     users_sales = User.objects.filter(groups__name="Sales Team")
@@ -940,10 +937,10 @@ def outward_servicedelivery_shipping(request):
                         "buyer":buyer
                     }
                     cc_email = ["gupta.rishabh.abcd@gmail.com"]
-                    #for user in users:
-                    #    cc_email.append(str(user.email))
+                    for user in users:
+                        cc_email.append(str(user.email))
         
-
+                    to.append(sopps[0].salesorderproduct.salesorder.buyer.email)
                     message = render_to_string('emails/external/order_dispatched.html', ctx)
                     text_content = strip_tags(message)
                     #EmailMessage(subject, message, to=to, from_email=from_email).send()
