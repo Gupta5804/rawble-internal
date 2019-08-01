@@ -1158,7 +1158,7 @@ def outward_service_delivery(request):
             selling_prices = request.POST.getlist("selling_price")
             selected_product_item_ids = request.POST.getlist("selected_product_item_id")
             freight = request.POST.get("freight")
-            transporter_ids = request.POST.getlist("transporter_id")
+            transporter_id = request.POST.get("transporter_id")
             salesorder = ZohoSalesOrder.objects.get(salesorder_id = salesorder_id)
             if freight == '':
                 freight=0
@@ -1187,7 +1187,7 @@ def outward_service_delivery(request):
                 for i,product_id in enumerate(product_ids):
                     if product_id == selected_product_item_id :
                         try:
-                            transporter = Transporter.objects.get(id=transporter_ids[i])
+                            transporter = Transporter.objects.get(id=transporter_id)
                         except:
                             transporter = None
                         sopp = SalesOrderProductPlan(
