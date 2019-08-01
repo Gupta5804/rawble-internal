@@ -28,7 +28,7 @@ from django.utils.html import strip_tags
 from django.contrib.auth.models import User
 from deals.filters import SOFilter
 def salesreport_mail_admin(request):
-    start_of_month = datetime.date.today().replace(day=1)
+    start_of_month = datetime.date.today().replace(day=1,month=7)
     so_qs = ZohoSalesOrder.objects.filter(date__gte = start_of_month)
     salespersons_list = so_qs.order_by().values('salesperson').distinct()
     salespersons={}
@@ -84,7 +84,7 @@ def salesreport_mail_admin(request):
     return redirect('sales_report')
 def overall_stats(request):
     if request.method == "GET":
-        start_of_month = datetime.date.today().replace(day=1)
+        start_of_month = datetime.date.today().replace(day=1,month=7)
         sops = SalesOrderProduct.objects.filter(salesorder__date__gte=start_of_month)
         eps = EstimateProduct.objects.filter(estimate__date__gte=start_of_month)
         total_sop_count = 0
@@ -128,7 +128,7 @@ def overall_stats(request):
 def salesperson_stats(request):
     if request.method == "GET":
         salesperson = request.GET.get('salesperson')
-        start_of_month = datetime.date.today().replace(day=1)
+        start_of_month = datetime.date.today().replace(day=1,month=7)
         eps = EstimateProduct.objects.filter(estimate__salesperson = salesperson, estimate__date__gte = start_of_month)
         sops = SalesOrderProduct.objects.filter(salesorder__salesperson = salesperson,salesorder__date__gte=start_of_month)
         total_sop_count = 0
