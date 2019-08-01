@@ -211,7 +211,7 @@ def sales_report(request):
 def zoho_salesorders(request):
     if request.method == 'GET':
         start_of_month = datetime.date.today().replace(day=1)
-        salesorders = ZohoSalesOrder.objects.filter(date__gte=start_of_month).order_by('-date')
+        salesorders = ZohoSalesOrder.objects.all().order_by('-date')
         return render(request,'deals/zoho_salesorders.html',{'salesorders':salesorders})
     if request.method == 'POST':
         if "unquote-so" in request.POST:
