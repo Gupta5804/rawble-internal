@@ -206,52 +206,43 @@ def inward_servicedelivery_expired(request):
                 msg.attach_alternative(message, "text/html")
                 msg.send()
         if "mark-as-dispatched" in request.POST:
-            selected_sopp_ids = request.POST.getlist('selected_sopp_id')
-            sopp_email = []
-            for selected_sopp_id in selected_sopp_ids:
-                sopp = SalesOrderProductPlan.objects.get(id = selected_sopp_id)
-                #sopp.shipped_date_time = sopp.planned_date_time
-                sopp.save()
-                sopp_email.append(sopp)
-            
-            buyer_sopps = {}
-            for sopp in sopp_email:
-                buyer = sopp.salesorderproduct.salesorder.buyer
-                
-                try:
-                    buyer_sopps[buyer.contact_name].append(sopp)
-                except:
-                    buyer_sopps[buyer.contact_name] = [sopp]
-            print(buyer_sopps)
-            if (buyer_sopps):
-                for buyer,sopps in buyer_sopps.items():
-
-                    subject = "Order Dispatched"
-                    to = []
-                    from_email = 'admin@rawble.com'
-                    users = User.objects.all()
-                    to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
-            
-                    users = User.objects.all()
-                    users_sales = User.objects.filter(groups__name="Sales Team")
-                    
-                    
-                    ctx = {
-                        "sopp_email":sopps,
-                        #"users_sales":users_sales,
-                        "buyer":buyer
-                    }
-                    cc_email = ["gupta.rishabh.abcd@gmail.com"]
-                    #for user in users:
-                    #    cc_email.append(str(user.email))
+            selected_popp_ids = request.POST.getlist('selected_popp_id')
+            popp_email = []
+            for selected_popp_id in selected_popp_ids:
+                popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
+                popp.dispatched_date_time = popp.planned_dispatch_date_time
+                popp.save()
+                popp_email.append(popp)
+            if(popp_email):
+                subject = "Items Dispatched From Vendor's End Today"
+                to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+                from_email = 'admin@rawble.com'
+                users = User.objects.all()
+                users_sales = User.objects.filter(groups__name="Sales Team")
+                total_quantity = 0
+                total_amount_without_tax = 0
+                total_amount_with_tax = 0
+                for popp in popp_email:
+                    total_quantity = total_quantity + popp.planned_quantity
+                    total_amount_without_tax = total_amount_without_tax + popp.total_amount_without_tax
+                    total_amount_with_tax = total_amount_with_tax + popp.total_amount_with_tax
+                ctx = {
+                    "popp_email":popp_email,
+                    #"users_sales":users_sales,
+                    "total_quantity":total_quantity,
+                    "total_amount_without_tax":total_amount_without_tax,
+                    "total_amount_with_tax":total_amount_with_tax,
+                }
+                for user in users:
+                    to.append(str(user.email))
         
 
-                    message = render_to_string('emails/external/order_dispatched.html', ctx)
-                    text_content = strip_tags(message)
-                    #EmailMessage(subject, message, to=to, from_email=from_email).send()
-                    msg = EmailMultiAlternatives(subject, text_content, from_email, to,cc=cc_email)
-                    msg.attach_alternative(message, "text/html")
-                    msg.send()
+                message = render_to_string('emails/inward/dispatched_today.html', ctx)
+                text_content = strip_tags(message)
+                #EmailMessage(subject, message, to=to, from_email=from_email).send()
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+                msg.attach_alternative(message, "text/html")
+                msg.send()
         return redirect('inward_servicedelivery_expired')    
 def salesorder_outward(request):
     salesorder_id = request.GET.get('slug',None)
@@ -913,49 +904,52 @@ def outward_servicedelivery_shipping(request):
                 msg.attach_alternative(message, "text/html")
                 msg.send()
         if "mark-as-dispatched" in request.POST:
-            selected_popp_ids = request.POST.getlist('selected_popp_id')
-            popp_email = []
-            for selected_popp_id in selected_popp_ids:
-                popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
-                popp.dispatched_date_time = popp.planned_dispatch_date_time
-                popp.save()
-                popp_email.append(popp)
-            if(popp_email):
-                subject = "Items Dispatched From Vendor's End Today"
-                to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
-                from_email = 'admin@rawble.com'
-                users = User.objects.all()
-                users_sales = User.objects.filter(groups__name="Sales Team")
-                total_quantity = 0
-                total_amount_without_tax = 0
-                total_amount_with_tax = 0
-                for popp in popp_email:
-                    total_quantity = total_quantity + popp.planned_quantity
-                    total_amount_without_tax = total_amount_without_tax + popp.total_amount_without_tax
-                    total_amount_with_tax = total_amount_with_tax + popp.total_amount_with_tax
-                ctx = {
-                    "popp_email":popp_email,
-                    #"users_sales":users_sales,
-                    "total_quantity":total_quantity,
-                    "total_amount_without_tax":total_amount_without_tax,
-                    "total_amount_with_tax":total_amount_with_tax,
-                }
-                for user in users:
-                    to.append(str(user.email))
+            selected_sopp_ids = request.POST.getlist('selected_sopp_id')
+            sopp_email = []
+            for selected_sopp_id in selected_sopp_ids:
+                sopp = SalesOrderProductPlan.objects.get(id = selected_sopp_id)
+                #sopp.shipped_date_time = sopp.planned_date_time
+                sopp.save()
+                sopp_email.append(sopp)
+            
+            buyer_sopps = {}
+            for sopp in sopp_email:
+                buyer = sopp.salesorderproduct.salesorder.buyer
+                
+                try:
+                    buyer_sopps[buyer.contact_name].append(sopp)
+                except:
+                    buyer_sopps[buyer.contact_name] = [sopp]
+            print(buyer_sopps)
+            if (buyer_sopps):
+                for buyer,sopps in buyer_sopps.items():
+
+                    subject = "Order Dispatched"
+                    to = []
+                    from_email = 'admin@rawble.com'
+                    users = User.objects.all()
+                    to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+            
+                    users = User.objects.all()
+                    users_sales = User.objects.filter(groups__name="Sales Team")
+                    
+                    
+                    ctx = {
+                        "sopp_email":sopps,
+                        #"users_sales":users_sales,
+                        "buyer":buyer
+                    }
+                    cc_email = ["gupta.rishabh.abcd@gmail.com"]
+                    #for user in users:
+                    #    cc_email.append(str(user.email))
         
 
-                message = render_to_string('emails/inward/dispatched_today.html', ctx)
-                text_content = strip_tags(message)
-                #EmailMessage(subject, message, to=to, from_email=from_email).send()
-                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
-                msg.attach_alternative(message, "text/html")
-                msg.send()
-        if "mark-as-dispatched" in request.POST:
-            sopp_id = request.POST.get("sopp_id")
-            sopp = SalesOrderProductPlan.objects.get(id = sopp_id)
-            print(sopp)
-            sopp.shipped_date_time = sopp.planned_date_time
-            sopp.save()
+                    message = render_to_string('emails/external/order_dispatched.html', ctx)
+                    text_content = strip_tags(message)
+                    #EmailMessage(subject, message, to=to, from_email=from_email).send()
+                    msg = EmailMultiAlternatives(subject, text_content, from_email, to,cc=cc_email)
+                    msg.attach_alternative(message, "text/html")
+                    msg.send()
         
         return redirect("outward_servicedelivery_shipping")
 def outward_service_delivery(request):
