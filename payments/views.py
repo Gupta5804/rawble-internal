@@ -8,7 +8,7 @@ from contacts.models import ContactVendor
 from deals.models import ZohoPurchaseOrder
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-# Create your views here.
+ # Create your views here.
 def payable_pending_get_purchaseorders(request):
     vendor_id = request.GET.get('vendor_id')
     vendor = ContactVendor.objects.get(contact_id = vendor_id)

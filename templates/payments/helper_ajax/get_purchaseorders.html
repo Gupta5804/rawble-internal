@@ -2,14 +2,47 @@
 <div id="accordion" role="tablist" aria-multiselectable="true">
     <div class="card mt-4">
         <h5 class="card-header" role="tab" id="headingOne">
-            <a data-toggle="collapse" data-parent="#accordion" href="#po-{{ po.purchaseorder_id }}" aria-expanded="true" aria-controls="collapseOne" class="d-block">
+            <a data-toggle="collapse" data-parent="#accordion" href="#po-{{ po.purchaseorder_id }}"  class="d-block">
                 <i class="fa fa-chevron-down pull-right"></i> {{ po.purchaseorder_number }} 
             </a>
         </h5>
 
         <div id="po-{{ po.purchaseorder_id }}" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
             <div class="card-body">
-                
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                      <tr>
+                        <th></th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Make</th>
+                        <th scope="col">Quantity Ordered</th>
+                        <th scope="col">Quantity Planned</th>
+                        <th scope="col">Inward Status(ETA)</th>
+                        <th scope="col">Total Amount(without Tax)</th>
+                        <th scope="col">Total Amount(with Tax)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for pop in po.purchaseorderproduct_set.all %}
+                    {% for popp in pop.purchaseorderproductplan_set.all %}
+                      <tr>
+                        <th scope="row"><input name="selected_popp_id" type="checkbox"></th>
+                        <td>{{ popp.purchaseorderproduct.product.name }}</td>
+                        <td>{{ popp.purchaseorderproduct.product.make }}</td>
+                        <td>{{ popp.purchaseorderproduct.quantity }} ({{ pop.product.unit }})</td>
+                        <td>{{ popp.planned_quantity }}</td>
+                        <td class="{% if popp.plan_status == 'planned' %}table-danger{% elif popp.plan_status == 'in-transit' %}table-warning{% else %}table-success{% endif %}">{{ popp.plan_status }}</td>
+                        <td>
+                            {{ popp.planned_receive_date_time }}
+                        </td>
+                        <td>{{ popp.total_amount_without_tax}}</td>
+                        <td>{{ popp.total_amount_with_tax}}</td>
+                      </tr>
+
+                    {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
