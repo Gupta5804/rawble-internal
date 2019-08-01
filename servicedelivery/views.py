@@ -837,7 +837,7 @@ def outward_servicedelivery_intransit(request):
         return redirect("outward_servicedelivery_intransit")
 def outward_servicedelivery_shipping(request):
     if request.method == "GET":
-        sopps = SalesOrderProductPlan.objects.all()
+        sopps = SalesOrderProductPlan.objects.all().order_by("-salesorderproduct__salesorder__salesorder_number")
         sopps_expired = []
         sopps_from_today=[]
         for sopp in sopps:
