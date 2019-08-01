@@ -39,11 +39,11 @@
       <h4 class="alert-heading text-center">Next Dispatch<br> <span style="color:red">{{ next_outward_date|date:"j-F-Y (l)" }} </span></h4>
     <hr>
     <div class="btn-group btn-block" role="group">
-                    <a class="btn btn-outline-success col-6 receivingtoday" href="#" data-toggle="modal" data-target="#receivingtoday"><i class="fas fa-clipboard-check"></i> Mark as Dispatched</a>
-                    <div class="modal fade" id="receivingtoday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
+      <a class="btn btn-outline-success col-6 nextdispatch" href="#" data-toggle="modal" data-target="#nextdispatch"><i class="fas fa-clipboard-check"></i> Mark as Dispatched</a>
+      <div class="modal fade" id="nextdispatch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">
                                     <i class="fas fa-sign-in-alt"></i>
                                     Mark as Dispatched for outward on [ <span style="color:red">{{ next_outward_date|date:"j-F-Y (l)" }} </span>] 
