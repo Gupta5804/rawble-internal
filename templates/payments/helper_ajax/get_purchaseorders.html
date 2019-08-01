@@ -9,6 +9,7 @@
 
         <div id="po-{{ po.purchaseorder_id }}" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
             <div class="card-body">
+                {% if po.purchaseorderproduct_set %}
                 <table class="table table-bordered">
                     <thead class="thead-light">
                       <tr>
@@ -44,6 +45,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                {% else %}
+                <p class="text-center"> Not Yet Planned </p>
+                {% endif %}
             </div>
         </div>
     </div>
