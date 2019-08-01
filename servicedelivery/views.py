@@ -18,6 +18,35 @@ from servicedelivery.models import Transporter , SalesOrderProductPlan,PurchaseO
 from servicedelivery.filters import SOPPFilter
 from django.db.models import Q
 # Create your views here.
+def nextoutward_summary(request):
+    today = date.today()
+    day = today
+    for i in range(10):
+        if(day.weekday() in [0,2,4]):
+            next_outward_date = day
+            break
+        day = day + datetime.timedelta(days=1)
+    day= today
+    for p in range(10):
+        day = day - datetime.timedelta(days=1)
+        if(day.weekday() in [0,2,4]):
+            previous_outward_date = day
+            break
+    sopps = SalesOrderProductPlan.objects.filter(planned_date_time__date = next_outward_date).order_by("-salesorderproduct__salesorder__salesorder_number")
+    planned_total_amount = 0
+    dispatched_total_amount = 0
+    for sopp in sopps:
+        planned_total_amount = planned_total_amount + sopp.total_amount
+        if(sopp.plan_status == "in-transit" or sopp.plan_status == "delivered"):
+            dispatched_total_amount = dispatched_total_amount + sopp.total_amount
+    dispatch_percentage = 0
+    try:
+        dispatch_percentage = (dispatched_total_amount / planned_total_amount)* 100
+    except:
+        pass
+        
+    rendered = render_to_string('servicedelivery/helper_ajax/nextoutward_summary.html', context = {'sopps':sopps,'next_outward_date':next_outward_date,'planned_total_amount':planned_total_amount , 'dispatched_total_amount':dispatched_total_amount,'dispatch_percentage':dispatch_percentage} ,request=request)
+    return  JsonResponse({'snippet':rendered})
 def nextoutward_dispatch(request):
     today = date.today()
     day = today

@@ -11,7 +11,6 @@
 <table class="table table-bordered">
   <thead class="thead-light">
     <tr>
-      <th><input type="checkbox" onClick="toggle(this)"></th>
       <th scope="col">Status</th>
       <th scope="col">SO #</th>
       <th scope="col">Buyer</th>
@@ -27,7 +26,6 @@
   <tbody>
   {% for sopp in sopps %}
     <tr>
-    <th><input type="checkbox" name="selected_sopp_id" ></th>
       <th scope="row" class="{% if sopp.plan_status == 'planned' %} table-danger {% elif sopp.plan_status == 'in-transit' %} table-warning {% else %} table-success {% endif %}">{% if sopp.plan_status == 'planned' %} Not Yet Dispatched {% elif sopp.plan_status == 'in-transit' %} In Transit [Dispatched] {% else %} Delivered {% endif %}</th>
       <td>{{ sopp.salesorderproduct.salesorder.salesorder_number }}</td>
       <td>{{ sopp.salesorderproduct.salesorder.buyer.contact_name }}</td>

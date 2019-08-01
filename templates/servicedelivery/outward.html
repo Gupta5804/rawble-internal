@@ -56,13 +56,13 @@
               <div class="modal-body">
 
               </div>
-              <input type="submit" value="Dispatched" class="btn btn-outline-success btn-block container mb-3" name="received-today">
+              <input type="submit" value="Dispatched" class="btn btn-outline-success btn-block container mb-3" name="nextoutward-dispatched">
             </form>
           </div>
         </div>
       </div>
-      <a class="btn btn-outline-danger col-6 receivingtodaysummary" href="#" data-toggle="modal" data-target="#receivingtodaysummary"><i class="fas fa-envelope"></i> Send Summary Mail</a>
-      <div class="modal fade" id="receivingtodaysummary" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <a class="btn btn-outline-danger col-6 nextoutward_summary" href="#" data-toggle="modal" data-target="#nextoutward_summary"><i class="fas fa-envelope"></i> Send Summary Mail</a>
+      <div class="modal fade" id="nextoutward_summary" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -78,7 +78,7 @@
               <div class="modal-body">
 
               </div>
-              <input type="submit" value="Send Mail" class="btn btn-outline-success btn-block container mb-3" name="mail-receive-summary">
+              <input type="submit" value="Send Mail" class="btn btn-outline-success btn-block container mb-3" name="mail-nextoutward-summary">
             </form>
           </div>
         </div>
@@ -234,6 +234,22 @@ $(document).on("click",".select-outward",function(){
             success: function(data) {
               
               $('#nextoutward_dispatch').find('.modal-body').html(data.snippet);
+            },
+            error: function(err) {
+              console.log('error', err);
+            }
+          });
+
+    });
+    $(document).on("click",".nextoutward_summary",function () {
+
+        $('#nextoutward_summary').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/cloudy/index.cloudy-sky-preloader.gif' />");
+        $.ajax({
+            url: '../../../../../ajax/servicedelivery/outward/nextoutward_summary',
+            type: "get",
+            success: function(data) {
+              
+              $('#nextoutward_summary').find('.modal-body').html(data.snippet);
             },
             error: function(err) {
               console.log('error', err);
