@@ -39,53 +39,52 @@
       <h4 class="alert-heading text-center">Next Dispatch<br> <span style="color:red">{{ next_outward_date|date:"j-F-Y (l)" }} </span></h4>
     <hr>
     <div class="btn-group btn-block" role="group">
-      <a class="btn btn-outline-success col-6 nextdispatch" href="#" data-toggle="modal" data-target="#nextdispatch"><i class="fas fa-clipboard-check"></i> Mark as Dispatched</a>
-      <div class="modal fade" id="nextdispatch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <a class="btn btn-outline-success col-6 nextoutward_dispatch" href="#" data-toggle="modal" data-target="#nextoutward_dispatch"><i class="fas fa-clipboard-check"></i> Mark as Dispatched</a>
+      <div class="modal fade" id="nextoutward_dispatch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
           <div class="modal-content">
             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">
-                                    <i class="fas fa-sign-in-alt"></i>
-                                    Mark as Dispatched for outward on [ <span style="color:red">{{ next_outward_date|date:"j-F-Y (l)" }} </span>] 
-                                </h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form method="post" action="">
-                            <div class="modal-body">
+              <h5 class="modal-title" id="exampleModalLabel">
+                <i class="fas fa-sign-in-alt"></i>
+                Mark as Dispatched for outward on [ <span style="color:red">{{ next_outward_date|date:"j-F-Y (l)" }} </span>] 
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form method="post" action="">
+              <div class="modal-body">
 
-                            </div>
-                            <input type="submit" value="Dispatched" class="btn btn-outline-success btn-block container mb-3" name="received-today">
-                            </form>
-                          </div>
-                        </div>
-                    </div>
+              </div>
+              <input type="submit" value="Dispatched" class="btn btn-outline-success btn-block container mb-3" name="received-today">
+            </form>
+          </div>
+        </div>
+      </div>
+      <a class="btn btn-outline-danger col-6 receivingtodaysummary" href="#" data-toggle="modal" data-target="#receivingtodaysummary"><i class="fas fa-envelope"></i> Send Summary Mail</a>
+      <div class="modal fade" id="receivingtodaysummary" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                <i class="fas fa-clipboard"></i>
+                Next Outward Summary [<span style="color:red">{{ next_outward_date|date:"j-F-Y (l)" }} </span>]
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form method="post" action="">
+              <div class="modal-body">
 
-                    <a class="btn btn-outline-danger col-6 receivingtodaysummary" href="#" data-toggle="modal" data-target="#receivingtodaysummary"><i class="fas fa-envelope"></i> Send Summary Mail</a>
-                    <div class="modal fade" id="receivingtodaysummary" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" style="max-width:98%" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">
-                                    <i class="fas fa-clipboard"></i>
-                                    Next Outward Summary [<span style="color:red">{{ next_outward_date|date:"j-F-Y (l)" }} </span>]
-                                </h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <form method="post" action="">
-                            <div class="modal-body">
-
-                            </div>
-                            <input type="submit" value="Send Mail" class="btn btn-outline-success btn-block container mb-3" name="mail-receive-summary">
-                            </form>
-                          </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
+              <input type="submit" value="Send Mail" class="btn btn-outline-success btn-block container mb-3" name="mail-receive-summary">
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
   </div>
 </div><!--
      <div class="btn-toolbar" style="align-self: center" >
@@ -219,6 +218,22 @@ $(document).on("click",".select-outward",function(){
             success: function(data) {
               
               $('#previousoutward').find('.modal-body').html(data.snippet);
+            },
+            error: function(err) {
+              console.log('error', err);
+            }
+          });
+
+    });
+     $(document).on("click",".nextoutward_dispatch",function () {
+
+        $('#nextoutward_dispatch').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/cloudy/index.cloudy-sky-preloader.gif' />");
+        $.ajax({
+            url: '../../../../../ajax/servicedelivery/outward/nextoutward_dispatch',
+            type: "get",
+            success: function(data) {
+              
+              $('#nextoutward_dispatch').find('.modal-body').html(data.snippet);
             },
             error: function(err) {
               console.log('error', err);
