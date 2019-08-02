@@ -1209,7 +1209,10 @@ def outward_service_delivery(request):
             salesorder = ZohoSalesOrder.objects.get(salesorder_id = salesorder_id)
             if freight == '':
                 freight=0
-            freight_for_each = (float(freight) / len(selected_product_item_ids))
+            try:
+                freight_for_each = (float(freight) / len(selected_product_item_ids))
+            except:
+                freight_for_each = 0
             if ( salesorder.salesorderproduct_set.count() == 0 ):
                 sops=[]
                 for i,product_id in enumerate(product_ids):
