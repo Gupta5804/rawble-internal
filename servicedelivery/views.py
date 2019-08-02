@@ -1039,7 +1039,49 @@ def outward_service_delivery(request):
                 break
         return render(request, 'servicedelivery/outward.html', {'salesorders_unplanned': salesorders_unplanned,'next_outward_date':next_outward_date,'previous_outward_date':previous_outward_date})
     if request.method == "POST":
-        
+        if "mail-nextoutward-summary" in request.POST:
+            today = date.today()
+            day = today
+            for i in range(10):
+                if(day.weekday() in [0,2,4]):
+                    next_outward_date = day
+                    break
+                day = day + datetime.timedelta(days=1)
+            day= today
+            for p in range(10):
+                day = day - datetime.timedelta(days=1)
+                if(day.weekday() in [0,2,4]):
+                    previous_outward_date = day
+                    break
+            sopps = SalesOrderProductPlan.objects.filter(planned_date_time__date=next_outward_date)
+            subject = "Next Outward Plan Summary ["+str(next_outward_date)+"]"
+            to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+            from_email = 'admin@rawble.com'
+            users = User.objects.all()
+            users_sales = User.objects.filter(groups__name="Sales Team")
+            total_quantity = 0
+            total_amount = 0
+            for sopp in sopps:
+                total_quantity = total_quantity + sopp.planned_quantity
+                total_amount = total_amount + ( sopp.total_amount )
+            ctx = {
+                "sopp_email":sopps,
+                "users_sales":users_sales,
+                "total_quantity":total_quantity,
+                "total_amount":total_amount,
+                "next_outward_date":next_outward_date,
+
+            }
+            #for user in users:
+            #    to.append(str(user.email))
+
+
+            message = render_to_string('emails/outward/nextoutward_summary.html', ctx)
+            text_content = strip_tags(message)
+            #EmailMessage(subject, message, to=to, from_email=from_email).send()
+            msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+            msg.attach_alternative(message, "text/html")
+            msg.send()  
         if "sopp-save" in request.POST:
             sopp_ids = request.POST.getlist("sopp_id")
             transporter_ids = request.POST.getlist("transporter_id")

@@ -1,0 +1,39 @@
+<p style="text-align:center;">Dear Team,</p>
+<p>&nbsp;</p>
+<p style="text-align:center;">Following Item(s) are Planned To Dispatch on <span style="color:red;">{{ next_outward_date|date:"j-F-Y (l)"}}</span>:</p>
+<table style="height: 112px;" border="1" width="572" cellpadding="1">
+<tbody>
+<tr>
+<th style="width: 65px;">SO#</th>
+<th style="width: 74px;">Product</th>
+<th style="width: 74px;">Buyer</th>
+<th style="width: 76px;">Total Quantity (In SO)</th>
+<th style="width: 88px;">Quantity Planned</th>
+<th style="width: 77px;">Transporter</th>
+
+<th style="width: 72px;">Status</th>
+
+<th style="width: 72px;">Freight</th>
+<th style="width: 72px;">Amount(Without Tax)</th>
+
+</tr>
+{% for sopp in sopp_email %}
+<tr>
+<td style="width: 65px;">{{ sopp.salesorderproduct.salesorder.salesorder_number }}</td>
+<td style="width: 74px;">{{ sopp.salesorderproduct.product.name }}</td>
+<td style="width: 74px;">{{ sopp.salesorderproduct.salesorder.buyer.contact_name }}</td>
+<td style="width: 76px;">{{ sopp.salesorderproduct.quantity }}</td>
+<td style="width: 88px;">{{ sopp.planned_quantity }}</td>
+<td style="width: 77px;">{{ sopp.transporter.name }}</td>
+
+<td style="width: 72px;">{{ sopp.plan_status }}</td>
+
+<td style="width: 72px;">{{ sopp.freight }}</td>
+<td style="width: 72px;">{{ sopp.total_amount }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p style="text-align: center;"><span style="text-decoration: underline;"><strong>Total Amount(Without Tax):</strong></span> {{ total_amount }}</p>
+<p style="text-align: center;"><span style="text-decoration: underline;"><strong>Total Quantity:</strong></span>{{ total_quantity }}</p>
