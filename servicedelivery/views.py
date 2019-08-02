@@ -920,11 +920,16 @@ def outward_servicedelivery_shipping(request):
             planned_date = request.POST.get('planned_date')
             planned_time = request.POST.get('planned_time')
             reason = request.POST.get('reason')
+            transporter_id = request.POST.get('transporter_id')
+            try:
+                transporter = Transporter.objects.get(id=transporter_id)
+            except:
+                transporter = None
             sopp_email = []
             for selected_sopp_id in selected_sopp_ids:
                 sopp = SalesOrderProductPlan.objects.get(id = selected_sopp_id)
                 sopp.planned_date_time = planned_date + " " + planned_time
-                
+                sopp.transporter = transporter
                 sopp.reason = reason
                 sopp.save()
                 sopp_email.append(sopp)
