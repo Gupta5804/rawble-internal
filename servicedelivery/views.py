@@ -1072,8 +1072,8 @@ def outward_service_delivery(request):
                 "next_outward_date":next_outward_date,
 
             }
-            #for user in users:
-            #    to.append(str(user.email))
+            for user in users:
+                to.append(str(user.email))
 
 
             message = render_to_string('emails/outward/nextoutward_summary.html', ctx)
