@@ -7,7 +7,7 @@
             </a>
         </h5>
 
-        <div id="po-{{ po.purchaseorder_id }}" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+        <div id="po-{{ po.purchaseorder_id }}" class="collapse select-po" role="tabpanel" aria-labelledby="headingOne">
             <div class="card-body">
                 {% if po.purchaseorderproduct_set.all %}
                 <table class="table table-bordered">
@@ -28,7 +28,7 @@
                     {% for pop in po.purchaseorderproduct_set.all %}
                     {% for popp in pop.purchaseorderproductplan_set.all %}
                       <tr>
-                        <th scope="row"><input name="selected_popp_id" type="checkbox"></th>
+                        <th scope="row" id="selected"><input name="selected_popp_id" type="checkbox"></th>
                         <td>{{ popp.purchaseorderproduct.product.name }}</td>
                         <td>{{ popp.purchaseorderproduct.product.make }}</td>
                         <td>{{ popp.purchaseorderproduct.quantity }} ({{ pop.product.unit }})</td>
