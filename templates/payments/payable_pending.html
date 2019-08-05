@@ -23,6 +23,10 @@
 function schedule_payment(){
   var vendor_id =  $('#vendor_id').val();
   alert(vendor_id);
+   var selected_popp_ids = $("#purchaseorders input:checkbox:checked").map(function(){
+      return $(this).val();
+    });
+  alert(selected_popp_ids);
 };
 function get_po(source){
     var vendor_id = source.value;
