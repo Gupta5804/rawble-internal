@@ -11,6 +11,14 @@ from django.template.loader import render_to_string
  # Create your views here.
 def payable_pending_get_purchaseorders(request):
     vendor_id = request.GET.get('vendor_id')
+    selected_popp_ids = request.GET.getlist('selected_popp_ids')
+    vendor = ContactVendor.objects.get(contact_id = vendor_id)
+    
+    rendered = render_to_string('payments/helper_ajax/schedule_payment.html', context = {'vendor':vendor,'selected_popp_ids':selected_popp_ids},request=request)
+    
+    return JsonResponse({'snippet': rendered})
+def payable_pending_get_purchaseorders(request):
+    vendor_id = request.GET.get('vendor_id')
     vendor = ContactVendor.objects.get(contact_id = vendor_id)
     pos_all = vendor.zohopurchaseorder_set.all()
     pos = []
