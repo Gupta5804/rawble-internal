@@ -26,8 +26,8 @@ class PurchaseOrderProductPlan(models.Model):
     transporter = models.ForeignKey(Transporter,on_delete=models.SET_NULL,null=True,blank=True)
     dispatch_delay_reason = models.CharField(max_length = 500 , null=True, blank=True)
     receive_delay_reason = models.CharField(max_length = 500 , null=True, blank=True)
-    #paymentpayable = models.ForeignKey(PaymentPayable,on_delete=models.SET_NULL)
-    #paymentpayable = models.ForeignKey(PaymentPayable,on_delete=models.SET_NULL,null=True,default=None)
+    paymentpayable = models.ForeignKey(PaymentPayable,on_delete=models.SET_NULL)
+    #pytpaymentpayable = models.ForeignKey(PaymentPayable,on_delete=models.SET_NULL,null=True,default=None)
     def __str__(self):
         return (self.purchaseorderproduct.purchaseorder.purchaseorder_number + "-" + self.purchaseorderproduct.product.name + "-"+str(self.planned_quantity))
     
