@@ -8,6 +8,9 @@
     <th class="table-secondary">Purchase Orders</th><th>{% for po in pos %}{{ po }} ,{% endfor %}</th>
     <th class="table-secondary">Total Amount(With Tax)</th><th>{{ total_amount }}</th>
     </tr>
+    {% for popp in popps %}
+        <input value="{{ popp_id }}" type="hidden" name="popp_ids">
+    {% endfor %}
     <tr>
     <th class="table-secondary">Number of cheques</th>
     <th>
@@ -29,3 +32,23 @@
 
     
 </table>
+<div class="alert alert-info" id="cheques">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Amount</th>
+                <th>Enter Cheque Unique Number</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th class="table-secondary">#1:</th>
+                <th>{{ total_amount }}<input type="hidden" value="{{ total_amount }}" name="cheque_amount"></th>
+                <th><input class="form-control" type="text" name="cheque_no"></th>
+                <th><input class="form-control" type="date" name="cheque_date"></th>
+            </tr>
+        </tbody>
+    </table>
+</div>
