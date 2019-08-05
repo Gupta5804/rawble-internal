@@ -2,7 +2,7 @@ from django.db import models
 from ordered_model.models import OrderedModel
 from contacts.models import ContactVendor
 import datetime
-from servicedelivery.models import PurchaseOrderProductPlan 
+
 from contacts.models import ContactVendor
 
 class PaymentPayable(models.Model):
