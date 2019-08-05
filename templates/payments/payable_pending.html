@@ -25,7 +25,7 @@ function schedule_payment(){
   alert(vendor_id);
    var selected_popp_ids = []
     $("input:checkbox[name=selected_popp_id]:checked").each(function(){
-    selected_popp_ids.push($(this).prop('checked'));
+    selected_popp_ids.push($(this).val());
 });
   alert(selected_popp_ids);
 };

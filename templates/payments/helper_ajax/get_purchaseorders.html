@@ -28,7 +28,7 @@
                     {% for pop in po.purchaseorderproduct_set.all %}
                     {% for popp in pop.purchaseorderproductplan_set.all %}
                       <tr>
-                        <th scope="row" id="selected"><input name="selected_popp_id" type="checkbox"></th>
+                        <th scope="row" id="selected"><input name="selected_popp_id" value="{{ popp_id }}" type="checkbox"></th>
                         <td>{{ popp.purchaseorderproduct.product.name }}</td>
                         <td>{{ popp.purchaseorderproduct.product.make }}</td>
                         <td>{{ popp.purchaseorderproduct.quantity }} ({{ pop.product.unit }})</td>
