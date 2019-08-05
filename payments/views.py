@@ -22,7 +22,7 @@ def schedule_payment(request):
         total_amount = total_amount + popp.total_amount_with_tax
 
         if(popp.purchaseorderproduct.purchaseorder.purchaseorder_number in pos):
-            pass:
+            pass
         else:
             pos.append(popp.purchaseorderproduct.purchaseorder.purchaseorder_number)
     
