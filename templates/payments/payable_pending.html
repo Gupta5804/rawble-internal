@@ -74,7 +74,7 @@ function each_cheque_amount(source){
 
   html_str = ''
   for (i = 0; i < no_of_cheque; i++) { 
-  html_str = html_str + '<tr><th class="table-secondary">#'+(i+1).toString()+':</th><th>'+each_cheque_amount.toString()+'<input type="hidden" value="'+each_cheque_amount.toString()+'" name="cheque_amount"></th><th><input class="form-control" type="text" name="cheque_no"></th><th><input class="form-control" type="date" name="cheque_date"></th></tr>'
+  html_str = html_str + '<tr><th>#'+(i+1).toString()+'</th><th>'+each_cheque_amount.toString()+'<input type="hidden" value="'+each_cheque_amount.toString()+'" name="cheque_amount"></th><th><input class="form-control" type="text" name="cheque_no"></th><th><input class="form-control" type="date" name="cheque_date"></th></tr>'
 }
   $('#cheques table tbody').html(html_str);
 
