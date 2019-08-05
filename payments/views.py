@@ -9,7 +9,7 @@ from deals.models import ZohoPurchaseOrder
 from django.http import JsonResponse
 from django.template.loader import render_to_string
  # Create your views here.
-def payable_pending_get_purchaseorders(request):
+def schedule_payment(request):
     vendor_id = request.GET.get('vendor_id')
     selected_popp_ids = request.GET.getlist('selected_popp_ids')
     vendor = ContactVendor.objects.get(contact_id = vendor_id)
