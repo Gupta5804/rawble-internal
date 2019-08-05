@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
  # Create your views here.
 def schedule_payment(request):
     vendor_id = request.GET.get('vendor_id')
-    selected_popp_ids = request.GET.get('selected_popp_ids')
+    selected_popp_ids = request.GET.get('selected_popp_ids[]')
     vendor = ContactVendor.objects.get(contact_id = vendor_id)
     
     rendered = render_to_string(
