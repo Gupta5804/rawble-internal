@@ -48,9 +48,10 @@ $(document).on("click",".schedule-payment",function(){
     var selected_popp_ids = []
     $("input:checkbox[name=selected_popp_id]:checked").each(function(){
     selected_popp_ids.push($(this).val());
+    });
         
-      $('#schedule-payment').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
-      $.ajax({
+    $('#schedule-payment').find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
+    $.ajax({
             url: '../../../../../ajax/payments/schedule_payment',
             type: "get",
             data: {'vendor_id': vendor_id,
@@ -64,12 +65,9 @@ $(document).on("click",".schedule-payment",function(){
             }
           })
 });
-function schedule_payment(){
-  
-});
- 
 
-};
+
+
 function get_po(source){
     var vendor_id = source.value;
     $('div#purchaseorders').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/bars/index.progress-bar-facebook-loader.gif' />");
