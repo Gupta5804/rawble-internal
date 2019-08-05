@@ -8,6 +8,7 @@ from contacts.models import ContactVendor
 from deals.models import ZohoPurchaseOrder
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+import datetime
  # Create your views here.
 def schedule_payment(request):
     vendor_id = request.GET.get('vendor_id')
@@ -16,16 +17,23 @@ def schedule_payment(request):
     popps = []
     pos = []
     total_amount = 0
+    schedule_dates = []
     for selected_popp_id in selected_popp_ids:
         popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
         popps.append(popp)
         total_amount = total_amount + popp.total_amount_with_tax
-
+        
         if(popp.purchaseorderproduct.purchaseorder.purchaseorder_number in pos):
             pass
         else:
             pos.append(popp.purchaseorderproduct.purchaseorder.purchaseorder_number)
-    
+        schedule_date = popp.planned_receive_date_time.date() + datetime.timedelta(days=popp.purchaseorderproduct.purchaseorder.vendor.payment_terms_no)
+        if(schedule_date in schedule_dates):
+            pass
+
+        else:
+            schedule_dates.append(schedule_date)
+
     rendered = render_to_string(
         'payments/helper_ajax/schedule_payment.html', 
         context = {
@@ -34,6 +42,7 @@ def schedule_payment(request):
             'popps':popps,
             'pos':pos,
             'total_amount':total_amount,
+            'schedule_dates':schedule_dates
             },
         request=request
         )

@@ -32,6 +32,10 @@
 
     
 </table>
+<div class="alert alert-danger">
+<h5 class="alert-title">Schedule Dates</h5>
+<p class="text-center">{% for schedule_date in schedule_dates %} {{ schedule_date|date:"d-m-Y" }} , {% endfor %}</p>
+</div>
 <div class="alert alert-dark" id="cheques">
     <table class="table table-bordered ">
         <thead>
