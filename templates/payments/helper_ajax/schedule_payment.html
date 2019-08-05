@@ -1,2 +1,14 @@
 {{ vendor.contact_name }}
 {{ selected_popp_ids }}
+<table class="table table-bordered table-sm">
+    <tr>
+    <th class="table-secondary">Vendor</th><th>{{ vendor.contact_name }}</th>
+    <th class="table-secondary">Payment Terms</th><th>{{ vendor.payment_terms }}</th>
+    </tr>
+    <tr>
+    <th class="table-secondary">Purchase Orders</th><th>{% for po in pos %}{{ po }} ,{% endfor %}</th>
+    <th class="table-secondary">Total Amount(With Tax)</th><th>{{ total_amount }}</th>
+    </tr>
+
+    
+</table>

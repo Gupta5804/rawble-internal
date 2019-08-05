@@ -11,14 +11,29 @@ from django.template.loader import render_to_string
  # Create your views here.
 def schedule_payment(request):
     vendor_id = request.GET.get('vendor_id')
-    selected_popp_ids = request.GET.get('selected_popp_ids[]')
+    selected_popp_ids = request.GET.getlist('selected_popp_ids[]')
     vendor = ContactVendor.objects.get(contact_id = vendor_id)
+    popps = []
+    pos = []
+    total_amount = 0
+    for selected_popp_id in selected_popp_ids:
+        popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
+        popps.append(popp)
+        total_amount = total_amount + popp.total_amount_with_tax
+
+        if(popp.purchaseorderproduct.purchaseorder.purchaseorder_number in pos):
+            pass:
+        else:
+            pos.append(popp.purchaseorderproduct.purchaseorder.purchaseorder_number)
     
     rendered = render_to_string(
         'payments/helper_ajax/schedule_payment.html', 
         context = {
             'vendor':vendor,
-            'selected_popp_ids':selected_popp_ids
+            'selected_popp_ids':selected_popp_ids,
+            'popps':popps,
+            'pos':pos,
+            'total_amount':total_amount,
             },
         request=request
         )
