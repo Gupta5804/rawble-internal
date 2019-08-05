@@ -27,7 +27,7 @@ class PurchaseOrderProductPlan(models.Model):
     dispatch_delay_reason = models.CharField(max_length = 500 , null=True, blank=True)
     receive_delay_reason = models.CharField(max_length = 500 , null=True, blank=True)
     #paymentpayable = models.ForeignKey(PaymentPayable,on_delete=models.SET_NULL)
-    paymentpayable = models.ForeignKey(PaymentPayable,on_delete=models.SET_NULL,null=True)
+    #paymentpayable = models.ForeignKey(PaymentPayable,on_delete=models.SET_NULL,null=True,default=None)
     def __str__(self):
         return (self.purchaseorderproduct.purchaseorder.purchaseorder_number + "-" + self.purchaseorderproduct.product.name + "-"+str(self.planned_quantity))
     
