@@ -14,4 +14,12 @@ class ChequePayable(models.Model):
     cheque_no = models.CharField(max_length=200,null=True,blank=True)
     date = models.DateField(null=True,default=None,blank=True)
     amount = models.FloatField()
+    approved_date = models.DateField(null=True,default=None,blank=True)
+
+    @property
+    def status(self):
+        if self.approved_date:
+            return "unapproved"
+        else:
+            return "approved"
     

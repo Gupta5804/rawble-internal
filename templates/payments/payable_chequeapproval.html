@@ -2,4 +2,8 @@
 {% block page-title-var %} Cheque Approval {% endblock page-title-var %}
 
 {% block application-active %}
+{% for vendor in vendors %}
+{{ vendor.contact_name }}
+{% endfor %}
+
 {% endblock application-active %}
