@@ -106,7 +106,7 @@ def payments_payable_pending(request):
 
                 )
                 cp.save()
-
+        return redirect("payments_payable_pending")
 #def advancepayment_reorder(request):
 #    payments = Payment.objects.all()
 #    return render(request,'payments/advance_payment_reorder.html',{'payments':payments})
