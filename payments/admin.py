@@ -6,4 +6,5 @@ from ordered_model.admin import OrderedModelAdmin
 #class PaymentAdmin(OrderedModelAdmin):
     #list_display = ['vendor','amount','move_up_down_links']
 #admin.site.register(Payment,PaymentAdmin)
-admin.site.register(PaymentPayable,ChequePayable)
+admin.site.register(PaymentPayable)
+admin.site.register(ChequePayable)
