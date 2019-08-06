@@ -66,7 +66,7 @@ def payable_pending_get_purchaseorders(request):
 def payments_payable_nextpayment(request):
     return render(request,'payments/payable_nextpayment.html')
 def payments_payable_chequeapproval(request):
-    vendor_ids = PaymentPayable.objects.value_list("vendor__contact_id",flat=True).distinct().order_by()
+    vendor_ids = PaymentPayable.objects.values_list("vendor__contact_id",flat=True).distinct().order_by()
     vendors = []
     for vendor_id in vendor_ids:
             vendor= ContactVendor.objects.get(contact_id = vendor_id)
