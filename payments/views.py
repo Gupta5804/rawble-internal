@@ -9,6 +9,7 @@ from deals.models import ZohoPurchaseOrder
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 import datetime
+from payments.models import PaymentPayable,ChequePayable
  # Create your views here.
 def schedule_payment(request):
     vendor_id = request.GET.get('vendor_id')
@@ -67,16 +68,44 @@ def payments_payable_nextpayment(request):
 def payments_payable_chequeapproval(request):
     return render(request,'payments/payable_chequeapproval.html')
 def payments_payable_pending(request):
-    
-    vendor_ids = PurchaseOrderProductPlan.objects.values_list("purchaseorderproduct__purchaseorder__vendor__contact_id",flat=True).distinct().order_by()
-    print(vendor_ids)
-    vendors = []
-    for vendor_id in vendor_ids:
-        vendor= ContactVendor.objects.get(contact_id = vendor_id)
-        vendors.append(vendor)
-    print(vendors)
-    return render(request,'payments/payable_pending.html',{'vendors':vendors})
+    if request.method == "GET":
+        vendor_ids = PurchaseOrderProductPlan.objects.values_list("purchaseorderproduct__purchaseorder__vendor__contact_id",flat=True).distinct().order_by()
+        print(vendor_ids)
+        vendors = []
+        for vendor_id in vendor_ids:
+            vendor= ContactVendor.objects.get(contact_id = vendor_id)
+            vendors.append(vendor)
+        print(vendors)
+        return render(request,'payments/payable_pending.html',{'vendors':vendors})
+    if request.method == "POST":
+        if "schedule-cheque" in request.POST:
+            popp_ids = request.POST.getlist("popp_id")
+            total_amount = request.POST.get("total_amount")
+            vendor_id = request.POST.get("vendor_id")
+            cheque_nos = request.POST.getlist("cheque_nos")
+            cheque_dates = request.POST.getlist("cheque_dates")
+            each_cheque_amount = float(total_amount) / len(cheque_nos)
 
+            pp = PaymentPayable(
+                mode="cheque",
+                vendor = ContactVendor.objects.get(contact_id = vendor_id)
+
+            )
+            pp.save()
+            for popp_id in popp_ids:
+                popp = PurchaseOrderProductPlan.objects.get(id=popp_id)
+                popp.paymentpayable = pp
+                popp.save()
+            for i,cheque_no in enumerate(cheque_nos):
+
+                cp = ChequePayable(
+                    cheque_no = cheque_no,
+                    paymentpayable = pp,
+                    date = cheque_dates[i],
+                    amount = each_cheque_amount,
+
+                )
+                cp.save()
 
 #def advancepayment_reorder(request):
 #    payments = Payment.objects.all()

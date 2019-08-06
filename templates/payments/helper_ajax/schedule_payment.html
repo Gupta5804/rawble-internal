@@ -1,12 +1,12 @@
 {% csrf_token %}
 <table class="table table-bordered table-sm">
     <tr>
-    <th class="table-secondary">Vendor</th><th>{{ vendor.contact_name }}</th>
+    <th class="table-secondary">Vendor</th><th>{{ vendor.contact_name }}<input value="{{ vendor.contact_id }}" name="vendor_id" type="hidden"></th>
     <th class="table-secondary">Payment Terms</th><th>{{ vendor.payment_terms }}</th>
     </tr>
     <tr>
     <th class="table-secondary">Purchase Orders</th><th>{% for po in pos %}{{ po }} ,{% endfor %}</th>
-    <th class="table-secondary">Total Amount(With Tax)</th><th>{{ total_amount }}</th>
+    <th class="table-secondary">Total Amount(With Tax)</th><th>{{ total_amount }}<input type="hidden" name="total_amount" value ="{{ total_amount }}"></th>
     </tr>
     {% for popp in popps %}
         <input value="{{ popp_id }}" type="hidden" name="popp_ids">
@@ -27,7 +27,7 @@
             <option value="10" data-total_amount="{{ total_amount }}">10</option>
         </select>
     </th>
-    <th class="table-secondary">Per Cheque Amount</th><th id="each_cheque_amount">{{ total_amount }}</th>
+    <th class="table-secondary">Per Cheque Amount</th><th id="cheque_amount">{{ total_amount }}</th>
     </tr>
 
     
