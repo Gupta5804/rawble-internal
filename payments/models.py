@@ -19,7 +19,7 @@ class ChequePayable(models.Model):
     @property
     def status(self):
         if self.approved_date:
-            return "unapproved"
-        else:
             return "approved"
+        else:
+            return "not approved"
     
