@@ -28,7 +28,7 @@
                     {% for pop in po.purchaseorderproduct_set.all %}
                     {% for popp in pop.purchaseorderproductplan_set.all %}
                       <tr class="{% if popp.paymentpayable %}table-danger {% else %} {% endif %}">
-                        <th scope="row" id="selected"><input name="selected_popp_id" value="{{ popp.id }}" type="checkbox"{% if popp.paymentpayable %} disable{% else %} {% endif %}></th>
+                        <th scope="row" id="selected"><input name="selected_popp_id" value="{{ popp.id }}" type="checkbox"{% if popp.paymentpayable %} disabled{% else %} {% endif %}></th>
                         <td>{{ popp.purchaseorderproduct.product.name }}</td>
                         <td>{{ popp.purchaseorderproduct.product.make }}</td>
                         <td>{{ popp.purchaseorderproduct.quantity }} ({{ pop.product.unit }})</td>
