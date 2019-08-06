@@ -12,6 +12,6 @@ class PaymentPayable(models.Model):
 class ChequePayable(models.Model):
     paymentpayable = models.ForeignKey(PaymentPayable,on_delete = models.CASCADE)
     cheque_no = models.CharField(max_length=200,null=True,blank=True)
-    date = models.DateField()
+    date = models.DateField(null=True,default=None,blank=True)
     amount = models.FloatField()
     
