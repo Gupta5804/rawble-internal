@@ -82,8 +82,8 @@ def payments_payable_pending(request):
             popp_ids = request.POST.getlist("popp_id")
             total_amount = request.POST.get("total_amount")
             vendor_id = request.POST.get("vendor_id")
-            cheque_nos = request.POST.getlist("cheque_nos")
-            cheque_dates = request.POST.getlist("cheque_dates")
+            cheque_nos = request.POST.getlist("cheque_no")
+            cheque_dates = request.POST.getlist("cheque_date")
             each_cheque_amount = float(total_amount) / len(cheque_nos)
 
             pp = PaymentPayable(
