@@ -170,7 +170,7 @@ def inward_servicedelivery_intransit(request):
             popp_email = []
             for selected_popp_id in selected_popp_ids:
                 popp = PurchaseOrderProductPlan.objects.get(id = selected_popp_id)
-                popp.dispatched_date_time = popp.planned_dispatch_date_time
+                popp.received_date_time = popp.planned_receive_date_time
                 popp.save()
                 popp_email.append(popp)
             if(popp_email):
