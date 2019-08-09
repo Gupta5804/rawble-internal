@@ -8,8 +8,8 @@
   <div class="alert alert-dark" role="alert">
     <a class="btn btn-outline-danger" href="{% url 'salesreport_mail_admin' %}"><i class="fas fa-envelope"></i> Send Admin Mail</a>
 
-    <form method="get">
-    <div class="input-group w-50 float-right">
+    
+    <form method="get" class="input-group w-50 float-right">
       <input type="text" class="form-control form-control-1 input-sm month-year" placeholder="Select Month To Filter" aria-describedby="basic-addon2">
       <div style="display:none">
       {% for field in filter.form %}
@@ -19,8 +19,8 @@
       <div class="input-group-append">
         <button type="submit" class="input-group-text btn btn-outline-warning" id="basic-addon2"><i class="fas fa-filter"></i></button>
       </div>
-    </div>
     </form>
+  
 
 
   </div>
