@@ -30,7 +30,7 @@
   {% for sopp in sopps %}
     <tr>
       <th>
-        <input type="checkbox" name="selected_sopp_id" >
+        <input type="checkbox" name="selected_sopp_id" value="{{ sopp.id }}" >
       </th>
       <th scope="row" class="{% if sopp.plan_status == 'planned' %} table-danger {% elif sopp.plan_status == 'in-transit' %} table-warning {% else %} table-success {% endif %}">{% if sopp.plan_status == 'planned' %} Not Yet Dispatched {% elif sopp.plan_status == 'in-transit' %} In Transit [Dispatched] {% else %} Delivered {% endif %}</th>
       <td>{{ sopp.salesorderproduct.salesorder.salesorder_number }}</td>
