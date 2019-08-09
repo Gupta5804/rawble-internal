@@ -130,7 +130,10 @@
 
 function filter_changed(source){
   $('#filter-button').css("display","");
-  alert($(source).val());
+  var range = $(source).val();
+  var month = range.split("/")[0];
+  var year = range.split("/")[1];
+  alert(month+year);
 
 }
 $('.month-year').datepicker({
