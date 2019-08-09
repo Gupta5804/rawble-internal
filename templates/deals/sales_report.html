@@ -135,6 +135,8 @@ function filter_changed(source){
   var year = parseInt(range.split("/")[1]);
   var first_day = new Date(year,month,1);
   var last_day = new Date(year,month+1,0);
+  alert(moment(first_day).format("MM/DD/YYYY"));
+  alert(moment(last_day).format("MM/DD/YYYY"));
   $('#id_date_0').val(moment(first_day).format("MM/DD/YYYY"));
   $('#id_date_1').val(moment(last_day).format("MM/DD/YYYY"));
 
