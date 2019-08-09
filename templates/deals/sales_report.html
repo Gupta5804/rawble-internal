@@ -131,9 +131,12 @@
 function filter_changed(source){
   $('#filter-button').css("display","");
   var range = $(source).val();
-  var month = range.split("/")[0];
-  var year = range.split("/")[1];
-  alert(month+year);
+  var month = parseInt(range.split("/")[0]);
+  var year = parseInt(range.split("/")[1]);
+  var first_day = new Date(year,month,1);
+  var last_day = new Date(year,month+1,0);
+  $('#id_date_0').val(first_day.toString("MM/dd/yyyy"));
+  $('#id_date_1').val(last_day.toString("MM/dd/yyyy"));
 
 }
 $('.month-year').datepicker({
