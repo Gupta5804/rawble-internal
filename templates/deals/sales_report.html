@@ -6,7 +6,10 @@
 {% block application-active %}
 <div class="container bg-light" style="max-width:none">
   <div class="alert alert-dark" role="alert">
-    <a class="btn btn-outline-danger" href="{% url 'salesreport_mail_admin' %}"><i class="fas fa-envelope"></i> Send Admin Mail</a>
+    <a class="btn btn-outline-danger" href="{% url 'salesreport_mail_admin' %}">
+      <i class="fas fa-envelope"></i> 
+      Send Admin Mail
+    </a>
 
     
     <form method="get" class="input-group w-50 float-right">
@@ -16,8 +19,11 @@
           {% render_field field class="form-control"  %}
       {% endfor %}
       </div>
+      <input name="month" type="hidden">
       <div class="input-group-append" style="display:none" id="filter-button">
-        <button type="submit" class="input-group-text btn btn-outline-warning" id="basic-addon2"><i class="fas fa-filter"></i></button>
+        <button type="submit" class="input-group-text btn btn-outline-warning" id="basic-addon2">
+          <i class="fas fa-filter"></i>
+        </button>
       </div>
     </form>
   
@@ -139,6 +145,7 @@ function filter_changed(source){
   //alert(moment(last_day).format("MM/DD/YYYY"));
   $('#id_date_0').val(moment(first_day).format("MM/DD/YYYY"));
   $('#id_date_1').val(moment(last_day).format("MM/DD/YYYY"));
+  $('#month').val(month-1);
 
 }
 $('.month-year').datepicker({
