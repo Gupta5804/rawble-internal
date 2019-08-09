@@ -1,6 +1,6 @@
 from deals.models import ZohoSalesOrder
 import django_filters
-from django_filters import DateFilter,DateRangeFilter,DateFromToRangeFilter,widgetsv
+from django_filters import DateFilter,DateRangeFilter,DateFromToRangeFilter,widgets
 class CustomDateFilter(DateFilter):
     def filter(self, qs, value):
         if value:
