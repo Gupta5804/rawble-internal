@@ -10,13 +10,13 @@
 
     
     <form method="get" class="input-group w-50 float-right">
-      <input type="text" class="form-control form-control-1 input-sm month-year" placeholder="Select Month To Filter" aria-describedby="basic-addon2">
+      <input type="text" onchange="return filter_changed(this);" class="form-control form-control-1 input-sm month-year" placeholder="Select Month To Filter" aria-describedby="basic-addon2">
       <div style="display:none">
       {% for field in filter.form %}
           {% render_field field class="form-control"  %}
       {% endfor %}
       </div>
-      <div class="input-group-append" style="display:none">
+      <div class="input-group-append" style="display:none" id="filter-button">
         <button type="submit" class="input-group-text btn btn-outline-warning" id="basic-addon2"><i class="fas fa-filter"></i></button>
       </div>
     </form>
@@ -127,6 +127,12 @@
   {% endfor %}
 </div>
 <script>
+
+function filter_changed(source){
+  $('#filter-button').css("display","");
+  alert($(source).val());
+
+}
 $('.month-year').datepicker({
     autoclose: true,
     minViewMode: 1,
