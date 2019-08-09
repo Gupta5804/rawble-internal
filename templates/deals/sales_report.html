@@ -12,7 +12,7 @@
       <form method="get">
       <input type="text" class="form-control form-control-1 input-sm month-year" placeholder="Select Month To Filter" aria-describedby="basic-addon2">
       {% for field in filter.form %}
-          {% render_field field class="form-control" type="hidden" %}
+          {% render_field field class="form-control" style="display:none" %}
       {% endfor %}
 
       <div class="input-group-append">
