@@ -8,10 +8,14 @@
   <div class="alert alert-dark" role="alert">
     <a class="btn btn-outline-danger" href="{% url 'salesreport_mail_admin' %}"><i class="fas fa-envelope"></i> Send Admin Mail</a>
 
-    <div class="form-group">
-      <label>First check in:</label>
-      <input type="text" class="form-control form-control-1 input-sm month-year" placeholder="Select Month To Filter" >
+    <div class="input-group w-50 float-right">
+      
+      <input type="text" class="form-control form-control-1 input-sm month-year" placeholder="Select Month To Filter" aria-describedby="basic-addon2">
+      <div class="input-group-append">
+        <button type="submit" class="input-group-text btn btn-outline-warning" id="basic-addon2"><i class="fas fa-filter"></i></button>
+      </div>
     </div>
+
 
   </div>
   <div class="alert alert-dark mt-3" role="alert">
@@ -117,7 +121,7 @@
   {% endfor %}
 </div>
 <script>
-$('.from').datepicker({
+$('.month-year').datepicker({
     autoclose: true,
     minViewMode: 1,
     format: 'mm/yyyy'
