@@ -67,6 +67,7 @@
                                                     <th>Total Amount</th>
                                                     <th>Transporter</th>
                                                     <th>Planned On</th>
+                                                    <th>Inward Status</th>
                                                     
                                                     
 
@@ -85,6 +86,37 @@
                                                     <td>{{ sopp.total_amount }}</td>
                                                     <td>{{ sopp.transporter.name }}</td>
                                                     <td>{{ sopp.planned_date_time }}</td>
+                                                    <th>
+                                                        {% if sopp.salesorderproduct.salesorder.zohopurchaseorder_set.all %}
+                                                          {% for po in salesorder.zohopurchaseorder_set.all %}
+                                                            {% if po.purchaseorderproduct_set.count > 0 %}
+                                                              {% for pop in po.purchaseorderproduct_set.all %}
+                                                                {% if pop.product.item_id_str == item.product.item_id_str %}
+                                                                  <table class="table">
+                                                                    <tr>
+                                                                        <th>Qty</th>
+                                                                        <th>Status</th>
+                                                                        <th>E.T.A.</th>
+                                                                    </tr>
+                                                                    {% if pop.product.item_id_str == item.product.item_id_str %}
+                                                                        {% for popp in pop.purchaseorderproductplan_set.all %}
+                                                                            <tr class="{% if popp.plan_status == 'planned' %}table-danger{% elif popp.plan_status == 'in-transit' %}table-warning{% else %}table-success{% endif %}">
+                                                                                <td>{{ popp.planned_quantity }}({{ pop.product.unit }})</td>
+                                                                                <td>{{ popp.plan_status }}</td>
+                                                                                <td>{{ popp.planned_receive_date_time }}</td>
+                                                                            </tr>
+
+                                                                                    {% endfor %}
+                                                                                {% endif %}
+                                                                                </table>
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                        {% else %}
+                                                        No Purchase Order Against this Sales Order
+                                                        {% endif %}
+                                                    </th>
                                                     
                                                     
                                                 </tr>
