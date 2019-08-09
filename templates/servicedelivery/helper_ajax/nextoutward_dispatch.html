@@ -21,13 +21,17 @@
       <th scope="col">Transporter</th>
       <th scope="col">Selling Price</th>
       <th scope="col">Amount</th>
+      <th scope="col">Inward Status</th>
+
       
     </tr>
   </thead>
   <tbody>
   {% for sopp in sopps %}
     <tr>
-    <th><input type="checkbox" name="selected_sopp_id" ></th>
+      <th>
+        <input type="checkbox" name="selected_sopp_id" >
+      </th>
       <th scope="row" class="{% if sopp.plan_status == 'planned' %} table-danger {% elif sopp.plan_status == 'in-transit' %} table-warning {% else %} table-success {% endif %}">{% if sopp.plan_status == 'planned' %} Not Yet Dispatched {% elif sopp.plan_status == 'in-transit' %} In Transit [Dispatched] {% else %} Delivered {% endif %}</th>
       <td>{{ sopp.salesorderproduct.salesorder.salesorder_number }}</td>
       <td>{{ sopp.salesorderproduct.salesorder.buyer.contact_name }}</td>
@@ -37,7 +41,37 @@
       <td>{{ sopp.transporter.name }}</td>
       <td>{{ sopp.salesorderproduct.so_selling_price }}</td>
       <td>{{ sopp.total_amount }}</td>
-    </tr>
+      <th>
+        {% if sopp.salesorderproduct.salesorder.zohopurchaseorder_set.all %}
+          {% for po in salesorder.zohopurchaseorder_set.all %}
+            {% if po.purchaseorderproduct_set.count > 0 %}
+              {% for pop in po.purchaseorderproduct_set.all %}
+                {% if pop.product.item_id_str == item.product.item_id_str %}
+                  <table class="table">
+                    <tr>
+                        <th>Qty</th>
+                        <th>Status</th>
+                        <th>E.T.A.</th>
+                    </tr>
+                    {% if pop.product.item_id_str == item.product.item_id_str %}
+                        {% for popp in pop.purchaseorderproductplan_set.all %}
+                            <tr class="{% if popp.plan_status == 'planned' %}table-danger{% elif popp.plan_status == 'in-transit' %}table-warning{% else %}table-success{% endif %}">
+                                            <td>{{ popp.planned_quantity }}({{ pop.product.unit }})</td>
+                                            <td>{{ popp.plan_status }}</td>
+                                            <td>{{ popp.planned_receive_date_time }}</td>
+                                        </tr>
+                                        
+                                    {% endfor %}
+                                {% endif %}
+                                </table>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                No Purchase Order Against this Sales Order
+                {% endif %}
+            </th></tr>
   {% endfor %}
   </tbody>
 </table>
