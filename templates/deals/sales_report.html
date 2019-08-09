@@ -135,8 +135,8 @@ function filter_changed(source){
   var year = parseInt(range.split("/")[1]);
   var first_day = new Date(year,month,1);
   var last_day = new Date(year,month+1,0);
-  $('#id_date_0').val(first_day.toString("MM/dd/yyyy"));
-  $('#id_date_1').val(last_day.toString("MM/dd/yyyy"));
+  $('#id_date_0').val(first_day.getMonth().toString() + "/"+first_day.getDate().toString()+"/"+first_day.getFullYear().toString());
+  $('#id_date_1').val(last_day.getMonth().toString() + "/"+last_day.getDate().toString()+"/"+last_day.getFullYear().toString());
 
 }
 $('.month-year').datepicker({
