@@ -2,4 +2,58 @@
 {% block page-title-var %} Un-Approved Cheque {% endblock page-title-var %}
 
 {% block application-active %}
+{% for vendor in vendors %} 
+<div class="alert alert-warning mb-0 mt-3" role="alert">
+<h4 class="alert-heading text-center">{{ vendor.contact_name }}</h4>
+</div>
+<div class="accordion" id="accordionExample">
+    {% for pp in vendor.paymentpayable_set.all %}
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#pp-{{ pp.id }}" aria-expanded="true" aria-controls="collapseOne">
+                    Payment ID : {{ pp.id }}
+                </button>
+            </h2>
+        </div>
+
+        <div id="pp-{{ pp.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+                <table class="table">
+                    <thead class="thead-light">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Cheque Number</th>
+                        <th scope="col">Cheque Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Amount</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for cp in pp.chequepayable_set.all %}
+                      <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ cp.cheque_no }}</td>
+                        <td>{{ cp.date|date:"d-M-Y" }}</td>
+                        <td>{{ cp.status }}</td>
+                        <td>{{ cp.amount }}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+  
+  
+</div>
+
+
+
+
+
+{% endfor %}
+
 {% endblock application-active %}

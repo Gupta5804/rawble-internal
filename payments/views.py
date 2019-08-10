@@ -12,7 +12,15 @@ import datetime
 from payments.models import PaymentPayable,ChequePayable
  # Create your views here.
 def payable_cheque_unapproved(request):
-    return render(request,'payments/payable_cheque_unapproved.html')
+    if request.method == "GET":
+        vendor_ids = PaymentPayable.objects.values_list("vendor__contact_id",flat=True).distinct().order_by()
+        vendors = []
+        for vendor_id in vendor_ids:
+                vendor= ContactVendor.objects.get(contact_id = vendor_id)
+                vendors.append(vendor)
+        #pps = PaymentPayable.objects.all().order_by("-id")
+        return render(request,'payments/payable_cheque_unapproved',{'vendors':vendors})
+    
 def payable_cheque_unsigned(request):
     return render(request,'payments/payable_cheque_unsigned.html')
 def payable_cheque_uncleared(request):
