@@ -4,11 +4,13 @@
 {% block application-active %}
 {% for vendor in vendors %} 
 <div class="alert alert-warning mb-0 mt-5 w-50 mx-auto" role="alert">
-<h4 class="alert-heading text-center">{{ vendor.contact_name }}</h4>
+<h4 class="alert-heading text-center">{{ vendor.contact_name }} <br>(<span style="color:red">Payment Terms: {{ vendor.payment_terms }}</span>)</h4>
     <div class="btn-group d-block text-center" role="group" aria-label="Basic example">
         <a class="btn btn-outline-dark">Cheque Ledger</a>
 
         <a class="btn btn-outline-dark">Actual Ledger</a>
+
+        <a class="btn btn-outline-dark">View All Cheques</a>
     </div>
 </div>
 <div class="accordion" id="accordionExample">
