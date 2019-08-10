@@ -5,16 +5,23 @@
 {% for vendor in vendors %} 
 <div class="alert alert-warning mb-0 mt-5 w-50 mx-auto" role="alert">
 <h4 class="alert-heading text-center">{{ vendor.contact_name }}</h4>
+<div class="btn-group d-block text-center" role="group" aria-label="Basic example">
+  <a class="btn btn-outline-dark">Cheque Ledger</button>
+  
+  <a class="btn btn-outline-dark">Actual Ledger</button>
+</div>
 </div>
 <div class="accordion" id="accordionExample">
     {% for pp in vendor.paymentpayable_set.all %}
     <div class="card">
         <div class="card-header" id="headingOne">
-            <h2 class="mb-0">
+            <h2 class="mb-0" style="display:inline;">
                 <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#pp-{{ pp.id }}" aria-expanded="true" aria-controls="collapseOne">
                     Payment ID : {{ pp.id }}  <i class="fas fa-chevron-down"></i>
                 </button>
             </h2>
+            <a class="btn btn-outline-danger float-right mx-1"><i class="fas fa-window-cancel"></i> Cancel</a>
+            <a class="btn btn-outline-warning float-right mx-1"><i class="fas fa-book-open"></i> View Inward Detail</a>
         </div>
 
         <div id="pp-{{ pp.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
@@ -27,6 +34,8 @@
                         <th scope="col">Cheque Date</th>
                         <th scope="col">Status</th>
                         <th scope="col">Amount</th>
+                        <th scope="col"></th>
+                        
                         
                       </tr>
                     </thead>
@@ -38,6 +47,7 @@
                         <td>{{ cp.date|date:"d-M-Y" }}</td>
                         <td>{{ cp.status }}</td>
                         <td>{{ cp.amount }}</td>
+                        <td><a class="btn btn-outline-success btn-block"><i class="fas fa-check-double"></i> Approve</a></td>
                       </tr>
                     {% endfor %}
                     </tbody>
