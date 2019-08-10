@@ -88,9 +88,11 @@ def overall_stats(request):
     if request.method == "GET":
         first_day = request.GET.get('first_day')
         last_day = request.GET.get('last_day')
+        first_date = datetime.strptime(first_day,"%m/%d/%Y")
+        last_date = datetime.strptime(last_day,"%m/%d/%Y")
         start_of_month = datetime.date.today().replace(day=1,month=7)
-        sops = SalesOrderProduct.objects.filter(salesorder__date__gte=first_day,salesorder__date__lte=last_day)
-        eps = EstimateProduct.objects.filter(estimate__date__gte=first_day,estimate__date__lte=last_day)
+        sops = SalesOrderProduct.objects.filter(salesorder__date__gte=first_date,salesorder__date__lte=last_date)
+        eps = EstimateProduct.objects.filter(estimate__date__gte=first_date,estimate__date__lte=last_date)
         total_sop_count = 0
         total_profit = 0
         total_sales = 0
@@ -134,10 +136,11 @@ def salesperson_stats(request):
         salesperson = request.GET.get('salesperson')
         first_day = request.GET.get('first_day')
         last_day = request.GET.get('last_day')
-
+        first_date = datetime.strptime(first_day,"%m/%d/%Y")
+        last_date = datetime.strptime(last_day,"%m/%d/%Y")
         start_of_month = datetime.date.today().replace(day=1,month=7)
-        eps = EstimateProduct.objects.filter(estimate__salesperson = salesperson, estimate__date__gte = first_day,estimate__date__lte=last_day)
-        sops = SalesOrderProduct.objects.filter(salesorder__salesperson = salesperson,salesorder__date__gte=first_day,salesorder__date__lte=last_day)
+        eps = EstimateProduct.objects.filter(estimate__salesperson = salesperson, estimate__date__gte = first_date,estimate__date__lte=last_date)
+        sops = SalesOrderProduct.objects.filter(salesorder__salesperson = salesperson,salesorder__date__gte=first_date,salesorder__date__lte=last_date)
         total_sop_count = 0
         total_profit = 0
         total_sales = 0
