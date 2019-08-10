@@ -15,11 +15,16 @@ class ChequePayable(models.Model):
     date = models.DateField(null=True,default=None,blank=True)
     amount = models.FloatField()
     approved_date = models.DateField(null=True,default=None,blank=True)
-
+    signed_date = models.DateField(null=True,default=None,blank=True)
+    cleared_date = models.DateField(null=True,default=None,blank=True)
     @property
     def status(self):
-        if self.approved_date:
+        if self.cleared_date:
+            return "cleared"
+        elif self.signed_date:
+            return "signed"
+        elif self.approved_date:
             return "approved"
         else:
-            return "not approved"
+            return "scheduled"
     

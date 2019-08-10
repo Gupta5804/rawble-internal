@@ -9,7 +9,7 @@
     <span onclick="closeNav()" style="position: absolute; right: 0; padding-right:10% ;display: none;" id="casp"></span>
     <div class="sidebar-header">
         <h3 style=" margin-left:12%;font-family: 'Josefin Sans', sans-serif;">
-            {{ user.first_name}} {{user.last_name}}  ({{ user.username}})
+            {{ user.first_name}} {{ user.last_name }}  ({{ user.username }})
         </h3>
         <br>
         <br>
@@ -37,9 +37,6 @@
                     <a href="{% url 'buyers_listing' %}" ><i class="fas fa-list-ul"></i> Buyer's List</a>
                 </li>
                 <hr>
-                
-                
-            
                 <li class='{% if request.resolver_match.url_name == "zoho_salesorders"  %}sub-menu active{% endif %}'>
                     <a href="{% url 'zoho_salesorders' %}"><i class="fas fa-dollar-sign"></i> Zoho Sales-Orders</a>
                 </li>
@@ -48,7 +45,6 @@
                     <a href="{% url 'zoho_estimates' %}"><i class="fas fa-euro-sign"></i> Zoho Estimates</a>
                 </li>
                 <hr>
-                
                 <li class='{% if request.resolver_match.url_name == "sales_report"  %}sub-menu active{% endif %}'>
                     <a href="{% url 'sales_report' %}"><i class="fas fa-clipboard"></i> Sales Report</a>
                 </li>
@@ -67,7 +63,6 @@
                     <a href="{% url 'vendors_listing' %}"><i class="fas fa-list-ul"></i> Vendor's List</a>
                 </li>
                 <hr>
-                
                 <li class='{% if request.resolver_match.url_name == "deal_vendor_list" %}sub-menu active{% endif %}'>
                     <a href="{% url 'deal_vendor_list' %}">Vendor Deals</a>
                 </li>
@@ -79,18 +74,14 @@
             <li>
             <a href="#servicedelivery" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                 <i class="fas fa-truck-loading"></i>
-                Service <br>    Delivery
+                Service <br> Delivery
             </a>
-            
             <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "outward_servicedelivery" %}collapse show {% endif %}' id="servicedelivery">
-                 
-                
                 <hr>
                 <li class='{% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "inward_servicedelivery_expired" or request.resolver_match.url_name == "inward_servicedelivery_expired"  %}sub-menu active{% endif %}'>
-                    
                     <a href="#inward-servicedelivery" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-sign-in-alt"></i>
-                            Inward
+                        Inward
                     </a>
                     <hr>
                     <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "inward_servicedelivery_new" or request.resolver_match.url_name == "inward_servicedelivery_expired" or request.resolver_match.url_name == "inward_servicedelivery_report" or request.resolver_match.url_name == "inward_servicedelivery_expired" %}collapse show {% endif %}' id="inward-servicedelivery">
