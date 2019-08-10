@@ -28,8 +28,10 @@ from django.utils.html import strip_tags
 from django.contrib.auth.models import User
 from deals.filters import SOFilter
 def salesreport_mail_admin(request):
-    start_of_month = datetime.date.today().replace(day=1,month=7)
+    
+    start_of_month = datetime.date.today().replace(day=1)
     so_qs = ZohoSalesOrder.objects.filter(date__gte = start_of_month)
+    
     salespersons_list = so_qs.order_by().values('salesperson').distinct()
     salespersons={}
     total_profit = 0
@@ -58,7 +60,7 @@ def salesreport_mail_admin(request):
             
 
     subject = "Chemicals Profit Report of "+ str(datetime.datetime.now().strftime('%B'))+","+str(datetime.datetime.now().strftime('%Y')) + " Till Date"
-    to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com',"madhur@rawble.com","ishleen.kaur@rawble.com","ajay@rawble.com"]
+    to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
     from_email = 'admin@rawble.com'
     cc_email=[]
     users_sales = User.objects.filter(groups__name="Sales Team")
@@ -84,9 +86,11 @@ def salesreport_mail_admin(request):
     return redirect('sales_report')
 def overall_stats(request):
     if request.method == "GET":
+        first_day = request.GET.get('first_day')
+        last_day = request.GET.get('last_day')
         start_of_month = datetime.date.today().replace(day=1,month=7)
-        sops = SalesOrderProduct.objects.filter(salesorder__date__gte=start_of_month)
-        eps = EstimateProduct.objects.filter(estimate__date__gte=start_of_month)
+        sops = SalesOrderProduct.objects.filter(salesorder__date__gte=first_day,salesorder__date__lte=last_day)
+        eps = EstimateProduct.objects.filter(estimate__date__gte=first_day,estimate__date__lte=last_day)
         total_sop_count = 0
         total_profit = 0
         total_sales = 0
@@ -128,9 +132,12 @@ def overall_stats(request):
 def salesperson_stats(request):
     if request.method == "GET":
         salesperson = request.GET.get('salesperson')
+        first_day = request.GET.get('first_day')
+        last_day = request.GET.get('last_day')
+
         start_of_month = datetime.date.today().replace(day=1,month=7)
-        eps = EstimateProduct.objects.filter(estimate__salesperson = salesperson, estimate__date__gte = start_of_month)
-        sops = SalesOrderProduct.objects.filter(salesorder__salesperson = salesperson,salesorder__date__gte=start_of_month)
+        eps = EstimateProduct.objects.filter(estimate__salesperson = salesperson, estimate__date__gte = first_day,estimate__date__lte=last_day)
+        sops = SalesOrderProduct.objects.filter(salesorder__salesperson = salesperson,salesorder__date__gte=first_day,salesorder__date__lte=last_day)
         total_sop_count = 0
         total_profit = 0
         total_sales = 0
