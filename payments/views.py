@@ -11,6 +11,13 @@ from django.template.loader import render_to_string
 import datetime
 from payments.models import PaymentPayable,ChequePayable
  # Create your views here.
+def payable_cheque_unapproved(request):
+    return render('payments/payable_cheque_unapproved.html')
+def payable_cheque_unsigned(request):
+    return render('payments/payable_cheque_unsigned.html')
+def payable_cheque_uncleared(request):
+    return render('payments/payable_cheque_uncleared.html')
+
 def schedule_payment(request):
     vendor_id = request.GET.get('vendor_id')
     selected_popp_ids = request.GET.getlist('selected_popp_ids[]')

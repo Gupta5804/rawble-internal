@@ -252,9 +252,28 @@
                         </li>
                         <hr>
                         <li class = '{% if request.resolver_match.url_name == "payments_payable_chequeapproval" %}sub-menu active{% endif %}'>
-                            <a href="{% url 'payments_payable_chequeapproval'%}">Cheque Approval</a>
+                            
+                            <a href="#cheque" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                                <i class="fas fa-dollar-sign"></i>
+                                Cheques
+                            </a>
+                            <ul style="padding-left:12%" class='collapse list-unstyled {% if request.resolver_match.url_name == "payable_cheque_unapproved"  or request.resolver_match.url_name == "payable_cheque_unsigned" or request.resolver_match.url_name == "payable_cheque_uncleared" %}collapse show {% endif %}' id="cheque">
+                                <li class = '{% if request.resolver_match.url_name == "payable_cheque_unapproved" %}sub-menu active{% endif %}'>
+                                    <a href="{% url 'payable_cheque_unapproved'%}">Un-Approved Cheques</a>
+                                </li>
+                                <hr>
+                                <li class = '{% if request.resolver_match.url_name == "payable_cheque_unsigned" %}sub-menu active{% endif %}'>
+                                    <a href="{% url 'payable_cheque_unsigned'%}">Un-Signed Cheques</a>
+                                </li>
+                                <hr>
+                                <li class = '{% if request.resolver_match.url_name == "payable_cheque_uncleared" %}sub-menu active{% endif %}'>
+                                    <a href="{% url 'payable_cheque_uncleared'%}">Un-Cleared Cheques</a>
+                                </li>
+                                <hr>
+                            
+                            </ul>
                         </li>
-                        <hr>
+                        
                         <li class = '{% if request.resolver_match.url_name == "payments_payable_nextpayment" %}sub-menu active{% endif %}'>
                             <a href="{% url 'payments_payable_nextpayment'%}">Next Payment</a>
                         </li>
