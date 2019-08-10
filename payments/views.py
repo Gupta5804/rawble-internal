@@ -12,11 +12,11 @@ import datetime
 from payments.models import PaymentPayable,ChequePayable
  # Create your views here.
 def payable_cheque_unapproved(request):
-    return render('payments/payable_cheque_unapproved.html')
+    return render(request,'payments/payable_cheque_unapproved.html')
 def payable_cheque_unsigned(request):
-    return render('payments/payable_cheque_unsigned.html')
+    return render(request,'payments/payable_cheque_unsigned.html')
 def payable_cheque_uncleared(request):
-    return render('payments/payable_cheque_uncleared.html')
+    return render(request,'payments/payable_cheque_uncleared.html')
 
 def schedule_payment(request):
     vendor_id = request.GET.get('vendor_id')
