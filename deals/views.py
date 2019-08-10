@@ -179,12 +179,12 @@ def salesperson_stats(request):
 
 def sales_report(request):
     so_list = ZohoSalesOrder.objects.all()
-    month = request.GET.get("month")
-    month_int = int(float(month))
+    #month = request.GET.get("month")
+    #month_int = int(float(month))
 
-    month_str = datetime.date(1900, month_int, 1).strftime('%B')
+    #month_str = datetime.date(1900, month_int, 1).strftime('%B')
 
-    print(month)
+    #print(month)
     so_filter = SOFilter(request.GET, queryset=so_list)
     salespersons = so_filter.qs.order_by().values('salesperson').distinct()
     print(salespersons)
@@ -218,7 +218,7 @@ def sales_report(request):
     #print(salesperson)
     #for estimate_number in ZohoEstimate.objects.values_list('estimate_number', flat=True).distinct():
     #    ZohoEstimate.objects.filter(pk__in=ZohoEstimate.objects.filter(estimate_number=estimate_number).values_list('id',# flat=True)[1:]).delete()
-    return render(request,'deals/sales_report.html',{'filter':so_filter,'salesperson_buyer':salesperson_buyer,'total_margin':total_margin,"month":month,"month_str":month_str})
+    return render(request,'deals/sales_report.html',{'filter':so_filter,'salesperson_buyer':salesperson_buyer,'total_margin':total_margin})
 # Create your views here.
 def zoho_salesorders(request):
     if request.method == 'GET':
