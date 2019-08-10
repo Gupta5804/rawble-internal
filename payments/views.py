@@ -19,7 +19,7 @@ def payable_cheque_unapproved(request):
                 vendor= ContactVendor.objects.get(contact_id = vendor_id)
                 vendors.append(vendor)
         #pps = PaymentPayable.objects.all().order_by("-id")
-        return render(request,'payments/payable_cheque_unapproved',{'vendors':vendors})
+        return render(request,'payments/payable_cheque_unapproved.html',{'vendors':vendors})
     
 def payable_cheque_unsigned(request):
     return render(request,'payments/payable_cheque_unsigned.html')
