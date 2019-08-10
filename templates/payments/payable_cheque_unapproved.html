@@ -3,7 +3,7 @@
 
 {% block application-active %}
 {% for vendor in vendors %} 
-<div class="alert alert-warning mb-0 mt-3" role="alert">
+<div class="alert alert-warning mb-0 mt-5 w-50 mx-auto" role="alert">
 <h4 class="alert-heading text-center">{{ vendor.contact_name }}</h4>
 </div>
 <div class="accordion" id="accordionExample">
@@ -11,8 +11,8 @@
     <div class="card">
         <div class="card-header" id="headingOne">
             <h2 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#pp-{{ pp.id }}" aria-expanded="true" aria-controls="collapseOne">
-                    Payment ID : {{ pp.id }}
+                <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#pp-{{ pp.id }}" aria-expanded="true" aria-controls="collapseOne">
+                    Payment ID : {{ pp.id }}  <i class="fas fa-chevron-down"></i>
                 </button>
             </h2>
         </div>
