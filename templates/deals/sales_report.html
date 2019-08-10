@@ -150,7 +150,7 @@ function get_overall_stats(sp){
   
   var sp_id = sp.getAttribute("data-id");
   var first_day = $("#id_date_0").val();
-  var last_day = $("id_date_1").val();
+  var last_day = $("#id_date_1").val();
   $('div#overall-stats').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/bars/index.progress-bar-facebook-loader.gif' />");
     $.ajax({
             url: '../../../../../ajax/overall_stats',
@@ -165,7 +165,7 @@ function get_sp_stats(sp){
   var salesperson = sp.getAttribute("data-salesperson");
   var sp_id = sp.getAttribute("data-id");
   var first_day = $("#id_date_0").val();
-  var last_day = $("id_date_1").val();
+  var last_day = $("#id_date_1").val();
   $('div#sp-stats-'+sp_id).html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/bars/index.progress-bar-facebook-loader.gif' />");
     $.ajax({
             url: '../../../../../ajax/salesperson_stats',
