@@ -11,6 +11,14 @@ from django.template.loader import render_to_string
 import datetime
 from payments.models import PaymentPayable,ChequePayable
  # Create your views here.
+def inwarddetail(request):
+    if request.method == "GET":
+        pp_id = request.GET.get("pp_id")
+        pp = PaymentPayable.objects.get(id = pp_id)
+        
+        rendered = render_to_string('payments/helper_ajax/inwarddetail.html',context = {'pp':pp},request=request)
+        return JsonResponse({'snippet': rendered})
+
 def payable_cheque_unapproved(request):
     if request.method == "GET":
         vendor_ids = PaymentPayable.objects.values_list("vendor__contact_id",flat=True).distinct().order_by()

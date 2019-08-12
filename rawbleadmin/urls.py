@@ -158,6 +158,7 @@ urlpatterns = [
     path('deals/vendor/list/',deal_views.dealvendor_list,name='deal_vendor_list'),
     path('ajax/payments/payable_pending/get_purchaseorders',payment_views.payable_pending_get_purchaseorders,name="payable_pending_get_purchaseorders"),
     path('ajax/payments/schedule_payment',payment_views.schedule_payment,name="schedule_payment"),
+    path('ajax/payments/payable/inwarddetail',payment_views.inwarddetail,name="inwarddetail"),
     path('payments/payable/pending',payment_views.payments_payable_pending,name = 'payments_payable_pending'),
     path('payments/payable/cheque/unapproved',payment_views.payable_cheque_unapproved,name = 'payable_cheque_unapproved'),
     path('payments/payable/cheque/unsigned',payment_views.payable_cheque_unsigned,name = 'payable_cheque_unsigned'),

@@ -9,7 +9,7 @@
                 (<span style="color:red">Payment Terms: {{ vendor.payment_terms }}</span>)
             </h4>
             <div class="btn-group d-block text-center" role="group" aria-label="Basic example">
-                <a class="btn btn-outline-dark" data-toggle="modal" data-target="#chequeledger-{{ vendor.contact_id }}">Cheque Ledger</a>
+                <a class="btn btn-outline-dark chequeledger" data-id="{{ vendor.contact_id }}" data-toggle="modal" data-target="#chequeledger-{{ vendor.contact_id }}">Cheque Ledger</a>
                 <!-- AJAX MODAL-->
                 <div class="modal fade" id="chequeledger-{{ vendor.contact_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
@@ -30,7 +30,7 @@
                       </div>
                     </div>
                 </div>
-                <a class="btn btn-outline-dark" data-toggle="modal" data-target="#actualledger-{{ vendor.contact_id }}">Actual Ledger</a>
+                <a class="btn btn-outline-dark actualledger" data-id="{{ vendor.contact_id }}" data-toggle="modal" data-target="#actualledger-{{ vendor.contact_id }}">Actual Ledger</a>
                 <!-- AJAX MODAL-->
                 <div class="modal fade" id="actualledger-{{ vendor.contact_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
@@ -51,7 +51,7 @@
                       </div>
                     </div>
                 </div>
-                <a class="btn btn-outline-dark" data-toggle="modal" data-target="#allcheques-{{ vendor.contact_id }}">View All Cheques</a>
+                <a class="btn btn-outline-dark allcheques" data-toggle="modal" data-id="{{ vendor.contact_id }}" data-target="#allcheques-{{ vendor.contact_id }}">View All Cheques</a>
                 <!-- AJAX MODAL-->
                 <div class="modal fade" id="allcheques-{{ vendor.contact_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
@@ -107,12 +107,12 @@
                               </div>
                             </div>
                         </div>
-                        <a class="btn btn-outline-warning float-right mx-1" data-toggle="modal" data-target="#inwarddetail-{{ pp.id }}">
+                        <a class="btn btn-outline-warning float-right mx-1 inwarddetail" data-toggle="modal" data-target="#inwarddetail-{{ pp.id }}">
                             <i class="fas fa-book-open"></i> 
                             View Inward Detail
                         </a>
                         <!-- AJAX MODAL-->
-                        <div class="modal fade" id="inwarddetail-{{ pp.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="inwarddetail-{{ pp.id }}" data-id="{{ pp.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -191,4 +191,90 @@
         </div>
     {% endfor %}
 
+<script>
+ $(document).on("click",".chequeledger",function(){ 
+    //alert(jQuery(this).data("id"));
+    var contact_id = ($(this).data('id'));
+    //$.get("https://www.rawble.com/rfq/userrfq/ajaxestimatelist?item_id="+item_id, function(data, status){
+    //alert(data);
+    $('#chequeledger-'+contact_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
+    $.ajax({
+        url: '../../../../../ajax/sales_history',
+        type: "get",
+        data: {'slug': item_id},
+
+        success: function(data) {
+          $('#chequeledger-'+contact_id).modal('show');
+          $('#chequeledger-'+contact_id).find('.modal-body').html(data.snippet);
+        },
+        error: function(err) {
+          console.log('error', err);
+        }
+      })
+    //});
+    });
+$(document).on("click",".actualledger",function(){ 
+    //alert(jQuery(this).data("id"));
+    var contact_id = ($(this).data('id'));
+    //$.get("https://www.rawble.com/rfq/userrfq/ajaxestimatelist?item_id="+item_id, function(data, status){
+    //alert(data);
+    $('#actualledger-'+contact_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
+    $.ajax({
+        url: '../../../../../ajax/sales_history',
+        type: "get",
+        data: {'slug': item_id},
+
+        success: function(data) {
+          $('#actualledger-'+contact_id).modal('show');
+          $('#actualledger-'+contact_id).find('.modal-body').html(data.snippet);
+        },
+        error: function(err) {
+          console.log('error', err);
+        }
+      })
+    //});
+    });
+$(document).on("click",".allcheques",function(){ 
+    //alert(jQuery(this).data("id"));
+    var contact_id = ($(this).data('id'));
+    //$.get("https://www.rawble.com/rfq/userrfq/ajaxestimatelist?item_id="+item_id, function(data, status){
+    //alert(data);
+    $('#allcheques-'+contact_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
+    $.ajax({
+        url: '../../../../../ajax/sales_history',
+        type: "get",
+        data: {'slug': item_id},
+
+        success: function(data) {
+          $('#allcheques-'+contact_id).modal('show');
+          $('#allcheques-'+contact_id).find('.modal-body').html(data.snippet);
+        },
+        error: function(err) {
+          console.log('error', err);
+        }
+      })
+    //});
+    });
+$(document).on("click",".inwarddetail",function(){ 
+    //alert(jQuery(this).data("id"));
+    var pp_id = ($(this).data('id'));
+    //$.get("https://www.rawble.com/rfq/userrfq/ajaxestimatelist?item_id="+item_id, function(data, status){
+    //alert(data);
+    $('#inwarddetail-'+pp_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
+    $.ajax({
+        url: '../../../../../ajax/payments/payable/inwarddetail',
+        type: "get",
+        data: {'pp_id': pp_id},
+
+        success: function(data) {
+          $('#inwarddetail-'+pp_id).modal('show');
+          $('#inwarddetail-'+pp_id).find('.modal-body').html(data.snippet);
+        },
+        error: function(err) {
+          console.log('error', err);
+        }
+      })
+    //});
+    });
+</script>
 {% endblock application-active %}
