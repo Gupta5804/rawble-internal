@@ -1,0 +1,20 @@
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Cheque Number</th>
+      <th scope="col">Date</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for cp in cps %}
+    <tr>
+      <th scope="row">{{ cp.cheque_no}}</th>
+      <td>{{ cp.date }}</td>
+      <td>{{ cp.amount }}</td>
+      <td>{{ cp.status }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

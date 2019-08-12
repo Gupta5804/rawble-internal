@@ -11,6 +11,43 @@ from django.template.loader import render_to_string
 import datetime
 from payments.models import PaymentPayable,ChequePayable
  # Create your views here.
+def actualledger(request):
+    if request.method == "GET":
+        contact_id = request.GET.get("contact_id")
+        vendor = request.GET.get("contact_id")
+        
+        rendered = render_to_string('payments/helper_ajax/inwarddetail.html',context = {},request=request)
+        return JsonResponse({'snippet': rendered})
+def chequeledger(request):
+    if request.method == "GET":
+        contact_id = request.GET.get("contact_id")
+        vendor = request.GET.get("contact_id")
+        pps = PaymentPayable.objects.filter(vendor = vendor)
+        cps = []
+        not_approved = 0
+        not_signed = 0
+        not_cleared = 0
+        for pp in pps:
+            for cp in pp.chequepayable_set.all():
+                cps.append(cp)
+                if(cp.status == "scheduled"):
+                    not_approved = not_approved + cp.amount
+                elif(cp.status == "approved"):
+                    not_signed = not_signed + cp.amount
+                elif(cp.status == "signed"):
+                    not_cleared = not_cleared + cp.amount
+        rendered = render_to_string('payments/helper_ajax/chequeledger.html',context = {'not_approved':not_approved,'not_signed':not_signed,'not_cleared':not_cleared},request=request)
+        return JsonResponse({'snippet': rendered})
+def allcheques(request):
+    if request.method == "GET":
+        contact_id = request.GET.get("contact_id")
+        vendor = request.GET.get("contact_id")
+        cps = []
+        for pp in pps:
+            for cp in pp.chequepayable_set.all():
+                cps.append(cp)
+        rendered = render_to_string('payments/helper_ajax/allcheques.html',context = {'cps':cps},request=request)
+        return JsonResponse({'snippet': rendered})
 def inwarddetail(request):
     if request.method == "GET":
         pp_id = request.GET.get("pp_id")
