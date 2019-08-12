@@ -9,12 +9,69 @@
                 (<span style="color:red">Payment Terms: {{ vendor.payment_terms }}</span>)
             </h4>
             <div class="btn-group d-block text-center" role="group" aria-label="Basic example">
-                <a class="btn btn-outline-dark">Cheque Ledger</a>
+                <a class="btn btn-outline-dark" data-toggle="modal" data-target="#chequeledger-{{ vendor.contact_id }}">Cheque Ledger</a>
                 <!-- AJAX MODAL-->
-                <a class="btn btn-outline-dark">Actual Ledger</a>
+                <div class="modal fade" id="chequeledger-{{ vendor.contact_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Cheque Ledger Of {{ vendor.contact_name }}</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          ...
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <a class="btn btn-outline-dark" data-toggle="modal" data-target="#actualledger-{{ vendor.contact_id }}">Actual Ledger</a>
                 <!-- AJAX MODAL-->
-                <a class="btn btn-outline-dark">View All Cheques</a>
+                <div class="modal fade" id="actualledger-{{ vendor.contact_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Actual Ledger of {{ vendor.contact_name }}</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          ...
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <a class="btn btn-outline-dark" data-toggle="modal" data-target="#allcheques-{{ vendor.contact_id }}">View All Cheques</a>
                 <!-- AJAX MODAL-->
+                <div class="modal fade" id="allcheques-{{ vendor.contact_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">All Cheques of {{ vendor.contact_name }}</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          ...
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="accordion" id="accordionExample">
@@ -26,16 +83,54 @@
                                 Payment ID : {{ pp.id }}  <i class="fas fa-chevron-down"></i>
                             </button>
                         </h2>
-                        <a class="btn btn-outline-danger float-right mx-1">
+                        <a class="btn btn-outline-danger float-right mx-1" data-toggle="modal" data-target="#cancelpayment-{{ pp.id }}">
                             <i class="fas fa-window-close"></i> 
                             Cancel
                         </a>
                         <!-- FORM MODAL-->
-                        <a class="btn btn-outline-warning float-right mx-1">
+                        <div class="modal fade" id="cancelpayment-{{ pp.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Cancel Payment Confirm ?</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  ...
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <a class="btn btn-outline-warning float-right mx-1" data-toggle="modal" data-target="#inwarddetail-{{ pp.id }}">
                             <i class="fas fa-book-open"></i> 
                             View Inward Detail
-                        <!-- AJAX MODAL-->
                         </a>
+                        <!-- AJAX MODAL-->
+                        <div class="modal fade" id="inwarddetail-{{ pp.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Inward Details</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  ...
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div id="pp-{{ pp.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
@@ -60,11 +155,30 @@
                                           <td>{{ cp.status }}</td>
                                           <td>{{ cp.amount }}</td>
                                           <td>
-                                              <a class="btn btn-outline-success btn-block">
+                                              <a class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#approvecheque-{{ cp.id }}">
                                                   <i class="fas fa-check"></i> 
-                                                  Approve
+                                                  Approve 
                                               </a>
                                               <!-- FORM MODAL-->
+                                              <div class="modal fade" id="approvecheque-{{ cp.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title" id="exampleModalLabel">Approve Cheque</h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                      ...
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                      <button type="button" class="btn btn-primary">Save changes</button>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            </div>
                                           </td>
                                         </tr>
                                     {% endfor %}
