@@ -199,7 +199,7 @@
     //alert(data);
     $('#chequeledger-'+contact_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
     $.ajax({
-        url: '../../../../../ajax/sales_history',
+        url: '../../../../../payable/chequeledger',
         type: "get",
         data: {'contact_id': contact_id},
 
@@ -220,7 +220,7 @@ $(document).on("click",".actualledger",function(){
     //alert(data);
     $('#actualledger-'+contact_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
     $.ajax({
-        url: '../../../../../ajax/sales_history',
+        url: '../../../../../payable/actualledger',
         type: "get",
         data: {'contact_id': contact_id},
 
@@ -241,7 +241,7 @@ $(document).on("click",".allcheques",function(){
     //alert(data);
     $('#allcheques-'+contact_id).find('.modal-body').html("<img style='display:block;margin:auto;' src='https://loading.io/spinners/magnify/index.searching-for-loading-icon.gif' />");
     $.ajax({
-        url: '../../../../../ajax/sales_history',
+        url: '../../../../../payable/allcheques',
         type: "get",
         data: {'contact_id': contact_id},
 
