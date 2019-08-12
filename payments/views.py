@@ -14,7 +14,8 @@ from payments.models import PaymentPayable,ChequePayable
 def actualledger(request):
     if request.method == "GET":
         contact_id = request.GET.get("contact_id")
-        vendor = request.GET.get("contact_id")
+        vendor = ContactVendor.objects.get(contact_id=contact_id)
+
         
         rendered = render_to_string('payments/helper_ajax/actualledger.html',context = {'vendor':vendor},request=request)
         return JsonResponse({'snippet': rendered})
