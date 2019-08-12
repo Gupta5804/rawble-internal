@@ -201,7 +201,7 @@
     $.ajax({
         url: '../../../../../ajax/sales_history',
         type: "get",
-        data: {'slug': item_id},
+        data: {'contact_id': contact_id},
 
         success: function(data) {
           $('#chequeledger-'+contact_id).modal('show');
@@ -222,7 +222,7 @@ $(document).on("click",".actualledger",function(){
     $.ajax({
         url: '../../../../../ajax/sales_history',
         type: "get",
-        data: {'slug': item_id},
+        data: {'contact_id': contact_id},
 
         success: function(data) {
           $('#actualledger-'+contact_id).modal('show');
@@ -243,7 +243,7 @@ $(document).on("click",".allcheques",function(){
     $.ajax({
         url: '../../../../../ajax/sales_history',
         type: "get",
-        data: {'slug': item_id},
+        data: {'contact_id': contact_id},
 
         success: function(data) {
           $('#allcheques-'+contact_id).modal('show');
