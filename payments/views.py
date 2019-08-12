@@ -16,7 +16,7 @@ def actualledger(request):
         contact_id = request.GET.get("contact_id")
         vendor = request.GET.get("contact_id")
         
-        rendered = render_to_string('payments/helper_ajax/inwarddetail.html',context = {},request=request)
+        rendered = render_to_string('payments/helper_ajax/actualledger.html',context = {'vendor':vendor},request=request)
         return JsonResponse({'snippet': rendered})
 def chequeledger(request):
     if request.method == "GET":
