@@ -42,6 +42,7 @@ def allcheques(request):
     if request.method == "GET":
         contact_id = request.GET.get("contact_id")
         vendor = request.GET.get("contact_id")
+        pps = PaymentPayable.objects.filter(vendor = vendor)
         cps = []
         for pp in pps:
             for cp in pp.chequepayable_set.all():
