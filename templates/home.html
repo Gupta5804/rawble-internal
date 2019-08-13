@@ -388,7 +388,7 @@
                                             <tbody>
                                             {% for po in pos %}
                                                 <tr>
-                                                  <th scope="row"><a href="{{ po.purchaseorder_url }}" target="_blank">{{ purchaseorder_number }}</a></th>
+                                                  <th scope="row"><a href="{{ po.purchaseorder_url }}" target="_blank">{{ po.purchaseorder_number }}</a></th>
                                                   <td>{{ po.vendor.contact_name }}</td>
                                                   <td>{{ po.date }} <br><span style="color:red;">Added {{ po.added_days_ago }} day(s) ago.</span></td>
                                                   <td>{{ po.salesorder.salesorder_number }}</td>
