@@ -374,9 +374,29 @@
                                         </a>
                                     </div>
                                     <div class="card-body collapse" id="unplanned">
-                                        <h5 class="card-title">Special title treatment</h5>
-                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">PO#</th>
+                                                <th scope="col">Vendor</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">For SO#</th>
+                                                <th scope="col">Total Amount</th>
+
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for po in pos %}
+                                                <tr>
+                                                  <th scope="row"><a href="{{ po.purchaseorder_url }}" target="_blank">{{ purchaseorder_number }}</a></th>
+                                                  <td>{{ po.vendor.contact_name }}</td>
+                                                  <td>{{ po.date }} <br><span style="color:red;">Added {{ po.added_days_ago }} day(s) ago.</span></td>
+                                                  <td>{{ po.salesorder.salesorder_number }}</td>
+                                                  <td>{{ po.total }}</td>
+                                                </tr>
+                                            {% endfor %} 
+                                            </tbody>
+                                        </table>
                                     </div>
                                     <div class="card-footer text-muted">
                                         <h4 style="color:red;">Purchase Orders that are not planned yet</h4>

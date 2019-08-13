@@ -90,6 +90,10 @@ class ZohoPurchaseOrder(models.Model):
     def __str__(self):
         return self.purchaseorder_number
     @property
+    def added_days_ago(self):
+        return (datetime.date.today() - self.date ).days
+
+    @property
     def planned_status(self):
         if(self.purchaseorderproduct_set.count() > 0):
             status = True
