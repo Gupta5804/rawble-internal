@@ -15,22 +15,15 @@ def dashboard(request):
     vendorproductvariations = VendorProductVariation.objects.all()
     relationship_managers = []
     for buyer in ContactBuyer.objects.all():
-            if(buyer.relationship_manager not in relationship_managers):
-                    relationship_managers.append(buyer.relationship_manager)
+        if(buyer.relationship_manager not in relationship_managers):
+                relationship_managers.append(buyer.relationship_manager)
 
     month_string = datetime.now().strftime('%B')
     month_int = datetime.now().strftime('%m')
-
-    return render(request,'home.html',{
-        'total_products':total_products,
-        'total_users':total_users,
-        'total_vendors':total_vendors,
-        'total_buyers':total_buyers,
-        'total_estimates':total_estimates,
-        'relationship_managers':relationship_managers,
-        'vendorproductvariation': vendorproductvariations,
-        'month_string':month_string,
-        'month_int':month_int })
+    user_groups = []
+    for group in request.user.groups.all():
+        user_groups.append(group.name)
+    return render(request,'home.html',{'user_groups':user_groups})
 
 def refresh_contacts(request):
     call_command('contacts_update_from_zoho')

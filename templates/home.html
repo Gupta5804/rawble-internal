@@ -352,84 +352,26 @@
             
             <!-- ================================tab============================= -->
             <nav class="nav nav-tabs nav-justified">
-                    <a class="nav-item nav-link" id="hag" data-toggle="tab" href="#home">General</a>
-                    <a class="nav-item nav-link" data-toggle="tab" href="#menu1">Sales</a>
-                    <a class="nav-item nav-link" data-toggle="tab" href="#menu2">Purchase</a>
+                {% if "Inward" in user_groups %}
+                <a class="nav-item nav-link" id="hag" data-toggle="tab" href="#inward">Inward</a>
+                {% endif %}
+                {% if "Outward" in user_groups %}
+                <a class="nav-item nav-link" data-toggle="tab" href="#outward">Outward</a>
+                {% endif %}
+                {% if "Sales Team" in user_groups %}
+                <a class="nav-item nav-link" data-toggle="tab" href="#sales">Sales</a>
+                {% endif %}
             </nav>
                     
                     <div class="tab-content">
-                    <div id="home" class="tab-pane fade in">
-                            <table class="table active table-hover" >
-                                    <thead>
-                                      <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col">Count</th>
-                                        <th scope="col">Refresh</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr>
-                                        <th scope="row">Users</th>
-                                        <td></td>
-                                        <td></td>
-                                        <td>{{ total_users }}</td>
-                                        <td><a class="btn btn-outline-primary btn-sm" href="#">Refresh Users From Zoho</a> </td>
-                                      </tr>
-                                      <tr>
-                                        <th scope="row">Products</th>
-                                        <td></td>
-                                        <td></td>
-                                        <td><a href="{% url 'products_listing' %}">{{ total_products }}</a></td>
-                                        <td><a class="btn btn-outline-primary btn-sm" href="{% url 'refresh_products' %}">Refresh Products From Zoho</a> </td>
-                                      </tr>
-                                      <tr>
-                                        <th scope="row">Purchase</th>
-                                        <td colspan="2"></td>
-                                        <td>0</td>
-                                        <td></td>
-                                      </tr>
-                                      <tr>
-                                        <th scope="row">Sales</th>
-                                        <td colspan="2"></td>
-                                        <td>0</td>
-                                        <td></td>
-                                      </tr>
-                                      <tr>
-                                        <th scope="row">Estimates</th>
-                                        <td colspan="2"></td>
-                                        <td><a href="{% url 'zoho_estimates' %}">{{ total_estimates }}</a></td>
-                                        <td></td>
-                                      </tr>
-                                      <tr>
-                                        <th scope="row">Vendors</th>
-                                        <td colspan="2"></td>
-                                        <td><a href="{% url 'vendors_listing' %}">{{ total_vendors }}</a></td>
-                                        <td><a class="btn btn-outline-primary btn-sm" href="{% url 'refresh_contacts' %}" rowspan="2">Refresh Contacts From Zoho</a> </td>
-                                      </tr>
-                                      <tr>
-                                        <th scope="row">Buyers</th>
-                                        <td colspan="2"></td>
-                                        <td><a href="{% url 'buyers_listing' %}">{{ total_buyers }}</a></td>
-                                        <td><a class="btn btn-outline-primary btn-sm" href="{% url 'refresh_contacts' %}">Refresh Contacts From Zoho</a> </td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
+                    <div id="inward" class="tab-pane fade in">
+                        
                     </div>
-                    <div id="menu1" class="tab-pane active fade in">
-                    <h2 style="text-align: center;margin-top: 1%;"> Target For {{ month_string }}</h2>
-                    <select class="form-control w-75" style="margin-top:1%;margin-left:auto;margin-right:auto;" onchange="return buyers(this);">
-                        {% for relationship_manager in relationship_managers %}
-                            <option value="{{ relationship_manager }}">{{ relationship_manager }}</option>
-                        {% endfor %}
-                    </select>
-                    <div id="buyers" class="mt-4">
+                    <div id="outward" class="tab-pane active fade in">
+                    
                     </div>
-                    </div>
-                    <div id="menu2" class="tab-pane fade in">
-                    <h3>Purchase</h3>
-                    <p>Some content in Purchase</p>
+                    <div id="sales" class="tab-pane fade in">
+                    
                     </div>
                     </div>
                     <script>
