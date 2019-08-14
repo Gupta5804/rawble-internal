@@ -1117,7 +1117,7 @@ def outward_service_delivery(request):
                 sopp.save()
                 
 
-        if "dispatched-outward" in request.POST:
+        if "nextoutward-dispatched" in request.POST:
             sopp_ids = request.POST.getlist("sopp_id")
             
             
