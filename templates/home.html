@@ -439,7 +439,7 @@
                                                 <th scope="col">Vendor</th>
                                                 <th scope="col">Product</th>
                                                 <th scope="col">Quantity </th>
-                                                <th scope="col">Total Amount</th>
+                                               
                                                 
                                                 
 
@@ -452,7 +452,7 @@
                                                   <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
                                                   <td>{{ popp.purchaseorderproduct.product.name }}</td>
                                                   <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to Dispatch on {{ popp.planned_dispatch_date_time }} day(s) ago.</span></td>
-                                                  <td>{{ popp.total_amount_with_tax }}</td>
+                                                 
                                                   
                                                 </tr>
                                             {% endfor %} 
@@ -490,7 +490,7 @@
                                                 <th scope="col">Vendor</th>
                                                 <th scope="col">Product</th>
                                                 <th scope="col">Quantity </th>
-                                                <th scope="col">Total Amount</th>
+                                                
                                                 
                                                 
 
@@ -503,7 +503,7 @@
                                                   <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
                                                   <td>{{ popp.purchaseorderproduct.product.name }}</td>
                                                   <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to receive on {{ popp.planned_receive_date_time }} day(s) ago.</span></td>
-                                                  <td>{{ popp.total_amount_with_tax }}</td>
+                                                  
                                                   
                                                 </tr>
                                             {% endfor %} 
