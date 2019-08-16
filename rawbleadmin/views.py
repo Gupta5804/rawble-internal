@@ -30,6 +30,12 @@ def dashboard(request):
         popps_intransit= []
         popps_intransit_amount = 0
         sos = []
+        sopps_shipping = []
+        sopps_shipping_amount = 0
+        sopps_intransit_lr_notshared = []
+        sopps_intransit_lr_notshared_amount = 0
+        sopps_intransit_notdelivered = []
+        sopps_intransit_notdelivered_amount = 0
         for po in ZohoPurchaseOrder.objects.all().order_by("-date"):
                 if(po.status != "billed" and po.status != "cancelled" and po.planned_status == False):
                         pos.append(po)
@@ -37,7 +43,16 @@ def dashboard(request):
                 if(so.status == "open" and so.planned_status == False):
                         sos.append(so)
         for sopp in SalesOrderProductPlan.objects.all().order_by("-salesorderproduct__salesorder__salesorder_number"):
-                if(sopp.plan_status == "planned"):                
+                if(sopp.plan_status == "planned"):
+                        sopps_shipping.append(sopp)
+                        sopps_shipping_amount = sopps_shipping_amount + sopp.total_amount
+                elif(sopp.plan_status == "in-transit" and (sopp.tracking_number == None or sopp.tracking == "") ):
+                        sopps_intransit_lr_notshared.append(sopp)
+                        sopps_intransit_lr_notshared_amount = sopps_intransit_lr_notshared_amount + sopp.total_amount
+                elif(sopp.plan_status == "in-transit" and sopp.tracking_number):
+                        sopps_intransit_notdelivered.append(sopp)
+                        sopps_intransit_notdelivered_amount = sopps_intransit_notdelivered_amount + sopp.total_amount 
+
         for popp in PurchaseOrderProductPlan.objects.all().order_by("-purchaseorderproduct__purchaseorder__purchaseorder_number"):
                 if(popp.plan_status == "planned"):
                         popps_expired.append(popp)
@@ -45,7 +60,7 @@ def dashboard(request):
                 elif(popp.plan_status == "in-transit"):
                         popps_intransit.append(popp)
                         popps_intransit_amount = popps_intransit_amount + popp.total_amount_with_tax
-        return render(request,'home.html',{'user_groups':user_groups,'pos':pos,'sos':sos,'popps_expired':popps_expired,'popps_expired_amount':popps_expired_amount,'popps_intransit':popps_intransit,'popps_intransit_amount':popps_intransit_amount })
+        return render(request,'home.html',{'user_groups':user_groups,'pos':pos,'sos':sos,'popps_expired':popps_expired,'popps_expired_amount':popps_expired_amount,'popps_intransit':popps_intransit,'popps_intransit_amount':popps_intransit_amount ,'sopps_shipping':sopps_shipping,'sopps_shipping_amount':sopps_shipping_amount,'sopps_intransit_lr_notshared':sopps_intransit_lr_notshared,'sopps_intransit_lr_notshared_amount':sopps_intransit_lr_notshared_amount,'sopps_intransit_notdelivered':sopps_intransit_notdelivered,'sopps_intransit_notdelivered_amount':sopps_intransit_notdelivered_amount})
 
 def refresh_contacts(request):
     call_command('contacts_update_from_zoho')

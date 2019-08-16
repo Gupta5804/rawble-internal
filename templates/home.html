@@ -570,20 +570,20 @@
                                 <div class="card text-center border border-dark">
                                     <div class="card-header">
                                         <a class="btn btn-primary" data-toggle="collapse" href="#expired" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                            Shipping - Expired Plans
+                                            Shipping - Not Dispatched Yet
                                         </a>
                                         <table class="table table-bordered table-light">
                                             <caption class="alert alert-danger">
                                                 <a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_expired' %}">
-                                                    Click Here</a> to Mark expired plans as Dispatched or reschedule them.
+                                                    Click Here</a> to Mark plans as Dispatched or reschedule them.
                                             </caption>
                                             <tr>
                                                 <td class="table-dark">Count</td>
-                                                <td>{{ popps_expired|length }}</td>
+                                                <td>{{ sopps_shipping|length }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="table-dark">Amount</td>
-                                                <td>{{ popps_expired_amount }}</td>
+                                                <td>{{ sopps_shipping_amount }}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -591,32 +591,32 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col">PO#</th>
-                                                    <th scope="col">Vendor</th>
+                                                    <th scope="col">SO#</th>
+                                                    <th scope="col">Buyer</th>
                                                     <th scope="col">Product</th>
                                                     <th scope="col">Quantity </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            {% for popp in popps_expired %}
+                                            {% for sopp in sopps_shipping %}
                                                 <tr>
                                                     <th scope="row">
-                                                        <a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">
-                                                        {{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}
+                                                        <a href="{{ sopp.salesorderproduct.salesorder.salesorder_url }}" target="_blank">
+                                                        {{ sopp.salesorderproduct.salesorder.salesorder_number }}
                                                         </a>
                                                     </th>
                                                     <td>
-                                                    {{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}
+                                                    {{ sopp.salesorderproduct.salesorder.buyer.contact_name }}
                                                     </td>
-                                                    <td>{{ popp.purchaseorderproduct.product.name }}</td>
-                                                  <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to Dispatch on {{ popp.planned_dispatch_date_time }}</span></td>
+                                                    <td>{{ sopp.salesorderproduct.product.name }}</td>
+                                                  <td>{{ sopp.planned_quantity }} <br><span style="color:red;">Planned to Dispatch on {{ sopp.planned_date_time }}</span></td>
                                                 </tr>
                                             {% endfor %} 
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="card-footer text-muted">
-                                        <h4 style="color:red">Plans Not Marked As Dispatched From Vendor Side</h4>
+                                        <h4 style="color:red">Plans Not Marked As Dispatched</h4>
                                     </div>
                                 </div>
                             </div>

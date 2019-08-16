@@ -68,7 +68,7 @@ class SalesOrderProductPlan(models.Model):
     eta = models.DateTimeField(null=True,blank=True,default=None)
     coafile = models.ForeignKey(CoaFile,on_delete=models.SET_NULL,null=True,blank=True,default=None)
     def __str__(self):
-        return (self.salesorderproduct.salesorder.salesorder_number + "-" + self.salesorderproduct.product.name + "-" +str(self.planned_quantity) )
+        return (self.salesorderproduct.salesorder.salesorder_number + "-" + self.salesorderproduct.product.name + "-" +str(self.planned_quantity))
     @property
     def total_amount(self):
         return (self.salesorderproduct.so_selling_price * self.planned_quantity )
