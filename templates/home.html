@@ -497,7 +497,7 @@
                                               </tr>
                                             </thead>
                                             <tbody>
-                                            {% for popp in popps_expired %}
+                                            {% for popp in popps_intransit %}
                                                 <tr>
                                                   <th scope="row"><a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</a></th>
                                                   <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
