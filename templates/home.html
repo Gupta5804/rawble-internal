@@ -385,23 +385,22 @@
                                     <div class="card-body p-0 collapse" id="unplanned">
                                         <table class="table table-bordered">
                                             <thead>
-                                              <tr>
-                                                <th scope="col">PO#</th>
-                                                <th scope="col">Vendor</th>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">For SO#</th>
-                                                <th scope="col">Total Amount</th>
-
-                                              </tr>
+                                                <tr>
+                                                    <th scope="col">PO#</th>
+                                                    <th scope="col">Vendor</th>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">For SO#</th>
+                                                    <th scope="col">Total Amount</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
                                             {% for po in pos %}
                                                 <tr>
-                                                  <th scope="row"><a href="{{ po.purchaseorder_url }}" target="_blank">{{ po.purchaseorder_number }}</a></th>
-                                                  <td>{{ po.vendor.contact_name }}</td>
-                                                  <td>{{ po.date }} <br><span style="color:red;">Added {{ po.added_days_ago }} day(s) ago.</span></td>
-                                                  <td>{{ po.salesorder.salesorder_number }}</td>
-                                                  <td>{{ po.total }}</td>
+                                                    <th scope="row"><a href="{{ po.purchaseorder_url }}" target="_blank">{{ po.purchaseorder_number }}</a></th>
+                                                    <td>{{ po.vendor.contact_name }}</td>
+                                                    <td>{{ po.date }} <br><span style="color:red;">Added {{ po.added_days_ago }} day(s) ago.</span></td>
+                                                    <td>{{ po.salesorder.salesorder_number }}</td>
+                                                    <td>{{ po.total }}</td>
                                                 </tr>
                                             {% endfor %} 
                                             </tbody>
@@ -433,26 +432,23 @@
                                     <div class="card-body p-0 collapse" id="expired">
                                         <table class="table table-bordered">
                                             <thead>
-                                              <tr>
-                                                <th scope="col">PO#</th>
-                                                <th scope="col">Vendor</th>
-                                                <th scope="col">Product</th>
-                                                <th scope="col">Quantity </th>
-                                               
-                                                
-                                                
-
-                                              </tr>
+                                                <tr>
+                                                    <th scope="col">PO#</th>
+                                                    <th scope="col">Vendor</th>
+                                                    <th scope="col">Product</th>
+                                                    <th scope="col">Quantity</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
                                             {% for popp in popps_expired %}
                                                 <tr>
-                                                  <th scope="row"><a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</a></th>
-                                                  <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
-                                                  <td>{{ popp.purchaseorderproduct.product.name }}</td>
-                                                  <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to Dispatch on {{ popp.planned_dispatch_date_time }}</span></td>
-                                                 
-                                                  
+                                                    <th scope="row">
+                                                        <a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">
+                                                        {{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</a>
+                                                    </th>
+                                                    <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
+                                                    <td>{{ popp.purchaseorderproduct.product.name }}</td>
+                                                    <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to Dispatch on {{ popp.planned_dispatch_date_time }}</span></td>
                                                 </tr>
                                             {% endfor %} 
                                             </tbody>
@@ -484,24 +480,27 @@
                                     <div class="card-body collapse" id="intransit">
                                         <table class="table table-bordered">
                                             <thead>
-                                              <tr>
-                                                <th scope="col">PO#</th>
-                                                <th scope="col">Vendor</th>
-                                                <th scope="col">Product</th>
-                                                <th scope="col">Quantity </th>
-                                                
-                                                
-                                                
-
-                                              </tr>
+                                                <tr>
+                                                    <th scope="col">PO#</th>
+                                                    <th scope="col">Vendor</th>
+                                                    <th scope="col">Product</th>
+                                                    <th scope="col">Quantity </th>
+                                                </tr>
                                             </thead>
                                             <tbody>
                                             {% for popp in popps_intransit %}
                                                 <tr>
-                                                  <th scope="row"><a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</a></th>
-                                                  <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
-                                                  <td>{{ popp.purchaseorderproduct.product.name }}</td>
-                                                  <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to receive on {{ popp.planned_receive_date_time }}</span></td>
+                                                    <th scope="row">
+                                                        <a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">
+                                                        {{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</a>
+                                                    </th>
+                                                    <td>
+                                                        {{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ popp.purchaseorderproduct.product.name }}
+                                                    </td>
+                                                    <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to receive on {{ popp.planned_receive_date_time }}</span></td>
                                                   
                                                   
                                                 </tr>
