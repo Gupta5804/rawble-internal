@@ -296,56 +296,55 @@
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: rgb(37, 78, 88);">
                 <div class="container-fluid">
-
                     <button onclick="Nav()" type="button" id="sidebarCollapse" class="btn btn-info" style="background-color: rgb(136, 189, 188)" >
                        <span > <i class="fas fa-align-left" style=""></i></span>
-
-
-
                     </button>
-                    <h2 style="padding-left: 23px;padding-top:9px; font-family: 'Raleway', sans-serif; margin-bottom: 2% ">{% block page-title-var %} DASHBOARD  {% endblock page-title-var %} </h2>
-                                 
+                    <h2 style="padding-left: 23px;padding-top:9px; font-family: 'Raleway', sans-serif; margin-bottom: 2% ">
+                        {% block page-title-var %} DASHBOARD  {% endblock page-title-var %} 
+                    </h2>
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-align-justify"></i>
                     </button>
-
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <button id="colla1" class="btn btn-info" style="background-color:rgb(136, 189, 188); border-radius: 25px ;  position: absolute; right: 0; margin-right: 8%" data-toggle="tooltip" data-placement="bottom" title="Timeline" >
-                                    <i class="fas fa-code-branch"></i>
-                                </button>
-                            
+                        <button id="colla1" class="btn btn-info" style="background-color:rgb(136, 189, 188); border-radius: 25px ;  position: absolute; right: 0; margin-right: 8%" data-toggle="tooltip" data-placement="bottom" title="Timeline" >
+                            <i class="fas fa-code-branch"></i>
+                        </button>
+                        <div class="dropdown" style="position: absolute;right: 0; margin-right: 5%">
+                            <button id="colla2" class="btn btn-info" data-toggle="dropdown" style="background-color: rgb(136, 189, 188); border-radius: 25px; margin-right: 5% " data-toggle="tooltip" data-placement="bottom" title="Expired Product" >
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="#">
+                                    <strong style="margin-left: 40%;font-size: larger;">Expiring Products</strong>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                {% for vpv in vendorproductvariation  %}
+                                    {% if vpv.dealvendorproduct.expiry_status < 0 and forloop.counter < 7 %}
+                                        <a onmouseover="this.bgColor='rgb(136, 189, 188)'" class="dropdown-item sup" href="{% url 'products_listing' %}?name=&name__icontains={{ vpv.vendorproduct.product.name }}&make=&make__icontains=&status=&group=">
+                                            {{ vpv.vendorproduct.vendor }}-
+                                            <strong>{{ vpv.vendorproduct.product }}</strong>-Expired 
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                    {% endif %}
+                                {% endfor %}
+                                <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{% url 'seeall' %}">
+                                        <strong style="margin-left: 45%;font-size: larger;">See All</strong>
+                                    </a>
+                                </div>
+                            </div>
+                            <button id="colla3" class="btn btn-info" style="background-color: rgb(136, 189, 188); border-radius: 25px ; position: absolute; right: 0;margin-right: 2%" data-toggle="tooltip" data-placement="bottom" title="Notification" >
+                                <i class="fas fa-bell"></i>
+                            </button>
+                            <ul class="nav navbar-nav ml-auto">
+                                <li class="nav-item active">
 
-                                    <div class="dropdown" style="position: absolute;right: 0; margin-right: 5%">
+                                </li>
 
-                                    <button id="colla2" class="btn btn-info" data-toggle="dropdown" style="background-color: rgb(136, 189, 188); border-radius: 25px; margin-right: 5% " data-toggle="tooltip" data-placement="bottom" title="Expired Product" >
-                                        <i class="fas fa-trash"></i>
-                                   </button>
-                                      <div class="dropdown-menu dropdown-menu-right">
-                                          <a href="#"><strong style="margin-left: 40%;font-size: larger;">Expiring Products</strong></a>
-                                            <div class="dropdown-divider"></div>
-                                          {% for vpv in vendorproductvariation  %}
-                                          {% if vpv.dealvendorproduct.expiry_status < 0 and forloop.counter < 7 %}
-                                              <a onmouseover="this.bgColor='rgb(136, 189, 188)'" class="dropdown-item sup" href="{% url 'products_listing' %}?name=&name__icontains={{ vpv.vendorproduct.product.name }}&make=&make__icontains=&status=&group=">{{ vpv.vendorproduct.vendor }}-<strong>{{ vpv.vendorproduct.product }}</strong>-Expired </a>
-                                               <div class="dropdown-divider"></div>
-                                          {% endif %}
-                                          {% endfor %}
-                                      <div class="dropdown-divider"></div>
-                                          <a class="dropdown-item" href="{% url 'seeall' %}"><strong style="margin-left: 45%;font-size: larger;">See All</strong></a>
-                                      </div>
-                                    </div>
-
-                                    <button id="colla3" class="btn btn-info" style="background-color: rgb(136, 189, 188); border-radius: 25px ; position: absolute; right: 0;margin-right: 2%"data-toggle="tooltip" data-placement="bottom" title="Notification" >
-                                        <i class="fas fa-bell"></i>
-                                   </button>
-                        <ul class="nav navbar-nav ml-auto">
-                            <li class="nav-item active">
-
-                            </li>
-
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
             <div class="card" id="card-block" style="margin-top:5%;border-radius:3px;background-color:white;">
                 <br> <br>
             {% block application-active %}
@@ -363,7 +362,7 @@
                 {% endif %}
             </nav>
                     
-                    <div class="tab-content">
+                <div class="tab-content">
                     <div id="inward" class="tab-pane fade in container " style="max-width:100%">
                         <div class="row">
                             <div class="col-4 mt-3">
@@ -517,8 +516,168 @@
                             </div>
                         </div>
                     </div>
-                    <div id="outward" class="tab-pane active fade in">
-                    
+                    <div id="outward" class="tab-pane fade in">
+                        <div class="row">
+                            <div class="col-4 mt-3">
+                                <div class="card text-center">
+                                    <div class="card-header">
+                                        <a class="btn btn-primary " data-toggle="collapse" href="#unplanned-so" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            Un-Planned Sales-Orders
+                                        </a>
+                                        <table class="table table-bordered table-light">
+                                          <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_new' %}">Click Here</a> to create new plan</caption>
+                                          <tr>
+                                            <td class="table-dark">Count</td>
+                                            <td>{{ pos|length }}</td>
+                                          </tr>
+                                          <tr></tr>
+
+                                        
+                                        </table>
+                                    </div>
+                                    <div class="card-body p-0 collapse" id="unplanned-so">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">SO#</th>
+                                                <th scope="col">Buyer</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">For SO#</th>
+                                                <th scope="col">Total Amount</th>
+
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for po in pos %}
+                                                <tr>
+                                                  <th scope="row"><a href="{{ po.purchaseorder_url }}" target="_blank">{{ po.purchaseorder_number }}</a></th>
+                                                  <td>{{ po.vendor.contact_name }}</td>
+                                                  <td>{{ po.date }} <br><span style="color:red;">Added {{ po.added_days_ago }} day(s) ago.</span></td>
+                                                  <td>{{ po.salesorder.salesorder_number }}</td>
+                                                  <td>{{ po.total }}</td>
+                                                </tr>
+                                            {% endfor %} 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer text-muted">
+                                        <h4 style="color:red;">Purchase Orders that are not planned yet</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 mt-3">
+                                <div class="card text-center">
+                                    <div class="card-header">
+                                        <a class="btn btn-primary" data-toggle="collapse" href="#expired" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            Expired Purchase-Orders Plans
+                                        </a>
+                                        <table class="table table-bordered table-light">
+                                              <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_expired' %}">Click Here</a> to Mark expired plans as Dispatched or reschedule them.</caption>
+                                              <tr>
+                                                <td class="table-dark">Count</td>
+                                                <td>{{ popps_expired|length }}</td>
+                                              </tr>
+                                              <tr>
+                                                <td class="table-dark">Amount</td>
+                                                <td>{{ popps_expired_amount }}</td>
+                                              </tr>
+                                        </table>
+                                    </div>
+                                    <div class="card-body p-0 collapse" id="expired">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">PO#</th>
+                                                <th scope="col">Vendor</th>
+                                                <th scope="col">Product</th>
+                                                <th scope="col">Quantity </th>
+                                               
+                                                
+                                                
+
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for popp in popps_expired %}
+                                                <tr>
+                                                  <th scope="row"><a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</a></th>
+                                                  <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
+                                                  <td>{{ popp.purchaseorderproduct.product.name }}</td>
+                                                  <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to Dispatch on {{ popp.planned_dispatch_date_time }}</span></td>
+                                                 
+                                                  
+                                                </tr>
+                                            {% endfor %} 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer text-muted">
+                                        <h4 style="color:red">Plans Not Marked As Dispatched From Vendor Side</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 mt-3">
+                                <div class="card text-center">
+                                    <div class="card-header">
+                                        <a class="btn btn-primary" data-toggle="collapse" href="#intransit" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            In-Transit
+                                        </a>
+                                        <table class="table table-bordered table-light">
+                                            <caption class="alert alert-danger">
+                                                <a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_intransit' %}">Click Here</a> to Mark them as  received or reschedule them.
+                                            </caption>
+                                            <tr>
+                                                <td class="table-dark">Count</td>
+                                                <td>{{ popps_intransit|length }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table-dark">Amount</td>
+                                                <td>{{ popps_intransit_amount }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="card-body collapse" id="intransit">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">PO#</th>
+                                                    <th scope="col">Vendor</th>
+                                                    <th scope="col">Product</th>
+                                                    <th scope="col">Quantity </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for popp in popps_intransit %}
+                                                <tr>
+                                                    <th scope="row">
+                                                        <a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">
+                                                            {{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}
+                                                        </a>
+                                                    </th>
+                                                    <td>
+                                                        {{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ popp.purchaseorderproduct.product.name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ popp.planned_quantity }} 
+                                                        <br>
+                                                        <span style="color:red;">
+                                                            Planned to receive on {{ popp.planned_receive_date_time }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %} 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer text-muted">
+                                        <h4 style="color:red;">In Transit Plans Not Marked as Received Yet.</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div id="sales" class="tab-pane fade in">
                     
