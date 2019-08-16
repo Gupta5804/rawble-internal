@@ -36,7 +36,8 @@ def dashboard(request):
         for so in ZohoSalesOrder.objects.all().order_by("-date"):
                 if(so.status == "open" and so.planned_status == False):
                         sos.append(so)
-
+        for sopp in SalesOrderProductPlan.objects.all().order_by("-salesorderproduct__salesorder__salesorder_number"):
+                if(sopp.plan_status == "planned"):                
         for popp in PurchaseOrderProductPlan.objects.all().order_by("-purchaseorderproduct__purchaseorder__purchaseorder_number"):
                 if(popp.plan_status == "planned"):
                         popps_expired.append(popp)
