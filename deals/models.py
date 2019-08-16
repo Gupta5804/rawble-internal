@@ -51,7 +51,9 @@ class ZohoSalesOrder(models.Model):
 
     def __str__(self):
         return str(self.salesorder_number)
-   
+    @property
+    def added_days_ago(self):
+        return (datetime.date.today() - self.date ).days
     @property
     def planned_status(self):
         if(self.salesorderproduct_set.count() > 0):
