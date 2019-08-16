@@ -372,7 +372,7 @@
                                             Un-Planned Purchase-Orders
                                         </a>
                                         <table class="table table-bordered table-light">
-                                          <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_new' %}">Click Here</a> to create new plan</caption>
+                                          <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_new' %}" target="_blank">Click Here</a> to create new plan</caption>
                                           <tr>
                                             <td class="table-dark">Count</td>
                                             <td>{{ pos|length }}</td>
@@ -414,11 +414,11 @@
                             <div class="col-4 mt-3">
                                 <div class="card text-center border border-dark">
                                     <div class="card-header">
-                                        <a class="btn btn-primary" data-toggle="collapse" href="#expired" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <a class="btn btn-primary" data-toggle="collapse" href="#expired" role="button" aria-expanded="false" aria-controls="collapseExample" >
                                             Expired Purchase-Orders Plans
                                         </a>
                                         <table class="table table-bordered table-light">
-                                              <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_expired' %}">Click Here</a> to Mark expired plans as Dispatched or reschedule them.</caption>
+                                              <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_expired' %}" target="_blank">Click Here</a> to Mark expired plans as Dispatched or reschedule them.</caption>
                                               <tr>
                                                 <td class="table-dark">Count</td>
                                                 <td>{{ popps_expired|length }}</td>
@@ -466,7 +466,7 @@
                                             In-Transit
                                         </a>
                                         <table class="table table-bordered table-light">
-                                          <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_intransit' %}">Click Here</a> to Mark them as received or reschedule them.</caption>
+                                          <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_intransit' %}" target="_blank">Click Here</a> to Mark them as received or reschedule them.</caption>
                                           <tr>
                                             <td class="table-dark">Count</td>
                                             <td>{{ popps_intransit|length }}</td>
@@ -525,7 +525,7 @@
                                             Un-Planned Sales-Orders
                                         </a>
                                         <table class="table table-bordered table-light">
-                                            <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'outward_servicedelivery' %}">Click Here</a> to create new plan</caption>
+                                            <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'outward_servicedelivery' %}" target="_blank">Click Here</a> to create new plan</caption>
                                             <tr>
                                                 <td class="table-dark">Count</td>
                                                 <td>{{ sos|length }}</td>
@@ -574,7 +574,7 @@
                                         </a>
                                         <table class="table table-bordered table-light">
                                             <caption class="alert alert-danger">
-                                                <a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_expired' %}">
+                                                <a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_expired' %}" target="_blank">
                                                     Click Here</a> to Mark plans as Dispatched or reschedule them.
                                             </caption>
                                             <tr>
@@ -628,7 +628,7 @@
                                         </a>
                                         <table class="table table-bordered table-light">
                                             <caption class="alert alert-danger">
-                                                <a class="btn btn-warning btn-sm" href="{% url 'outward_servicedelivery_intransit' %}">Click Here</a> to Mark them as  received or reschedule them.
+                                                <a class="btn btn-warning btn-sm" href="{% url 'outward_servicedelivery_intransit' %}" target="_blank">Click Here</a> to Mark them as  received or reschedule them.
                                             </caption>
                                             <tr>
                                                 <td class="table-dark">Count</td>
@@ -681,7 +681,7 @@
                                         </a>
                                         <table class="table table-bordered table-light">
                                             <caption class="alert alert-danger">
-                                                <a class="btn btn-warning btn-sm" href="{% url 'outward_servicedelivery_intransit' %}">Click Here</a> to Mark them as Delivered
+                                                <a class="btn btn-warning btn-sm" href="{% url 'outward_servicedelivery_intransit' %}" target="_blank">Click Here</a> to Mark them as Delivered
                                             </caption>
                                             <tr>
                                                 <td class="table-dark">Count</td>
