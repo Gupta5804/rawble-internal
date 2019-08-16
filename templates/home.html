@@ -369,7 +369,7 @@
                             <div class="col-4 mt-3">
                                 <div class="card text-center">
                                     <div class="card-header">
-                                        <a class="btn btn-primary" data-toggle="collapse" href="#unplanned" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#unplanned" role="button" aria-expanded="false" aria-controls="collapseExample">
                                             Un-Planned Purchase-Orders
                                         </a>
                                         <table class="table table-bordered table-light">
@@ -420,10 +420,43 @@
                                             Expired Purchase-Orders Plans
                                         </a>
                                     </div>
+                                    <table class="table table-bordered table-light">
+                                          <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_expired' %}">Click Here</a> to create new plan</caption>
+                                          <tr>
+                                            <td class="table-dark">Count</td>
+                                            <td>{{ popps_expired|length }}</td>
+                                          </tr>
+                                          <tr>
+                                            <td class="table-dark">Amount</td>
+                                            <td>{{ popps_expired_amount }}</td>
+                                          </tr>
+                                    </table>
                                     <div class="card-body collapse" id="expired">
-                                        <h5 class="card-title">Special title treatment</h5>
-                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">PO#</th>
+                                                <th scope="col">Vendor</th>
+                                                <th scope="col">Product</th>
+                                                <th scope="col">Quantity </th>
+                                                <th scope="col">Total Amount</th>
+                                                
+                                                
+
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for popp in popps_expired %}
+                                                <tr>
+                                                  <th scope="row"><a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">{{ popp.purchasorderproduct.purchaseorder.purchaseorder_number }}</a></th>
+                                                  <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
+                                                  <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to Dispatch on {{ popp.planned_dispatch_date_time }} day(s) ago.</span></td>
+                                                  <td>{{ popp.total_amount_with_tax }}</td>
+                                                  
+                                                </tr>
+                                            {% endfor %} 
+                                            </tbody>
+                                        </table>
                                     </div>
                                     <div class="card-footer text-muted">
                                         <h4 style="color:red">Plans Not Marked As Dispatched From Vendor Side</h4>
