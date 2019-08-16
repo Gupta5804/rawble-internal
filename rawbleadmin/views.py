@@ -27,6 +27,8 @@ def dashboard(request):
         pos = []
         popps_expired = []
         popps_expired_amount = 0
+        popps_intransit= []
+        popps_intransit_amount = 0
         for po in ZohoPurchaseOrder.objects.all().order_by("-date"):
                 if(po.status != "billed" and po.status != "cancelled" and po.planned_status == False):
                         pos.append(po)
@@ -35,7 +37,10 @@ def dashboard(request):
                 if(popp.plan_status == "planned"):
                         popps_expired.append(popp)
                         popps_expired_amount = popps_expired_amount + popp.total_amount_with_tax
-        return render(request,'home.html',{'user_groups':user_groups,'pos':pos,'popps_expired':popps_expired,'popps_expired_amount':popps_expired_amount })
+                elif(popp.plan_status == "in-transit"):
+                        popps_intransit.append(popp)
+                        popps_intransit_amount = popps_intransit_amount + popp.total_amount_with_tax
+        return render(request,'home.html',{'user_groups':user_groups,'pos':pos,'popps_expired':popps_expired,'popps_expired_amount':popps_expired_amount,'popps_intransit':popps_intransit,'popps_intransit_amount':popps_intransit_amount })
 
 def refresh_contacts(request):
     call_command('contacts_update_from_zoho')

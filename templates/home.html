@@ -421,7 +421,7 @@
                                         </a>
                                     </div>
                                     <table class="table table-bordered table-light">
-                                          <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_expired' %}">Click Here</a> to create new plan</caption>
+                                          <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_expired' %}">Click Here</a> to Mark expired plans as Dispatched or reschedule them.</caption>
                                           <tr>
                                             <td class="table-dark">Count</td>
                                             <td>{{ popps_expired|length }}</td>
@@ -469,11 +469,44 @@
                                         <a class="btn btn-primary" data-toggle="collapse" href="#intransit" role="button" aria-expanded="false" aria-controls="collapseExample">
                                             In-Transit
                                         </a>
+                                        <table class="table table-bordered table-light">
+                                          <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_intransit' %}">Click Here</a> to create Mark them as received or reschedule them.</caption>
+                                          <tr>
+                                            <td class="table-dark">Count</td>
+                                            <td>{{ popps_intransit|length }}</td>
+                                          </tr>
+                                          <tr>
+                                            <td class="table-dark">Amount</td>
+                                            <td>{{ popps_intransit_amount }}</td>
+                                          </tr>
+                                        </table>
                                     </div>
                                     <div class="card-body collapse" id="intransit">
-                                        <h5 class="card-title">Special title treatment</h5>
-                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">PO#</th>
+                                                <th scope="col">Vendor</th>
+                                                <th scope="col">Product</th>
+                                                <th scope="col">Quantity </th>
+                                                <th scope="col">Total Amount</th>
+                                                
+                                                
+
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for popp in popps_expired %}
+                                                <tr>
+                                                  <th scope="row"><a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">{{ popp.purchasorderproduct.purchaseorder.purchaseorder_number }}</a></th>
+                                                  <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
+                                                  <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to receive on {{ popp.planned_receive_date_time }} day(s) ago.</span></td>
+                                                  <td>{{ popp.total_amount_with_tax }}</td>
+                                                  
+                                                </tr>
+                                            {% endfor %} 
+                                            </tbody>
+                                        </table>
                                     </div>
                                     <div class="card-footer text-muted">
                                         <h4 style="color:red;">In Transit Plans Not Marked as Received Yet.</h4>
