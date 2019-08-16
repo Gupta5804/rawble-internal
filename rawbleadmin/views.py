@@ -5,8 +5,8 @@ from contacts.models import ContactBuyer, ContactVendor
 from deals.models import ZohoEstimate, VendorProductVariation
 from django.core.management import call_command
 from datetime import datetime
-from deals.models import ZohoPurchaseOrder
-from servicedelivery.models import PurchaseOrderProductPlan
+from deals.models import ZohoPurchaseOrder,ZohoSalesOrder
+from servicedelivery.models import PurchaseOrderProductPlan,SalesOrderProductPlan
 def dashboard(request):
         #total_products = Product.objects.count()
         #total_users = User.objects.count()
@@ -29,10 +29,14 @@ def dashboard(request):
         popps_expired_amount = 0
         popps_intransit= []
         popps_intransit_amount = 0
+        sos = []
         for po in ZohoPurchaseOrder.objects.all().order_by("-date"):
                 if(po.status != "billed" and po.status != "cancelled" and po.planned_status == False):
                         pos.append(po)
-                
+        for so in ZohoSalesOrder.objects.all().order_by("-date"):
+                if(so.status == "open" and so.planned_status == False):
+                        sos.sppend(so)
+
         for popp in PurchaseOrderProductPlan.objects.all().order_by("-purchaseorderproduct__purchaseorder__purchaseorder_number"):
                 if(popp.plan_status == "planned"):
                         popps_expired.append(popp)
@@ -40,7 +44,7 @@ def dashboard(request):
                 elif(popp.plan_status == "in-transit"):
                         popps_intransit.append(popp)
                         popps_intransit_amount = popps_intransit_amount + popp.total_amount_with_tax
-        return render(request,'home.html',{'user_groups':user_groups,'pos':pos,'popps_expired':popps_expired,'popps_expired_amount':popps_expired_amount,'popps_intransit':popps_intransit,'popps_intransit_amount':popps_intransit_amount })
+        return render(request,'home.html',{'user_groups':user_groups,'pos':pos,'sos':sos,'popps_expired':popps_expired,'popps_expired_amount':popps_expired_amount,'popps_intransit':popps_intransit,'popps_intransit_amount':popps_intransit_amount })
 
 def refresh_contacts(request):
     call_command('contacts_update_from_zoho')
