@@ -623,7 +623,7 @@
                             <div class="col-6 mt-3">
                                 <div class="card text-center border border-dark">
                                     <div class="card-header">
-                                        <a class="btn btn-primary" data-toggle="collapse" href="#intransit" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <a class="btn btn-primary" data-toggle="collapse" href="#intransit-lr-notshared" role="button" aria-expanded="false" aria-controls="collapseExample">
                                             In-Transit [LR Not Shared]
                                         </a>
                                         <table class="table table-bordered table-light">
@@ -632,113 +632,97 @@
                                             </caption>
                                             <tr>
                                                 <td class="table-dark">Count</td>
-                                                <td>{{ popps_intransit|length }}</td>
+                                                <td>{{ sopps_intransit_lr_notshared|length }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="table-dark">Amount</td>
-                                                <td>{{ popps_intransit_amount }}</td>
+                                                <td>{{ sopps_intransit_lr_notshared_amount }}</td>
                                             </tr>
                                         </table>
                                     </div>
-                                    <div class="card-body collapse" id="intransit">
+                                    <div class="card-body collapse" id="intransit-lr-notshared">
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col">PO#</th>
-                                                    <th scope="col">Vendor</th>
+                                                    <th scope="col">SO#</th>
+                                                    <th scope="col">Buyer</th>
                                                     <th scope="col">Product</th>
                                                     <th scope="col">Quantity </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            {% for popp in popps_intransit %}
+                                            {% for sopp in sopps_intransit_lr_notshared %}
                                                 <tr>
                                                     <th scope="row">
-                                                        <a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">
-                                                            {{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}
+                                                        <a href="{{ sopp.salesorderproduct.salesorder.salesorder_url }}" target="_blank">
+                                                        {{ sopp.salesorderproduct.salesorder.salesorder_number }}
                                                         </a>
                                                     </th>
                                                     <td>
-                                                        {{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}
+                                                    {{ sopp.salesorderproduct.salesorder.buyer.contact_name }}
                                                     </td>
-                                                    <td>
-                                                        {{ popp.purchaseorderproduct.product.name }}
-                                                    </td>
-                                                    <td>
-                                                        {{ popp.planned_quantity }} 
-                                                        <br>
-                                                        <span style="color:red;">
-                                                            Planned to receive on {{ popp.planned_receive_date_time }}
-                                                        </span>
-                                                    </td>
+                                                    <td>{{ sopp.salesorderproduct.product.name }}</td>
+                                                  <td>{{ sopp.planned_quantity }} <br><span style="color:red;">Dispatched on {{ sopp.shipped_date_time }}</span></td>
                                                 </tr>
                                             {% endfor %} 
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="card-footer text-muted">
-                                        <h4 style="color:red;">In Transit Plans Not Marked as Received Yet.</h4>
+                                        <h4 style="color:red;">In Transit Plans Whose Lr Details Are Not Shared Yet.</h4>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-6 mt-3">
                                 <div class="card text-center border border-dark">
                                     <div class="card-header">
-                                        <a class="btn btn-primary" data-toggle="collapse" href="#intransit" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                            In-Transit [LR Not Shared]
+                                        <a class="btn btn-primary" data-toggle="collapse" href="#intransit-notdelivered" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            In-Transit [Not Delivered]
                                         </a>
                                         <table class="table table-bordered table-light">
                                             <caption class="alert alert-danger">
-                                                <a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_intransit' %}">Click Here</a> to Mark them as  received or reschedule them.
+                                                <a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_intransit' %}">Click Here</a> to Mark them as Delivered
                                             </caption>
                                             <tr>
                                                 <td class="table-dark">Count</td>
-                                                <td>{{ popps_intransit|length }}</td>
+                                                <td>{{ sopps_intransit_notdelivered|length }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="table-dark">Amount</td>
-                                                <td>{{ popps_intransit_amount }}</td>
+                                                <td>{{ sopps_intransit_notdelivered_amount }}</td>
                                             </tr>
                                         </table>
                                     </div>
-                                    <div class="card-body collapse" id="intransit">
+                                    <div class="card-body collapse" id="intransit-notdelivered">
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col">PO#</th>
-                                                    <th scope="col">Vendor</th>
+                                                    <th scope="col">SO#</th>
+                                                    <th scope="col">Buyer</th>
                                                     <th scope="col">Product</th>
                                                     <th scope="col">Quantity </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            {% for popp in popps_intransit %}
+                                            {% for sopp in sopps_intransit_notdelivered %}
                                                 <tr>
                                                     <th scope="row">
-                                                        <a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">
-                                                            {{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}
+                                                        <a href="{{ sopp.salesorderproduct.salesorder.salesorder_url }}" target="_blank">
+                                                        {{ sopp.salesorderproduct.salesorder.salesorder_number }}
                                                         </a>
                                                     </th>
                                                     <td>
-                                                        {{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}
+                                                    {{ sopp.salesorderproduct.salesorder.buyer.contact_name }}
                                                     </td>
-                                                    <td>
-                                                        {{ popp.purchaseorderproduct.product.name }}
-                                                    </td>
-                                                    <td>
-                                                        {{ popp.planned_quantity }} 
-                                                        <br>
-                                                        <span style="color:red;">
-                                                            Planned to receive on {{ popp.planned_receive_date_time }}
-                                                        </span>
-                                                    </td>
+                                                    <td>{{ sopp.salesorderproduct.product.name }}</td>
+                                                  <td>{{ sopp.planned_quantity }} <br><span style="color:red;">Dispatched on {{ sopp.shipped_date_time }}</span></td>
                                                 </tr>
                                             {% endfor %} 
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="card-footer text-muted">
-                                        <h4 style="color:red;">In Transit Plans Not Marked as Received Yet.</h4>
+                                        <h4 style="color:red;">In Transit Plans Not Marked as Delivered Yet.</h4>
                                     </div>
                                 </div>
                             </div>
