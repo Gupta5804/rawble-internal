@@ -46,7 +46,7 @@ def dashboard(request):
                 if(sopp.plan_status == "planned"):
                         sopps_shipping.append(sopp)
                         sopps_shipping_amount = sopps_shipping_amount + sopp.total_amount
-                elif(sopp.plan_status == "in-transit" and (sopp.tracking_number == None or sopp.tracking == "") ):
+                elif(sopp.plan_status == "in-transit" and (sopp.tracking_number == None or sopp.tracking_number == "") ):
                         sopps_intransit_lr_notshared.append(sopp)
                         sopps_intransit_lr_notshared_amount = sopps_intransit_lr_notshared_amount + sopp.total_amount
                 elif(sopp.plan_status == "in-transit" and sopp.tracking_number):
