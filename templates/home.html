@@ -369,11 +369,11 @@
                             <div class="col-4 mt-3">
                                 <div class="card text-center">
                                     <div class="card-header">
-                                        <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#unplanned" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <a class="btn btn-primary " data-toggle="collapse" href="#unplanned" role="button" aria-expanded="false" aria-controls="collapseExample">
                                             Un-Planned Purchase-Orders
                                         </a>
                                         <table class="table table-bordered table-light">
-                                          <caption class="alert alert-danger"><a class="btn btn-warning" href="{% url 'inward_servicedelivery_new' %}">Click Here</a> to create new plan</caption>
+                                          <caption class="alert alert-danger"><a class="btn btn-warning btn-sm" href="{% url 'inward_servicedelivery_new' %}">Click Here</a> to create new plan</caption>
                                           <tr>
                                             <td class="table-dark">Count</td>
                                             <td>{{ pos|length }}</td>
@@ -431,7 +431,7 @@
                                             <td>{{ popps_expired_amount }}</td>
                                           </tr>
                                     </table>
-                                    <div class="card-body collapse" id="expired">
+                                    <div class="card-body p-0 collapse" id="expired">
                                         <table class="table table-bordered">
                                             <thead>
                                               <tr>
@@ -448,8 +448,9 @@
                                             <tbody>
                                             {% for popp in popps_expired %}
                                                 <tr>
-                                                  <th scope="row"><a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">{{ popp.purchasorderproduct.purchaseorder.purchaseorder_number }}</a></th>
+                                                  <th scope="row"><a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</a></th>
                                                   <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
+                                                  <td>{{ popp.purchaseorderproduct.product.name }}</td>
                                                   <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to Dispatch on {{ popp.planned_dispatch_date_time }} day(s) ago.</span></td>
                                                   <td>{{ popp.total_amount_with_tax }}</td>
                                                   
@@ -498,8 +499,9 @@
                                             <tbody>
                                             {% for popp in popps_expired %}
                                                 <tr>
-                                                  <th scope="row"><a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">{{ popp.purchasorderproduct.purchaseorder.purchaseorder_number }}</a></th>
+                                                  <th scope="row"><a href="{{ popp.purchaseorderproduct.puchaseorder.purchaseorder_url }}" target="_blank">{{ popp.purchaseorderproduct.purchaseorder.purchaseorder_number }}</a></th>
                                                   <td>{{ popp.purchaseorderproduct.purchaseorder.vendor.contact_name }}</td>
+                                                  <td>{{ popp.purchaseorderproduct.product.name }}</td>
                                                   <td>{{ popp.planned_quantity }} <br><span style="color:red;">Planned to receive on {{ popp.planned_receive_date_time }} day(s) ago.</span></td>
                                                   <td>{{ popp.total_amount_with_tax }}</td>
                                                   
