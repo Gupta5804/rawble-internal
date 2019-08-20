@@ -19,7 +19,7 @@ class ChequePayable(models.Model):
     cleared_date = models.DateField(null=True,default=None,blank=True)
     
     def __str__(self):
-        return str(self.paymentpayable.vendor.contact_name)+str(cheque_no)
+        return str(self.paymentpayable.vendor.contact_name)+str(self.cheque_no)
     @property
     def status(self):
         if self.cleared_date:
