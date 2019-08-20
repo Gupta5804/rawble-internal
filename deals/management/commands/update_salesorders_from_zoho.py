@@ -58,7 +58,7 @@ class Command(BaseCommand):
                     
                     print('SO Exists !, Updating fields')
                     z1.update(salesperson = salesperson)
-                    #z1.update(status = status)
+                    z1.update(status = status)
                     z1.update(estimate = estimate)
                     z1.update(total = total)
                     so = z1[0]
