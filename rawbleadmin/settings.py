@@ -81,7 +81,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_filters',
     'django_template_maths',
-   #'django_extensions',
+    'django_extensions',
     'export_xls',
     'servicedelivery',
 
