@@ -1035,7 +1035,7 @@ def outward_service_delivery(request):
     if request.method == "GET":
         
         closed_salesorders = ZohoSalesOrder.objects.filter(status="closed")
-        salesorders = ZohoSalesOrder.objects.all().order_by("buyer__contact_name","-salesorder_number").exclude(id__in=closed_salesorders)
+        salesorders = ZohoSalesOrder.objects.all().order_by("-salesorder_number").exclude(id__in=closed_salesorders)
         salesorders_unplanned = []
         for salesorder in salesorders:
             if(salesorder.planned_status == False):
