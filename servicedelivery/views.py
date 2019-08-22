@@ -702,11 +702,14 @@ def outward_servicedelivery_report(request):
                     not_hiya_dispatched_amount_okhla = hiya_dispatched_amount_okhla + (sopp.total_amount)
                 elif(sopp.salesorderproduct.salesorder.zoho_location == "baddi"):
                     not_hiya_dispatched_amount_baddi = hiya_dispatched_amount_baddi + (sopp.total_amount)
-    hiya_pending_amount = 0
-    not_hiya_pending_amount = 0
+    hiya_pending_amount_okhla = 0
+    hiya_pending_amount_baddi = 0
+    not_hiya_pending_amount_okhla = 0
+    not_hiya_pending_amount_baddi = 0
     
     salesorders = ZohoSalesOrder.objects.filter(Q(status="open") | Q(status="approved"))
-    uncategorized_pending_amount = 0
+    uncategorized_pending_amount_okhla = 0
+    uncategorized_pending_amount_baddi = 0
     for salesorder in salesorders:
         if(salesorder.salesorderproduct_set.count() == 0):
             uncategorized_pending_amount = uncategorized_pending_amount + salesorder.total
@@ -1119,10 +1122,10 @@ def outward_service_delivery(request):
 
         if "nextoutward-dispatched" in request.POST:
             sopp_ids = request.POST.getlist("sopp_id")
-            
+            selected_sopp_ids = request.POST.getlist("selected_sopp_id")
             
             buyer_sopps = {}
-            for sopp_id in sopp_ids:
+            for sopp_id in selected_sopp_ids:
                 sopp = SalesOrderProductPlan.objects.get(id = sopp_id)
                 sopp.shipped_date_time = datetime.datetime.now()
                 sopp.save()
@@ -1164,73 +1167,73 @@ def outward_service_delivery(request):
                     msg.send()
             
             
-            for i,sopp_id in enumerate(sopp_ids):
-                try:
-                    if(request.POST.get("coafile_id-"+str(sopp_id)) != ""):
-                        coafile = CoaFile.objects.get(id = request.POST.get("coafile_id-"+str(sopp_id)) )
-                    else:
-                        coafile=None
-                except:
-                    coafile = None
-
-                if(transporter_ids[i] == ""):
-                    transporter = None
-                else:
-                    transporter = Transporter.objects.get(id = transporter_ids[i])
-               
-                if(freights[i] == ''):
-                        freight = 0.0
-                else:
-                    freight = freights[i]
-                if(quantity_to_dispatchs[i] == ''):
-                    quantity_to_dispatch = 0.0
-                else:
-                    quantity_to_dispatch = quantity_to_dispatchs[i]
-                sopp = SalesOrderProductPlan.objects.get(id=sopp_id)
-                sopp.transporter = transporter
-                sopp.freight = freight
-                sopp.planned_quantity = quantity_to_dispatch
-                sopp.coafile = coafile
-                sopp.save()
-            sopp_email = []
-            for dispatched_sopp_id in dispatched_sopp_ids:
-                sopp_dispatched = SalesOrderProductPlan.objects.get(id=dispatched_sopp_id)
-                sopp_dispatched.shipped_date_time = datetime.datetime.now()
-                
-                
-                sopp_dispatched.save()
-                
-                sopp_email.append(sopp_dispatched)
-            print(sopp_email)
-            if( sopp_email ):
-                subject = "Items Dispatched Today (Reminder)"
-                to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
-                from_email = 'admin@rawble.com'
-                users = User.objects.all()
-                users_sales = User.objects.filter(groups__name="Sales Team")
-                total_quantity = 0
-                total_amount = 0
-                for sopp in sopp_email:
-                    total_quantity = total_quantity + sopp.planned_quantity
-                    total_amount = total_amount + ( sopp.planned_quantity * sopp.salesorderproduct.so_selling_price )
-                ctx = {
-                    "sopp_email":sopp_email,
-                    "users_sales":users_sales,
-                    "total_quantity":total_quantity,
-                    "total_amount":total_amount
-
-                }
-                for user in users:
-                    to.append(str(user.email))
-
-
-                message = render_to_string('emails/outward_dispatched.html', ctx)
-                text_content = strip_tags(message)
-                #EmailMessage(subject, message, to=to, from_email=from_email).send()
-                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
-                msg.attach_alternative(message, "text/html")
-                
-                msg.send()  
+            #for i,sopp_id in enumerate(selected_sopp_ids):
+            #    try:
+            #        if(request.POST.get("coafile_id-"+str(sopp_id)) != ""):
+            #            coafile = CoaFile.objects.get(id = request.POST.get("coafile_id-"+str(sopp_id)) )
+            #        else:
+            #            coafile=None
+            #    except:
+            #        coafile = None
+#
+            #    if(transporter_ids[i] == ""):
+            #        transporter = None
+            #    else:
+            #        transporter = Transporter.objects.get(id = transporter_ids[i])
+            #   
+            #    if(freights[i] == ''):
+            #            freight = 0.0
+            #    else:
+            #        freight = freights[i]
+            #    if(quantity_to_dispatchs[i] == ''):
+            #        quantity_to_dispatch = 0.0
+            #    else:
+            #        quantity_to_dispatch = quantity_to_dispatchs[i]
+            #    sopp = SalesOrderProductPlan.objects.get(id=sopp_id)
+            #    sopp.transporter = transporter
+            #    sopp.freight = freight
+            #    sopp.planned_quantity = quantity_to_dispatch
+            #    sopp.coafile = coafile
+            #    sopp.save()
+            #sopp_email = []
+            #for dispatched_sopp_id in selected_sopp_ids:
+            #    sopp_dispatched = SalesOrderProductPlan.objects.get(id=dispatched_sopp_id)
+            #    sopp_dispatched.shipped_date_time = datetime.datetime.now()
+            #    
+            #    
+            #    sopp_dispatched.save()
+            #    
+            #    sopp_email.append(sopp_dispatched)
+            #print(sopp_email)
+            #if( sopp_email ):
+            #    subject = "Items Dispatched Today (Reminder)"
+            #    to = ['gupta.rishabh.abcd@gmail.com','rishabh.gupta@rawble.com']
+            #    from_email = 'admin@rawble.com'
+            #    users = User.objects.all()
+            #    users_sales = User.objects.filter(groups__name="Sales Team")
+            #    total_quantity = 0
+            #    total_amount = 0
+            #    for sopp in sopp_email:
+            #        total_quantity = total_quantity + sopp.planned_quantity
+            #        total_amount = total_amount + ( sopp.planned_quantity * sopp.salesorderproduct.so_selling_price )
+            #    ctx = {
+            #        "sopp_email":sopp_email,
+            #        "users_sales":users_sales,
+            #        "total_quantity":total_quantity,
+            #        "total_amount":total_amount
+#
+            #    }
+            #    for user in users:
+            #        to.append(str(user.email))
+#
+#
+            #    message = render_to_string('emails/outward_dispatched.html', ctx)
+            #    text_content = strip_tags(message)
+            #    #EmailMessage(subject, message, to=to, from_email=from_email).send()
+            #    msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+            #    msg.attach_alternative(message, "text/html")
+            #    
+            #    msg.send()  
         if "so-outward" in request.POST:
             salesorder_id = request.POST.get("salesorder_id")
             product_ids = request.POST.getlist("product_id")
