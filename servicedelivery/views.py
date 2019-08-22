@@ -712,16 +712,27 @@ def outward_servicedelivery_report(request):
     uncategorized_pending_amount_baddi = 0
     for salesorder in salesorders:
         if(salesorder.salesorderproduct_set.count() == 0):
-            uncategorized_pending_amount = uncategorized_pending_amount + salesorder.total
+            if(salesorder.zoho_location == "okhla"):
+                uncategorized_pending_amount_okhla = uncategorized_pending_amount_okhla + salesorder.total
+            elif(salesorder.zoho_location == "baddi"):
+                uncategorized_pending_amount_baddi = uncategorized_pending_amount_baddi + salesorder.total
         for sop in salesorder.salesorderproduct_set.all():
             if(salesorder.status == "open" or salesorder.status == "approved"):
                 if("hiya" in sop.product.make.lower()):
-                    remaining_amount = (sop.quantity - sop.quantity_dispatched) * sop.so_selling_price
-                    hiya_pending_amount = hiya_pending_amount + remaining_amount
+                    if(sopp.salesorderproduct.salesorder.zoho_location == "okhla"):
+                        remaining_amount = (sop.quantity - sop.quantity_dispatched) * sop.so_selling_price
+                        hiya_pending_amount_okhla = hiya_pending_amount_okhla + remaining_amount
+                    elif(sopp.salesorderproduct.salesorder.zoho_location == "baddi"):
+                        remaining_amount = (sop.quantity - sop.quantity_dispatched) * sop.so_selling_price
+                        hiya_pending_amount_baddi = hiya_pending_amount_baddi + remaining_amount
                 
                 else:
-                    remaining_amount = (sop.quantity - sop.quantity_dispatched) * sop.so_selling_price
-                    not_hiya_pending_amount = not_hiya_pending_amount + remaining_amount
+                    if(sopp.salesorderproduct.salesorder.zoho_location == "okhla"):
+                        remaining_amount = (sop.quantity - sop.quantity_dispatched) * sop.so_selling_price
+                        not_hiya_pending_amount_okhla = not_hiya_pending_amount_okhla + remaining_amount
+                    elif(sopp.salesorderproduct.salesorder.zoho_location == "baddi"):
+                        remaining_amount = (sop.quantity - sop.quantity_dispatched) * sop.so_selling_price
+                        not_hiya_pending_amount_baddi = not_hiya_pending_amount_baddi + remaining_amount
                
     #uncategorized_pending_amount = 0
     #hiya_pending_amount = 0
@@ -749,10 +760,15 @@ def outward_servicedelivery_report(request):
     #    ZohoSalesOrder.objects.filter(pk__in=ZohoSalesOrder.objects.filter(salesorder_number=salesorder_number)#.values_list('id', flat=True)[1:]).delete()
     #total_pending = uncategorized_pending_amount + hiya_pending_amount + not_hiya_pending_amount
     return render(request,'servicedelivery/outward_report.html',{
-        'uncategorized_pending_amount':uncategorized_pending_amount,
-        'hiya_pending_amount':hiya_pending_amount,
-        'not_hiya_pending_amount':not_hiya_pending_amount,
-        'total_pending_amount':not_hiya_pending_amount + hiya_pending_amount + uncategorized_pending_amount,
+        'uncategorized_pending_amount_okhla':uncategorized_pending_amount_okhla,
+        'uncategorized_pending_amount_baddi':uncategorized_pending_amount_baddi,
+        'hiya_pending_amount_okhla':hiya_pending_amount_okhla,
+        'hiya_pending_amount_baddi':hiya_pending_amount_baddi,
+        'not_hiya_pending_amount_okhla':not_hiya_pending_amount_okhla,
+        'not_hiya_pending_amount_okhla':not_hiya_pending_amount_baddi,
+        'total_pending_amount_okhla':not_hiya_pending_amount_okhla + hiya_pending_amount_okhla + uncategorized_pending_amount_okhla,
+        'total_pending_amount_baddi':not_hiya_pending_amount_baddi + hiya_pending_amount_baddi + uncategorized_pending_amount_baddi,
+        'total_pending_amount':not_hiya_pending_amount_okhla + hiya_pending_amount_okhla + uncategorized_pending_amount_okhla + not_hiya_pending_amount_baddi + hiya_pending_amount_baddi + uncategorized_pending_amount_baddi,
         #'total_salesorders':total_salesorders ,
         #'total_pending':total_pending,
         #'unplanned_so_remaining':unplanned_so_remaining,

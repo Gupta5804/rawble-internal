@@ -34,26 +34,26 @@ NOT HIYA :
         <td colspan="4">Dispatched</td>
     </tr>
     <tr>
-    <td class="table-secondary">Hiya(OKHLA)</td>
-    <td>{{ hiya_dispatched_amount_okhla|intcomma }}</td>
-    <td class="table-secondary">Hiya(BADDI)</td>
-    <td>{{ hiya_dispatched_amount_baddi|intcomma }}</td>
+      <td class="table-secondary">Hiya(OKHLA)</td>
+      <td>{{ hiya_dispatched_amount_okhla|intcomma }}</td>
+      <td class="table-secondary">Hiya(BADDI)</td>
+      <td>{{ hiya_dispatched_amount_baddi|intcomma }}</td>
     </tr>
     <tr>
-    <td class="table-secondary">Not Hiya(OKHLA)</td>
-    <td>{{ not_hiya_dispatched_amount_okhla|intcomma }}</td>
-    <td class="table-secondary">Not Hiya(BADDI)</td>
-    <td>{{ not_hiya_dispatched_amount_baddi|intcomma }}</td>
+      <td class="table-secondary">Not Hiya(OKHLA)</td>
+      <td>{{ not_hiya_dispatched_amount_okhla|intcomma }}</td>
+      <td class="table-secondary">Not Hiya(BADDI)</td>
+      <td>{{ not_hiya_dispatched_amount_baddi|intcomma }}</td>
     </tr>
     <tr>
-    <td class="table-secondary">Total(OKHLA) </td>
-    <td>{{ total_dispatched_amount_okhla|intcomma }}</td>
-    <td class="table-secondary">Total(BADDI) </td>
-    <td>{{ total_dispatched_amount_baddi|intcomma }}</td>
+      <td class="table-secondary">Total(OKHLA) </td>
+      <td>{{ total_dispatched_amount_okhla|intcomma }}</td>
+      <td class="table-secondary">Total(BADDI) </td>
+      <td>{{ total_dispatched_amount_baddi|intcomma }}</td>
     </tr>
     <tr>
-    <td class="table-dark" colspan="2">Total</td>
-    <td class="table-dark" colspan="2">{{ total_dispatched_amount|intcomma }}</td>
+      <td class="table-dark" colspan="2">Total</td>
+      <td class="table-dark" colspan="2">{{ total_dispatched_amount|intcomma }}</td>
     </tr>
 
     
@@ -63,20 +63,32 @@ NOT HIYA :
         <td colspan="2">Pending</td>
     </tr>
     <tr>
-    <td class="table-secondary">Hiya</td>
-    <td>{{ hiya_pending_amount|intcomma }}</td>
+      <td class="table-secondary">Hiya(Okhla)</td>
+      <td>{{ hiya_pending_amount_okhla|intcomma }}</td>
+      <td class="table-secondary">Hiya(Baddi)</td>
+      <td>{{ hiya_pending_amount_baddi|intcomma }}</td>
     </tr>
     <tr>
-    <td class="table-secondary">Not Hiya </td>
-    <td>{{ not_hiya_pending_amount|intcomma }}</td>
+      <td class="table-secondary">Not Hiya(Okhla) </td>
+      <td>{{ not_hiya_pending_amount_okhla|intcomma }}</td>
+      <td class="table-secondary">Not Hiya(Baddi) </td>
+      <td>{{ not_hiya_pending_amount_baddi|intcomma }}</td>
     </tr>
     <tr>
-    <td class="table-secondary">Uncategorized </td>
-    <td>{{ uncategorized_pending_amount|intcomma }}</td>
+      <td class="table-secondary">Uncategorized(Okhla) </td>
+      <td>{{ uncategorized_pending_amount_okhla|intcomma }}</td>
+      <td class="table-secondary">Uncategorized(Baddi) </td>
+      <td>{{ uncategorized_pending_amount_baddi|intcomma }}</td>
     </tr>
     <tr>
-    <td class="table-secondary">Total </td>
-    <td>{{ total_pending_amount|intcomma }}</td>
+      <td class="table-secondary">Total(Okhla) </td>
+      <td>{{ total_pending_amount_okhla|intcomma }}</td>
+      <td class="table-secondary">Total(Baddi) </td>
+      <td>{{ total_pending_amount_baddi|intcomma }}</td>
+    </tr>
+    <tr>
+      <td class="table-dark" colspan="2">Total(Okhla + Baddi)</td>
+      <td class="table-dark" colspan="2">{{ total_pending_amount|intcomma }}</td>
     </tr>
     
   </table>
