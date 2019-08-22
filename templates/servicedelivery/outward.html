@@ -131,7 +131,7 @@
             </thead>
             <tbody>
             {% for salesorder in salesorders_unplanned  %}
-              {% if salesorder.planned_status == False and salesorder.status != "invoiced" and salesorder.status != "overdue" and salesorder.status != "void" and salesorder.status != "closed" %}
+              {% if salesorder.planned_status == False and salesorder.open_status == True %}
 
 
                 <tr >
