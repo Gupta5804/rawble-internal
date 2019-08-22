@@ -48,7 +48,7 @@ class ZohoSalesOrder(models.Model):
     salesperson = models.CharField(max_length = 100,blank=True, default = '')
     estimate = models.ForeignKey(ZohoEstimate,on_delete=models.CASCADE,null=True,blank=True)
     zoho_location = models.CharField(max_length = 100,default="okhla",null=True,blank=True)
-
+    open_status = models.BooleanField(default=False)
     def __str__(self):
         return str(self.salesorder_number)
     @property
