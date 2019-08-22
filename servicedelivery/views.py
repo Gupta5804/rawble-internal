@@ -707,17 +707,17 @@ def outward_servicedelivery_report(request):
     not_hiya_pending_amount_okhla = 0
     not_hiya_pending_amount_baddi = 0
     
-    salesorders = ZohoSalesOrder.objects.filter(Q(status="open") | Q(status="approved"))
+    salesorders = ZohoSalesOrder.objects.all()
     uncategorized_pending_amount_okhla = 0
     uncategorized_pending_amount_baddi = 0
     for salesorder in salesorders:
-        if(salesorder.salesorderproduct_set.count() == 0):
+        if(salesorder.open_status == True and salesorder.salesorderproduct_set.count() == 0):
             if(salesorder.zoho_location == "okhla"):
                 uncategorized_pending_amount_okhla = uncategorized_pending_amount_okhla + salesorder.total
             elif(salesorder.zoho_location == "baddi"):
                 uncategorized_pending_amount_baddi = uncategorized_pending_amount_baddi + salesorder.total
         for sop in salesorder.salesorderproduct_set.all():
-            if(salesorder.status == "open" or salesorder.status == "approved"):
+            if(salesorder.open_status == True):
                 if("hiya" in sop.product.make.lower()):
                     if(sopp.salesorderproduct.salesorder.zoho_location == "okhla"):
                         remaining_amount = (sop.quantity - sop.quantity_dispatched) * sop.so_selling_price
