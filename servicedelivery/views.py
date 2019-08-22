@@ -765,7 +765,7 @@ def outward_servicedelivery_report(request):
         'hiya_pending_amount_okhla':hiya_pending_amount_okhla,
         'hiya_pending_amount_baddi':hiya_pending_amount_baddi,
         'not_hiya_pending_amount_okhla':not_hiya_pending_amount_okhla,
-        'not_hiya_pending_amount_okhla':not_hiya_pending_amount_baddi,
+        'not_hiya_pending_amount_baddi':not_hiya_pending_amount_baddi,
         'total_pending_amount_okhla':not_hiya_pending_amount_okhla + hiya_pending_amount_okhla + uncategorized_pending_amount_okhla,
         'total_pending_amount_baddi':not_hiya_pending_amount_baddi + hiya_pending_amount_baddi + uncategorized_pending_amount_baddi,
         'total_pending_amount':not_hiya_pending_amount_okhla + hiya_pending_amount_okhla + uncategorized_pending_amount_okhla + not_hiya_pending_amount_baddi + hiya_pending_amount_baddi + uncategorized_pending_amount_baddi,
