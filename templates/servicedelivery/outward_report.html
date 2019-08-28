@@ -22,79 +22,77 @@ NOT HIYA :
 {% endfor %}-->
 
 <div class="alert alert-dark" role="alert">
-<form method="get" style="display:grid;text-align:center">
+  <form method="get" style="display:grid;text-align:center">
     {{ filter.form.as_p }}
     <button type="submit" class="btn btn-primary"> FILTER</button>
   </form>
-  </div>
-  <div class="alert alert-light" role="alert">
+  <a href="{% url 'outward_report_mail' %}" class="btn btn-outline-warning"><i class="fas fa-envelope"></i> Send Mail</a>
+</div>
+<div class="alert alert-light" role="alert">
   <div class="row">
-  <table class="table table-bordered col-6">
-    <tr class="table-dark" style="text-align:center">
+    <table class="table table-bordered col-6">
+      <tr class="table-dark" style="text-align:center">
         <td colspan="4">Dispatched</td>
-    </tr>
-    <tr>
-      <td class="table-secondary">Hiya(OKHLA)</td>
-      <td>{{ hiya_dispatched_amount_okhla|intcomma }}</td>
-      <td class="table-secondary">Hiya(BADDI)</td>
-      <td>{{ hiya_dispatched_amount_baddi|intcomma }}</td>
-    </tr>
-    <tr>
-      <td class="table-secondary">Not Hiya(OKHLA)</td>
-      <td>{{ not_hiya_dispatched_amount_okhla|intcomma }}</td>
-      <td class="table-secondary">Not Hiya(BADDI)</td>
-      <td>{{ not_hiya_dispatched_amount_baddi|intcomma }}</td>
-    </tr>
-    <tr>
-      <td class="table-secondary">Total(OKHLA) </td>
-      <td>{{ total_dispatched_amount_okhla|intcomma }}</td>
-      <td class="table-secondary">Total(BADDI) </td>
-      <td>{{ total_dispatched_amount_baddi|intcomma }}</td>
-    </tr>
-    <tr>
-      <td class="table-dark" colspan="2">Total</td>
-      <td class="table-dark" colspan="2">{{ total_dispatched_amount|intcomma }}</td>
-    </tr>
-
-    
-  </table>
-  <table class="table table-bordered col-6">
-    <tr class="table-dark" style="text-align:center">
-        <td colspan="4">Pending</td>
-    </tr>
-    <tr>
-      <td class="table-secondary">Hiya(Okhla)</td>
-      <td>{{ hiya_pending_amount_okhla|intcomma }}</td>
-      <td class="table-secondary">Hiya(Baddi)</td>
-      <td>{{ hiya_pending_amount_baddi|intcomma }}</td>
-    </tr>
-    <tr>
-      <td class="table-secondary">Not Hiya(Okhla) </td>
-      <td>{{ not_hiya_pending_amount_okhla|intcomma }}</td>
-      <td class="table-secondary">Not Hiya(Baddi) </td>
-      <td>{{ not_hiya_pending_amount_baddi|intcomma }}</td>
-    </tr>
-    <tr>
-      <td class="table-secondary">Uncategorized(Okhla) </td>
-      <td>{{ uncategorized_pending_amount_okhla|intcomma }}</td>
-      <td class="table-secondary">Uncategorized(Baddi) </td>
-      <td>{{ uncategorized_pending_amount_baddi|intcomma }}</td>
-    </tr>
-    <tr>
-      <td class="table-secondary">Total(Okhla) </td>
-      <td>{{ total_pending_amount_okhla|intcomma }}</td>
-      <td class="table-secondary">Total(Baddi) </td>
-      <td>{{ total_pending_amount_baddi|intcomma }}</td>
-    </tr>
-    <tr>
-      <td class="table-dark" colspan="2">Total(Okhla + Baddi)</td>
-      <td class="table-dark" colspan="2">{{ total_pending_amount|intcomma }}</td>
-    </tr>
-    
-  </table>
+      </tr>
+      <tr>
+        <td class="table-secondary">Hiya(OKHLA)</td>
+        <td>{{ hiya_dispatched_amount_okhla|intcomma }}</td>
+        <td class="table-secondary">Hiya(BADDI)</td>
+        <td>{{ hiya_dispatched_amount_baddi|intcomma }}</td>
+      </tr>
+      <tr>
+        <td class="table-secondary">Not Hiya(OKHLA)</td>
+        <td>{{ not_hiya_dispatched_amount_okhla|intcomma }}</td>
+        <td class="table-secondary">Not Hiya(BADDI)</td>
+        <td>{{ not_hiya_dispatched_amount_baddi|intcomma }}</td>
+      </tr>
+      <tr>
+        <td class="table-secondary">Total(OKHLA) </td>
+        <td>{{ total_dispatched_amount_okhla|intcomma }}</td>
+        <td class="table-secondary">Total(BADDI) </td>
+        <td>{{ total_dispatched_amount_baddi|intcomma }}</td>
+      </tr>
+      <tr>
+        <td class="table-dark" colspan="2">Total</td>
+        <td class="table-dark" colspan="2">{{ total_dispatched_amount|intcomma }}</td>
+      </tr>
+    </table>
+    <table class="table table-bordered col-6">
+      <tr class="table-dark" style="text-align:center">
+          <td colspan="4">Pending</td>
+      </tr>
+      <tr>
+        <td class="table-secondary">Hiya(Okhla)</td>
+        <td>{{ hiya_pending_amount_okhla|intcomma }}</td>
+        <td class="table-secondary">Hiya(Baddi)</td>
+        <td>{{ hiya_pending_amount_baddi|intcomma }}</td>
+      </tr>
+      <tr>
+        <td class="table-secondary">Not Hiya(Okhla) </td>
+        <td>{{ not_hiya_pending_amount_okhla|intcomma }}</td>
+        <td class="table-secondary">Not Hiya(Baddi) </td>
+        <td>{{ not_hiya_pending_amount_baddi|intcomma }}</td>
+      </tr>
+      <tr>
+        <td class="table-secondary">Uncategorized(Okhla) </td>
+        <td>{{ uncategorized_pending_amount_okhla|intcomma }}</td>
+        <td class="table-secondary">Uncategorized(Baddi) </td>
+        <td>{{ uncategorized_pending_amount_baddi|intcomma }}</td>
+      </tr>
+      <tr>
+        <td class="table-secondary">Total(Okhla) </td>
+        <td>{{ total_pending_amount_okhla|intcomma }}</td>
+        <td class="table-secondary">Total(Baddi) </td>
+        <td>{{ total_pending_amount_baddi|intcomma }}</td>
+      </tr>
+      <tr>
+        <td class="table-dark" colspan="2">Total(Okhla + Baddi)</td>
+        <td class="table-dark" colspan="2">{{ total_pending_amount|intcomma }}</td>
+      </tr>
+    </table>
   </div>
-  </div>
-  <table class="table table-hover table-bordered">
+</div>
+<table class="table table-hover table-bordered">
   <thead>
     <tr>
       <th scope="col">SO #</th>
@@ -104,23 +102,17 @@ NOT HIYA :
       <th scope="col">Make</th>
       <th scope="col">Ordered Quantity</th>
       <th scope="col">Quantity Dispatched Till Now</th>
-
       <th scope="col">Dispatch Quantity</th>
       <th scope="col"> Selling Price </th>
       <th scope="col">Amount</th>
-
       <th scope="col">Status</th>
       <th scope="col" >Planned At </th>
-      
-
       <th scope="col">Dispatched Date</th>
       <th scope="col">Delivered Date</th>
     </tr>
   </thead>
   <tbody>
     {% for sopp in filter.qs %}
-    
-  
     <tr class="{% if sopp.plan_status == 'planned'%} table-danger {% elif sopp.plan_status == 'in-transit' %} table-warning {% else %} table-success {% endif %}">
       <th scope="row">{{ sopp.salesorderproduct.salesorder.salesorder_number }}</th>
       <th scope="row">{{ sopp.salesorderproduct.salesorder.buyer.contact_name }}</th>
@@ -140,7 +132,7 @@ NOT HIYA :
     {% endfor %}
   </tbody>
 </table>
-  <ul>
-  
-  </ul>
+<ul>
+
+</ul>
 {% endblock application-active %} 

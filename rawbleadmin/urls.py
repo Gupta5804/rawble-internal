@@ -186,6 +186,7 @@ urlpatterns = [
     path('service_delivery/outward/shipping', servicedelivery_views.outward_servicedelivery_shipping, name='outward_servicedelivery_shipping'),
     path('service_delivery/outward/intransit', servicedelivery_views.outward_servicedelivery_intransit, name='outward_servicedelivery_intransit'),
     path('service_delivery/outward/report', servicedelivery_views.outward_servicedelivery_report, name='outward_servicedelivery_report'),
+    path('service_delivery/outward/outward_report_mail',servicedelivery_views.outward_report_mail,name='outward_report_mail'),
     path('service_delivery/report', servicedelivery_views.report_service_delivery, name='report_servicedelivery'),
     path('service_delivery/sendmail_pickup',servicedelivery_views.send_mail_pickup,name='send_mail_pickup'),
     path('service_delivery/sendmail_outward',servicedelivery_views.send_mail_outward,name='send_mail_outward'),

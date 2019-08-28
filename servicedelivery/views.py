@@ -14,10 +14,12 @@ from django.contrib.auth.models import User
 from datetime import timedelta, date
 from django.core.mail import EmailMessage,EmailMultiAlternatives
 from django.utils.html import strip_tags
-from servicedelivery.models import Transporter , SalesOrderProductPlan,PurchaseOrderProductPlan
+from servicedelivery.models import Transporter,SalesOrderProductPlan,PurchaseOrderProductPlan
 from servicedelivery.filters import SOPPFilter
 from django.db.models import Q
 # Create your views here.
+def outward_report_mail(request):
+    pass
 def nextoutward_summary(request):
     today = date.today()
     day = today
